@@ -1,0 +1,110 @@
+/* Old visualization Styling */
+.prototype {
+    border-width: 2px;
+    border-color: #888888;
+    border-style: solid;
+    width: 900px;
+    height: 450px;
+    min-width: 900px;
+}
+
+.visualization {
+    border-width: 2px;
+    border-color: #888888;
+    border-style: solid;
+}
+
+
+.overall-title {
+    font-size: 1.5rem;
+}
+
+.vis-label {
+    font-size: .8rem;
+}
+
+/*Page Styling*/
+.page-content {
+    width: 900px;
+    max-width: 900px;
+}
+
+.grade-list {
+    margin-bottom: 1em;
+    margin-right: 1em;
+    /*margin-top: 10px;*/
+}
+
+.check-list {
+    list-style: none !important;
+}
+
+.hero.is-primary.is-bold {
+    /*background: linear-gradient(90deg, rgba(122,55,196,1) 0%, rgba(95,55,196,1) 44%, rgba(41,191,222,1) 100%) !important;*/
+    background: linear-gradient(90deg, rgb(249, 214, 77) 0%, rgb(55, 196, 123) 65%, rgb(41, 191, 222) 100%) !important;
+    /*TODO Make this better*/
+}
+
+.content {
+    margin: auto;
+}
+
+footer.smaller-footers-are-better {
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    height:50px;
+    width: 100%;
+
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+/* HOMEWORK 3 STUFF */
+path.land {
+    fill : #DDDDDD;
+    stroke: none;
+}
+
+path.neighborhood {
+    fill: none;
+    stroke: white;
+    stroke-width: 3px;
+    pointer-events: none;
+}
+
+.active {
+    stroke: red !important;
+    stroke-width: 1.5px !important;
+}
+
+path.street {
+    fill: none;
+    stroke: white;
+    stroke-width: 1px;
+    pointer-events: none;
+}
+
+#tooltip {
+    font-weight: 500;
+    text-shadow: 0px 0px 2px white;
+
+    fill: black;
+    stroke: none;
+}
+
+circle.symbol {
+    stroke: white;
+    stroke-width: 0.5px;
+}
+
+/*a:link, a:visited {*/
+/*    color: #444444;*/
+/*}*/
+
+/*a:hover, a:active {*/
+/*    color: red;*/
+/*}*/
+
+th {
+    text-align: right;
+}
