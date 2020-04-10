@@ -64,9 +64,9 @@
               <span>About</span>
             </a>
 
-            <a class="navbar-item" href="dataset.html" title="Dataset">
+            <a class="navbar-item" href="datasets.html" title="Datasets">
               <span class="icon"><i class="fas fa-table"></i></span>
-              <span>Dataset</span>
+              <span>Datasets</span>
             </a>
 
             <a class="navbar-item" href="prototypes.html" title="Prototypes">
@@ -133,120 +133,12 @@
           After exploring the dataset, I decided to focus on noise complaints.
         </p>
 
-        <h2 id="data">Dataset Info</h2>
-        <p>The dataset is published under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>. I accessed it on April 2nd 2020 at <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6">data.sfgov.org</a>, but its original source was <a href="http://www.sf311.org">http://www.sf311.org</a></p><br>
-
-        <div class="tile is-ancestor">
-          <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child box">
-              <p class="title">Accessed</p>
-              <p class="subtitle">April 2, 2020</p>
-            </div>
-            <div class="tile is-child box">
-              <p class="subtitle">Columns</p>
-              <p class="title">20</p>
-            </div>
-          </div>
-          <div class="tile is-parent is-8">
-            <div class="tile is-child box">
-              <p class="title">
-                San Francisco 311 Cases</p>
-              <p>SF311 cases created since 7/1/2008 with location information.
-                This dataset includes cases generally associated with a place or thing (for example parks, streets, or buildings) and created July 1, 2008 or later. Cases generally logged by a user regarding their own needs (for example, property or business tax questions, parking permit requests) are not included
-            </div>
-          </div>
-        </div>
-
-        <h4 class="title">
-          Relevant Columns
-        </h4>
-
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Column Name</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>Category</td>
-            <td>Broad type of incident.<br>
-              <span class="has-text-grey-light">Example: <em>Noise Report</em></span></td>
-          </tr>
-          <tr>
-            <td>Request Type</td>
-            <td>More specific type of incident.<br>
-              <span class="has-text-grey-light">Example: <em>construction_private_property</em></span></td>
-          </tr>
-          <tr>
-            <td>Neighborhood</td>
-            <td>Neighborhood of the city where the incident took place.<br>
-              <span class="has-text-grey-light">Example: <em>South of Market</em></span></td>
-          </tr>
-          <tr>
-            <td>Latitude</td>
-            <td>Vertical geographic position.<br>
-              <span class="has-text-grey-light">Example: <em>37.7821011</em></span></td>
-          </tr>
-          <tr>
-            <td>Longitude</td>
-            <td>Horizontal geographic position.<br>
-              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>
-          </tr>
-          </tbody>
-        </table>
-
-        <h2 id="wrangling">Data Wrangling</h2>
-        <p>I filtered the dataset when downloading it from data.sfgov.org, and kept only cases of category "Noise Report", and which were opened in February 2020. <a href="resources/311_Cases_filtered_feb_noise.csv">[Data file as downloaded]</a>.
-        Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>
-
-        <h2 id="bio">About me</h2><br>
-
-        <!-- Profile box -->
-        <!-- https://bulma.io/documentation/layout/media-object/ -->
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-128x128"><img class="is-rounded" src="resources/profile.jpg"></p>
-          </figure>
-
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>Eve Matson</strong><br/>
-                Computer Science Major, <a href="https://www.usfca.edu/">University of San Francisco</a><br/>
-                <em>Expected Graduation: 2021</em><br/>
-                <i class="fas fa-envelope" style="margin-right: 3px"></i> <a href="mailto:ematson@dons.usfca.edu">ematson@dons.usfca.edu</a>
-                   <i class="fab fa-github" style="margin-left: 10px; margin-right: 3px"></i> <a href="https://github.com/evelynmatson">evelynmatson</a>
-              </p>
-
-              <p>
-                I am a junior Computer Science Major at USF, and expect to graduate in May 2021. I'm from Seattle and enjoy doing computer science, physics and theatre!
-              </p>
-
-              <div class="heading">Skills</div>
-
-              <div class="tags">
-                <span class="tag">Java</span>
-                <span class="tag">Python</span>
-                <span class="tag">C</span>
-                <span class="tag">JavaScript</span>
-                <span class="tag">HTML</span>
-                <span class="tag">CSS</span>
-              </div>
-            </div>
-          </div>
-        </article>
-        <!-- End profile box -->
-
       </div>
     </div>
     <!-- End page content -->
   </section>
 <!--  </main>-->
-
-  <!-- Page footer -->
-<!--  <div class="false-footer"></div>-->
+    <!-- Page footer -->
   <!-- https://bulma.io/documentation/layout/footer/ -->
   <footer class="footer smaller-footers-are-better">
     <div class="content has-text-centered is-size-7">

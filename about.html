@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Happiness and Inequality Homepage</title>
+    <title>Happiness and Inequality About</title>
 
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
@@ -64,9 +64,9 @@
               <span>About</span>
             </a>
 
-            <a class="navbar-item" href="dataset.html" title="Dataset">
+            <a class="navbar-item" href="datasets.html" title="Datasets">
               <span class="icon"><i class="fas fa-table"></i></span>
-              <span>Dataset</span>
+              <span>Datasets</span>
             </a>
 
             <a class="navbar-item" href="prototypes.html" title="Prototypes">
@@ -124,82 +124,6 @@
     <div class="container">
       <!-- Begin page content -->
       <div class="content">
-
-        <h2 id="about">
-          About the Assignment
-        </h2>
-        <p>This is my third homework assignment for CS 360: Data Visualization during spring semester 2020 with Sophie Engle.
-          We were given this dataset on San Francisco's 311 reports to use for some sort of geographic visualization.
-          After exploring the dataset, I decided to focus on noise complaints.
-        </p>
-
-        <h2 id="data">Dataset Info</h2>
-        <p>The dataset is published under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>. I accessed it on April 2nd 2020 at <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6">data.sfgov.org</a>, but its original source was <a href="http://www.sf311.org">http://www.sf311.org</a></p><br>
-
-        <div class="tile is-ancestor">
-          <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child box">
-              <p class="title">Accessed</p>
-              <p class="subtitle">April 2, 2020</p>
-            </div>
-            <div class="tile is-child box">
-              <p class="subtitle">Columns</p>
-              <p class="title">20</p>
-            </div>
-          </div>
-          <div class="tile is-parent is-8">
-            <div class="tile is-child box">
-              <p class="title">
-                San Francisco 311 Cases</p>
-              <p>SF311 cases created since 7/1/2008 with location information.
-                This dataset includes cases generally associated with a place or thing (for example parks, streets, or buildings) and created July 1, 2008 or later. Cases generally logged by a user regarding their own needs (for example, property or business tax questions, parking permit requests) are not included
-            </div>
-          </div>
-        </div>
-
-        <h4 class="title">
-          Relevant Columns
-        </h4>
-
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Column Name</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>Category</td>
-            <td>Broad type of incident.<br>
-              <span class="has-text-grey-light">Example: <em>Noise Report</em></span></td>
-          </tr>
-          <tr>
-            <td>Request Type</td>
-            <td>More specific type of incident.<br>
-              <span class="has-text-grey-light">Example: <em>construction_private_property</em></span></td>
-          </tr>
-          <tr>
-            <td>Neighborhood</td>
-            <td>Neighborhood of the city where the incident took place.<br>
-              <span class="has-text-grey-light">Example: <em>South of Market</em></span></td>
-          </tr>
-          <tr>
-            <td>Latitude</td>
-            <td>Vertical geographic position.<br>
-              <span class="has-text-grey-light">Example: <em>37.7821011</em></span></td>
-          </tr>
-          <tr>
-            <td>Longitude</td>
-            <td>Horizontal geographic position.<br>
-              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>
-          </tr>
-          </tbody>
-        </table>
-
-        <h2 id="wrangling">Data Wrangling</h2>
-        <p>I filtered the dataset when downloading it from data.sfgov.org, and kept only cases of category "Noise Report", and which were opened in February 2020. <a href="resources/311_Cases_filtered_feb_noise.csv">[Data file as downloaded]</a>.
-        Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>
 
         <h2 id="bio">About me</h2><br>
 

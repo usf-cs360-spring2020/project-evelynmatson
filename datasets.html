@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Happiness and Inequality Homepage</title>
+    <title>Happiness and Inequality Datasets</title>
 
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
@@ -64,9 +64,9 @@
               <span>About</span>
             </a>
 
-            <a class="navbar-item is-active" href="dataset.html" title="Dataset">
+            <a class="navbar-item is-active" href="datasets.html" title="Datasets">
               <span class="icon"><i class="fas fa-table"></i></span>
-              <span>Dataset</span>
+              <span>Datasets</span>
             </a>
 
             <a class="navbar-item" href="prototypes.html" title="Prototypes">
@@ -124,14 +124,6 @@
     <div class="container">
       <!-- Begin page content -->
       <div class="content">
-
-        <h2 id="about">
-          About the Assignment
-        </h2>
-        <p>This is my third homework assignment for CS 360: Data Visualization during spring semester 2020 with Sophie Engle.
-          We were given this dataset on San Francisco's 311 reports to use for some sort of geographic visualization.
-          After exploring the dataset, I decided to focus on noise complaints.
-        </p>
 
         <h2 id="data">Dataset Info</h2>
         <p>The dataset is published under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>. I accessed it on April 2nd 2020 at <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6">data.sfgov.org</a>, but its original source was <a href="http://www.sf311.org">http://www.sf311.org</a></p><br>
@@ -200,45 +192,6 @@
         <h2 id="wrangling">Data Wrangling</h2>
         <p>I filtered the dataset when downloading it from data.sfgov.org, and kept only cases of category "Noise Report", and which were opened in February 2020. <a href="resources/311_Cases_filtered_feb_noise.csv">[Data file as downloaded]</a>.
         Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>
-
-        <h2 id="bio">About me</h2><br>
-
-        <!-- Profile box -->
-        <!-- https://bulma.io/documentation/layout/media-object/ -->
-        <article class="media">
-          <figure class="media-left">
-            <p class="image is-128x128"><img class="is-rounded" src="resources/profile.jpg"></p>
-          </figure>
-
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong>Eve Matson</strong><br/>
-                Computer Science Major, <a href="https://www.usfca.edu/">University of San Francisco</a><br/>
-                <em>Expected Graduation: 2021</em><br/>
-                <i class="fas fa-envelope" style="margin-right: 3px"></i> <a href="mailto:ematson@dons.usfca.edu">ematson@dons.usfca.edu</a>
-                   <i class="fab fa-github" style="margin-left: 10px; margin-right: 3px"></i> <a href="https://github.com/evelynmatson">evelynmatson</a>
-              </p>
-
-              <p>
-                I am a junior Computer Science Major at USF, and expect to graduate in May 2021. I'm from Seattle and enjoy doing computer science, physics and theatre!
-              </p>
-
-              <div class="heading">Skills</div>
-
-              <div class="tags">
-                <span class="tag">Java</span>
-                <span class="tag">Python</span>
-                <span class="tag">C</span>
-                <span class="tag">JavaScript</span>
-                <span class="tag">HTML</span>
-                <span class="tag">CSS</span>
-              </div>
-            </div>
-          </div>
-        </article>
-        <!-- End profile box -->
-
       </div>
     </div>
     <!-- End page content -->
