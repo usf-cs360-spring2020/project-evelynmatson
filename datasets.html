@@ -125,41 +125,39 @@
       <!-- Begin page content -->
       <div class="content">
 
-        <h2 id="data">Datasets Info</h2>
-        <p>The main dataset I will use will be from the <a href="https://worldhappiness.report">World Happiness Report</a>.
+        <h2 id="data">Datasets Info</h2><br>
+
+<!--        World Happiness Report-->
+        <h3>World Happiness Report 2020</h3>
+        <p>The main dataset I will use will be from the <a href="https://worldhappiness.report">2020 World Happiness Report</a>.
           This is an annual publication by the United Nations Sustainable Development Solutions Network that tracks people's happiness by country, and analyzes which factors contribute to or take away from people's happiness.</p>
-        <p>I will also draw from several other datasets for other metrics to compare by:</p>
-        <ul>
-          <li>OECD's <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">Income inequality Dataset</a></li>
-          <li>United States Census Bureau's <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-income-inequality.html">Income Inequality Dataset</a></li>
-        </ul>
-<!--        <p>The dataset is published under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>. I accessed it on April 2nd 2020 at <a href="https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6">data.sfgov.org</a>, but its original source was <a href="http://www.sf311.org">http://www.sf311.org</a></p><br>-->
 
         <div class="tile is-ancestor">
           <div class="tile is-4 is-vertical is-parent">
             <div class="tile is-child box">
               <p class="title">Accessed</p>
-              <p class="subtitle">April 2, 2020</p>
+              <p class="subtitle">April 12, 2020</p>
             </div>
             <div class="tile is-child box">
-              <p class="subtitle">Columns</p>
-              <p class="title">20</p>
+              <p class="subtitle">Total Rows</p>
+              <p class="title">2,195</p>
             </div>
           </div>
           <div class="tile is-parent is-8">
             <div class="tile is-child box">
-              <p class="title">
-                San Francisco 311 Cases</p>
-              <p>SF311 cases created since 7/1/2008 with location information.
-                This dataset includes cases generally associated with a place or thing (for example parks, streets, or buildings) and created July 1, 2008 or later. Cases generally logged by a user regarding their own needs (for example, property or business tax questions, parking permit requests) are not included
+              <p class="title">Files</p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigure2.1.xls"><i class="fas fa-file-excel"></i> WHR20_DataForFigure2.1.xls</a></p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigures2.2_2.3_Appendix2.xlsx"><i class="fas fa-file-excel"></i> WHR20_DataForFigures2.2_2.3_Appendix2.xlsx</a></p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigure2.4.xls"><i class="fas fa-file-excel"></i> WHR20_DataForFigure2.4.xls</a></p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForTable2.1.xls"><i class="fas fa-file-excel"></i> WHR20_DataForTable2.1.xls</a></p>
             </div>
           </div>
-        </div>
+        </div><br>
 
-        <h4 class="title">
+<!--        WHR Columns-->
+        <h5 class="title">
           Relevant Columns
-        </h4>
-
+        </h5>
         <table class="table">
           <thead>
           <tr>
@@ -169,12 +167,12 @@
           </thead>
           <tbody>
           <tr>
-            <td>Category</td>
-            <td>Broad type of incident.<br>
-              <span class="has-text-grey-light">Example: <em>Noise Report</em></span></td>
+            <td>Country Name</td>
+            <td>Name of the country.<br>
+              <span class="has-text-grey-light">Example: <em>Iceland</em></span></td>
           </tr>
           <tr>
-            <td>Request Type</td>
+            <td>Regional Indicator</td>
             <td>More specific type of incident.<br>
               <span class="has-text-grey-light">Example: <em>construction_private_property</em></span></td>
           </tr>
@@ -196,9 +194,23 @@
           </tbody>
         </table>
 
+<!--        World Happiness Report License-->
+        <h4>License</h4>
+
+
+<!--        About other datasets-->
+        <h3>Other Datasets</h3>
+        <p>I will also draw from several other datasets for other metrics to compare by:</p>
+        <ul>
+          <li>OECD's <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">Income inequality Dataset</a></li>
+          <li>United States Census Bureau's <a href="https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-income-inequality.html">Income Inequality Dataset</a></li>
+        </ul>
+
+<!--        Wrangling (on all) -->
         <h2 id="wrangling">Data Wrangling</h2>
         <p>I filtered the dataset when downloading it from data.sfgov.org, and kept only cases of category "Noise Report", and which were opened in February 2020. <a href="resources/311_Cases_filtered_feb_noise.csv">[Data file as downloaded]</a>.
-        Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>
+          Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>
+
       </div>
     </div>
     <!-- End page content -->
