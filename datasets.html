@@ -222,7 +222,7 @@
             <div class="tile is-child box">
               <p class="title">
                 OECD Income Inequality</p>
-              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.
+              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.</p>
             </div>
           </div>
         </div><br>
@@ -276,8 +276,8 @@
 
         <!--        World Bank-->
         <h3>World Bank Population Data</h3>
-        <p>This is a supplemental dataset I will use from the World Bank that lists the population of different countries: <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">OECD Income Inequality Data</a>.
-          This dataset gives a measure of the amount of income inequality by country by year, which I will use to compare with different countries' happiness scores.</p>
+        <p>This is a supplemental dataset I will use from the World Bank that lists the population of different countries: <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank Population Data</a>.
+          This dataset gives the populations of different countries, which I will compare with different countries' happiness scores.</p>
 
         <div class="tile is-ancestor">
           <div class="tile is-4 is-vertical is-parent">
@@ -287,14 +287,14 @@
             </div>
             <div class="tile is-child box">
               <p class="subtitle">Rows</p>
-              <p class="title">2,581</p>
+              <p class="title">264</p>
             </div>
           </div>
           <div class="tile is-parent is-8">
             <div class="tile is-child box">
               <p class="title">
-                OECD Income Inequality</p>
-              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.
+                World Bank Population, Total</p>
+              <p>Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</p>
             </div>
           </div>
         </div><br>
@@ -312,24 +312,19 @@
           </thead>
           <tbody>
           <tr>
-            <td>LOCATION</td>
+            <td>Country Name</td>
+            <td>Full name of the country.<br>
+              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>
+          </tr>
+          <tr>
+            <td>Country Code</td>
             <td>Name of the country (as a 3-letter code).<br>
               <span class="has-text-grey-light">Example: <em>ISL</em></span></td>
           </tr>
           <tr>
-            <td>MEASURE</td>
-            <td>Whether a row gives the GINI coefficient or some other measure.<br>
-              <span class="has-text-grey-light">Example: <em>GINI</em></span></td>
-          </tr>
-          <tr>
-            <td>TIME</td>
-            <td>Year when the row refers to.<br>
-              <span class="has-text-grey-light">Example: <em>2015</em></span></td>
-          </tr>
-          <tr>
-            <td>Value</td>
-            <td>The GINI score itself.<br>
-              <span class="has-text-grey-light">Example: <em>0.257</em></span></td>
+            <td>[Year Number]</td>
+            <td>Population at that year.<br>
+              <span class="has-text-grey-light">Example: <em>330815</em></span></td>
           </tr>
           <!--          <tr>-->
           <!--            <td>Longitude</td>-->
@@ -341,8 +336,8 @@
 
         <!--        World Bank License-->
         <h4>License</h4>
-        <p>OECD's Terms and Conditions says that "<em>You can extract from, download, copy, adapt, print, distribute, share and embed Data for any purpose, even for commercial use. You must give appropriate credit to the OECD by using the citation associated with the relevant Data</em>"</p>
-        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>
+        <p>This data is distributed under the <a href="https://datacatalog.worldbank.org/public-licenses#cc-by">CC BY-4.0 license</a>, which allows users to "copy, modify and distribute data in any format for any purpose, including commercial use", as long as attribution is given.</p>
+<!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
 
 
 <!--        Wrangling (on all) -->
