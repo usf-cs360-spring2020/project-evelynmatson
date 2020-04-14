@@ -143,45 +143,48 @@
       <!-- Begin page content -->
       <div class="content page-content">
         <h1 class="title">
-          Noise Reports in San Francisco
+          Data Visualization Prototyes
         </h1>
-        <p class="subtitle">
-          Reported in February 2020, separated by category.
-        </p>
+
 
         <h3>About</h3>
-        <p>This is a non-proportional symbol map geographic visualization, displayed using a conic equal area projection.
-        I have grouped the different types of reports into four broad categories, which then is encoded by color (see legend).
-        I have also added outlines of the different neighborhoods in San Francisco, as defined by the Mayor's Office.
-        This enables comparison between neighborhoods, and makes finding reports near specific parts of the city easier.</p>
-        <p>Each dot represents a single noise report, placed onto the map by its geographic location.
-          Each dot is partially transparent, enabling multiple reports in the same location to appear more pronounced than singular ones.</p>
+        <p>In order to explore the datasets a bit, I created two prototype visualizations in Tableau.</p>
+        <p>The first is a multivariate bubble plot of various countries, encoding several different metrics. Each bubble is a country, and information about them are encoded in the following ways :</p>
         <ul>
-          <li><strong>Color of Dot</strong> - Broad category of the report. See legend.</li>
-          <li><strong>Location of Dot on Map</strong> - Location of the report.</li>
+          <li>Color of bubble - amount of income inequality as a GINI coefficient</li>
+          <li>Size of bubble - most recent population size</li>
+          <li></li>
+          <li>Height of bubble</li>
         </ul>
+<!--        <p>This is a small multiples parallel coordinates chart that compares different college tiers' impact on their students' economic outcomes, and examines in what ways this depends on the students' economic backgrounds.</p>-->
+<!--        <p>Here, <strong>each line represents a cohort of students from a certain economic background, going to a certain college</strong>. Infomation about their cohort is encoded in the following way : </p>-->
+<!--        <ul>-->
+<!--          <li><strong>Color of line</strong> - Economic background, determined by their parents' income quintile. Yellow lines represent the most wealthy backgrounds, and purple lines represent the least wealthy backgrounds. See legend.</li>-->
+<!--          <li><strong>Height of line on axis</strong> - Percent of cohort who end up in that income quintile. Higher values meaan higher percents, and axes further to the right are wealthier.</li>-->
+<!--          <li><strong>Location of subplot</strong> - Each subplot is labeled with the tier of college it represents. Subplots are broadly grouped near similar tiers of school for ease of comparison.</li>-->
+<!--          &lt;!&ndash;          <li>Opacity of line - Representation of that economic background in a college's student body, determined by percentage of students at that college who come from that same economic background. A more prominent line means a greater percentage of students at that college come from that same background, and a fainter line means students from that background are underrepresented at that college.</li>&ndash;&gt;-->
+<!--        </ul>-->
+<!--        <p>Broadly, tiers where <strong>all the lines are close together</strong> regardless of their color demonstrate student outcomes uninfluenced by economic background, and tiers where the <strong>lines separate based on color</strong> show student outcomes that differ based on economic background.</p>-->
+<!--        <p>Also, for a any line or group of lines, a <strong>positive trend</strong> (lower on the left ond higher on the right) shows that students in that cohort are more likely to end up in a wealthy income quintile.-->
+<!--          A <strong>negative trend</strong> (higher on the left and lower on the right) shows that students in that cohort are more likely to end up in a less wealthy income quintile.</p>-->
 
-        <h3>Interactivity</h3>
-        <p>I have enabled both details-on-demand interactivity and filtering interactivity.</p>
-        <p>When <strong>hovering over different neighborhoods</strong> on the map, a details pane will appear which lists the number of incidents from different categories that happened in that neighborhood.
-        The neighborhood will also be highlighted in red, making its boundaries clearer.</p>
-        <p>By <strong>clicking on the colored swatches in the legend</strong>, you can toggle each category of report to filter the data to only show the types you are interested in.</p>
+<!--        <h3>Conclusions</h3>-->
+<!--        <p>The visualization was designed to support the study's second finding, and seems to do so. The authors of the study write:</p>-->
+<!--        <blockquote>Second, children from low- and high-income families have similar earnings outcomes conditional on the college they attend, indicating that low-income students are not mismatched at selective colleges.</blockquote>-->
+<!--        In this visualization, higher college tiers (especially "Ivy Plus") have plots where the lines are all tightly bound together, regardless of what quintile of economic background they represent.-->
+<!--        <p>This supports the finding by showing that students who attend elite schools can expect similar outcomes regardless of their backgrounds.</p><br>-->
+<!--        <p>Additionally, in this visualization the plots of lower tier schools (especially "Two-Year (Public + Private) show lines clearly separated by color.-->
+<!--          Purple and blue lines mostly peak an the left side of the graph, and yellow and light green lines mostly peak on the right side of the graph.-->
+<!--          This shows that students who attend these lower-tier colleges have very different economic outcomes depending on their background.-->
+<!--          Students who go to these schools often end up wealthy when they come from wealthy backgrounds, but often end up in the working class when they come from working class backgrounds.</p>-->
 
-        <h3>Conclusions</h3>
-        <p>The visualization makes it clear that more noise reports happen near the downtown region of the city, and fewer happen in the west and south parts of the city.
-        It also suggests that each type are about equally distributed throughout the city, which surprised me a little.</p>
 
-        <h3>Acknowledgements</h3>
-        <p>Thank you to the following people for making the following helpful resources:</p>
-        <ul>
-          <li>Sophie Engle for her <a href="https://bl.ocks.org/sjengle/2f6d4832397e3cdd78d735774cb5a4f2">bl.ocks.org map visualization example</a></li>
-          <li>Higo Wiledal for his <a href="https://medium.com/your-majesty-co/frameworkless-javascript-template-literals-the-best-thing-since-sliced-bread-d97f000ce955">article about the magic of JavaScript template literals</a></li>
-          <li>d3noob for their bl.ocks.org <a href="https://bl.ocks.org/d3noob/5d621a60e2d1d02086bf">block about hiding d3 elements with click events</a></li>
-        </ul>
-        <p>Thank you data.sfgov.org for the following datasets that I also used:</p>
-        <ul>
-          <li><a href="https://data.sfgov.org/Geographic-Locations-and-Boundaries/SF-Find-Neighborhoods/pty2-tcw4">SF Find Neighborhoods</a></li>
-        </ul>
+<!--        <h3>Prototypes</h3>-->
+<!--        <p>I used <a href="https://rawgraphs.io">RawGraphs</a> for initial prototyping, then moved to D3 to implement my final visualization.-->
+<!--          I was unable to filter rows out of the dataset using RawGraphs, so I changed the color for unwanted lines to be white.-->
+<!--          This helped emphasize the data I wanted to see, but then it became partially obscured by a plethora of annoying white lines.</p>-->
+<!--        <p>I also intended to display multiple lines from the same college on the same graph, each representing different parent income quintiles, but RawGraphs wouldn't allow me to do this without doing some serious wrangling.-->
+<!--          Here I have displayed two prototype graphs I made, each showing two college tiers but only data for one parent income quintile.</p><br>-->
       </div>
       <!-- End page content -->
     </div>
