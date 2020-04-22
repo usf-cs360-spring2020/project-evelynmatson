@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Happiness and Inequality Prototypes</title>
+    <title>Happiness and Inequality Beta Prototypes</title>
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
     <!-- https://bulma.io/ -->
@@ -86,9 +86,13 @@
               <span>Datasets</span>
             </a>
 
-            <a class="navbar-item is-active" href="prototypes.html" title="Prototypes">
+            <a class="navbar-item" href="alphaprototypes.html" title="Prototypes">
               <span class="icon"><i class="fas fa-chart-line"></i></span>
-              <span>Prototypes</span>
+              <span>Alpha Prototypes</span>
+            </a>
+            <a class="navbar-item is-active" href="betaprototypes.html" title="Prototypes">
+              <span class="icon"><i class="fas fa-chart-line"></i></span>
+              <span>Beta Prototypes</span>
             </a>
             <!--          <div class="navbar-item has-dropdown is-hoverable">-->
             <!--            <a class="navbar-link"  href="index.html">-->
@@ -114,7 +118,7 @@
             <!--              </a>-->
             <!--            </div>-->
           </div>
-          <!--          <a class="navbar-item" href="prototypes.html" title="visualization">-->
+          <!--          <a class="navbar-item" href="alphaprototypes.html" title="visualization">-->
           <!--            <span class="icon"><i class="fas fa-chart-line"></i></span>-->
           <!--            <span>Visualization</span>-->
           <!--          </a>-->
@@ -143,38 +147,38 @@
       <!-- Begin page content -->
       <div class="content page-content">
         <h1 class="title">
-          Data Visualization Prototyes
+          Data Visualization Beta Prototypes
         </h1>
 
 
 <!--        <h3>About</h3>-->
-        <p>In order to explore the datasets a bit, I created two prototype visualizations in Tableau.</p>
+<!--        <p>In order to explore the datasets a bit, I created two prototype visualizations in Tableau.</p>-->
 
-        <br>
-        <h3>Bubble Plot Visualization</h3>
-        <p>The first is a multivariate bubble plot of various countries, encoding several different metrics. Each bubble is a country, and information about them are encoded in the following ways :</p>
-        <ul>
-          <li>Color of bubble - amount of income inequality as a GINI coefficient (blue means more equal, red means less. See legend.)</li>
-          <li>Size of bubble - most recent population size (larger is more populous)</li>
-          <li>Horizontal position of bubble - average happiness ladder score (further right is happier)</li>
-          <li>Vertical position of bubble - GDP per capita on a logarithmic scale (higher is greater GDP per capita)</li>
-        </ul>
-        <img src="resources/prototypes/Bubble%20Dashboard.png">
-
-
-        <br>
-        <h3>Stacked Bar Visualization</h3>
-        <p>The second is a stacked bar chart where each bar is a country, and the heights of different colors correspond to different factors that contribute to happiness.
-          Each of the six factors identified by the World Happiness Report is represented by a color (see legend), and the pink color shows the 'residual' amount of happiness.
-          This is the 'extra' amount of happiness not explained in their model by the measured values for each of the six factors.
-          The data is encoded as follows : </p>
-        <ul>
-          <li>Height of bar - average happiness ladder score</li>
-          <li>Height of colored sections - amount of happiness 'explained by' a given factor's measured value in the researchers' model</li>
-          <li>Height of pink section - residual happiness, or the 'extra' amount of happiness not explained in the model by the six factors</li>
+<!--        <br>-->
+<!--        <h3>Bubble Plot Visualization</h3>-->
+<!--        <p>The first is a multivariate bubble plot of various countries, encoding several different metrics. Each bubble is a country, and information about them are encoded in the following ways :</p>-->
+<!--        <ul>-->
+<!--          <li>Color of bubble - amount of income inequality as a GINI coefficient (blue means more equal, red means less. See legend.)</li>-->
+<!--          <li>Size of bubble - most recent population size (larger is more populous)</li>-->
+<!--          <li>Horizontal position of bubble - average happiness ladder score (further right is happier)</li>-->
 <!--          <li>Vertical position of bubble - GDP per capita on a logarithmic scale (higher is greater GDP per capita)</li>-->
-        </ul>
-        <img src="resources/prototypes/Stack%20Dashboard.png">
+<!--        </ul>-->
+<!--        <img src="resources/prototypes/Bubble%20Dashboard.png">-->
+
+
+<!--        <br>-->
+<!--        <h3>Stacked Bar Visualization</h3>-->
+<!--        <p>The second is a stacked bar chart where each bar is a country, and the heights of different colors correspond to different factors that contribute to happiness.-->
+<!--          Each of the six factors identified by the World Happiness Report is represented by a color (see legend), and the pink color shows the 'residual' amount of happiness.-->
+<!--          This is the 'extra' amount of happiness not explained in their model by the measured values for each of the six factors.-->
+<!--          The data is encoded as follows : </p>-->
+<!--        <ul>-->
+<!--          <li>Height of bar - average happiness ladder score</li>-->
+<!--          <li>Height of colored sections - amount of happiness 'explained by' a given factor's measured value in the researchers' model</li>-->
+<!--          <li>Height of pink section - residual happiness, or the 'extra' amount of happiness not explained in the model by the six factors</li>-->
+<!--        </ul>-->
+<!--        <img src="resources/prototypes/Stack%20Dashboard.png">-->
+
         <!--        <p>This is a small multiples parallel coordinates chart that compares different college tiers' impact on their students' economic outcomes, and examines in what ways this depends on the students' economic backgrounds.</p>-->
 <!--        <p>Here, <strong>each line represents a cohort of students from a certain economic background, going to a certain college</strong>. Infomation about their cohort is encoded in the following way : </p>-->
 <!--        <ul>-->

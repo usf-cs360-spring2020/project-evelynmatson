@@ -44,12 +44,15 @@
 
   <!-- Page navigation -->
   <!-- https://bulma.io/documentation/components/navbar/ -->
-  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
     <div class="container">
       <div class="navbar-brand">
+        <a class="navbar-item" href="index.html" title="Home">
+          <span class="icon"><i class="fas fa-home"></i></span>
+          <span>Home</span>
+        </a>
+
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="main-menu">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
@@ -57,44 +60,68 @@
       <div id="main-menu" class="navbar-menu has-text-weight-medium">
         <!-- Left navbar items -->
         <div class="navbar-start">
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link"  href="index.html">
-              Info
-            </a>
 
-            <div class="navbar-dropdown">
-              <a class="navbar-item" href="index.html#about" title="About the Assignment">
-                <span class="icon"><i class="far fa-file-alt"></i></span>
-                <span>Assignment</span>
-              </a>
-              <a class="navbar-item" href="index.html#data" title="Dataset Info">
-                <span class="icon"><i class="fas fa-table"></i></span>
-                <span>Dataset</span>
-              </a>
-              <a class="navbar-item" href="index.html#wrangling" title="Dataset Info">
-                <span class="icon"><i class="fas fa-wrench"></i></span>
-                <span>Wrangling</span>
-              </a>
-              <a class="navbar-item" href="index.html#bio" title="About Me">
-                <span class="icon"><i class="fas fa-info-circle"></i></span>
-                <span>About me</span>
-              </a>
-            </div>
-          </div>
-<!--          <a class="navbar-item" href="prototypes.html" title="visualization">-->
-<!--            <span class="icon"><i class="fas fa-chart-line"></i></span>-->
-<!--            <span>Visualization</span>-->
-<!--          </a>-->
-        </div>
-
-        <!-- Right navbar items -->
-        <div class="navbar-end">
-          <a class="navbar-item" href="grade.html" title="About">
-            <span class="icon"><i class="fas fa-tasks"></i></span>
-            <span>Grade</span>
+          <a class="navbar-item is-active" href="about.html" title="About">
+            <span class="icon"><i class="far fa-address-card"></i></i></span>
+            <span>About</span>
           </a>
+
+          <a class="navbar-item" href="datasets.html" title="Datasets">
+            <span class="icon"><i class="fas fa-table"></i></span>
+            <span>Datasets</span>
+          </a>
+
+          <a class="navbar-item" href="alphaprototypes.html" title="Prototypes">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span>Alpha Prototypes</span>
+          </a>
+          <a class="navbar-item" href="betaprototypes.html" title="Prototypes">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span>Beta Prototypes</span>
+          </a>
+          <!--          <div class="navbar-item has-dropdown is-hoverable">-->
+          <!--            <a class="navbar-link"  href="index.html">-->
+          <!--              Info-->
+          <!--            </a>-->
+
+          <!--            <div class="navbar-dropdown">-->
+          <!--              <a class="navbar-item" href="index.html#about" title="About the Assignment">-->
+          <!--                <span class="icon"><i class="far fa-file-alt"></i></span>-->
+          <!--                <span>Assignment</span>-->
+          <!--              </a>-->
+          <!--              <a class="navbar-item" href="index.html#data" title="Dataset Info">-->
+          <!--                <span class="icon"><i class="fas fa-table"></i></span>-->
+          <!--                <span>Dataset</span>-->
+          <!--              </a>-->
+          <!--              <a class="navbar-item" href="index.html#wrangling" title="Dataset Info">-->
+          <!--                <span class="icon"><i class="fas fa-wrench"></i></span>-->
+          <!--                <span>Wrangling</span>-->
+          <!--              </a>-->
+          <!--              <a class="navbar-item" href="index.html#bio" title="About Me">-->
+          <!--                <span class="icon"><i class="fas fa-info-circle"></i></span>-->
+          <!--                <span>About me</span>-->
+          <!--              </a>-->
+          <!--            </div>-->
         </div>
+        <!--          <a class="navbar-item" href="alphaprototypes.html" title="visualization">-->
+        <!--            <span class="icon"><i class="fas fa-chart-line"></i></span>-->
+        <!--            <span>Visualization</span>-->
+        <!--          </a>-->
+
       </div>
+
+      <!-- Right navbar items -->
+      <div class="navbar-end">
+<!--          <a class="navbar-item" href="grade.html" title="About">-->
+<!--            <span class="icon"><i class="fas fa-tasks"></i></span>-->
+<!--            <span>Grade</span>-->
+<!--          </a>-->
+      </div>
+    </div>
+    <!--      <a class="navbar-item" href="index.html#about" title="About">-->
+    <!--        <span class="icon"><i class="fas fa-info-circle"></i></span>-->
+    <!--        <span>About Me</span>-->
+    <!--      </a>-->
     </div>
   </nav>
   <!-- End page navigation -->
