@@ -171,26 +171,30 @@
 
             // Get some data on d3
             let actualData = d3.csv('resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv', function (row) {
-              console.log('original row', row);
+              // console.log('original row', row);
               let toReturn = {
                 'country' : row['Country name'],
-                "Explained by Freedom to make life choices" : row['Explained by: Freedom to make life choices'],
-                "Explained by Generosity" : row['Explained by: Generosity'],
-                "Explained by Healthy life expectancy" : row['Explained by: Healthy life expectancy'],
-                "Explained by Log GDP per capita" : row['Explained by: Log GDP per capita'],
-                "Explained by Perceptions of corruption" : row['Explained by: Perceptions of corruption'],
-                "Explained by Social support" : row['Explained by: Social support'],
-                'region' : row['Regional indicator'],
-                'ladder score' : row['Ladder score'],
-                'dystopia + residual' : row['Dystopia + residual']
+                'ladder score' : parseFloat(row['Ladder score']),
+                "Explained by Freedom to make life choices" : parseFloat(row['Explained by: Freedom to make life choices']),
+                "Explained by Generosity" : parseFloat(row['Explained by: Generosity']),
+                "Explained by Healthy life expectancy" : parseFloat(row['Explained by: Healthy life expectancy']),
+                "Explained by Log GDP per capita" : parseFloat(row['Explained by: Log GDP per capita']),
+                "Explained by Perceptions of corruption" : parseFloat(row['Explained by: Perceptions of corruption']),
+                "Explained by Social support" : parseFloat(row['Explained by: Social support']),
+                'dystopia + residual' : parseFloat(row['Dystopia + residual']),
+                'region' : row['Regional indicator']
               };
-              console.log('returned row', toReturn)
+              // console.log('returned row', toReturn)
               return toReturn;
+            }).then(function(data) {
+              // Make the lineup!
+              let lineUpLocation = document.getElementById('lineup');
+              const lineup = LineUpJS.asLineUp(lineUpLocation, data);
             });
+            console.log('actualData', actualData);
 
-            let lineUpLocation = document.getElementById('lineup');
 
-            const lineup = LineUpJS.asLineUp(lineUpLocation, arr);
+            console.log('array as sent to lineup', arr);
           </script>
 
 
