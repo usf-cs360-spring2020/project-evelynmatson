@@ -39,6 +39,10 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha256-qo76Vs9B6JAALbrTn+PcN1r09hbNLd2M78V19glOMeU=" crossorigin="anonymous"></script>
 
+    <!-- Lineup Scripts -->
+    <link href="https://unpkg.com/lineupjs/build/LineUpJS.css" rel="stylesheet">
+    <script src="https://unpkg.com/lineupjs/build/LineUpJS.js"></script>
+
     <!-- My CSS -->
     <link rel="stylesheet" href="style.css">
 
@@ -141,14 +145,30 @@
     </nav>
     <!-- End page navigation -->
 
-  <section class="section">
-    <div class="container">
+    <!-- Begin page content -->
+    <section class="section">
+      <div class="container">
 
-      <!-- Begin page content -->
-      <div class="content page-content">
-        <h1 class="title">
-          Data Visualization Beta Prototypes
-        </h1>
+        <div class="content page-content">
+          <h1 class="title">
+            Data Visualization Beta Prototypes
+          </h1>
+
+          <script>
+            // generate some data
+            const arr = [];
+            const cats = ['c1', 'c2', 'c3'];
+            for (let i = 0; i < 100; ++i) {
+              arr.push({
+                a: Math.random() * 10,
+                d: 'Row ' + i,
+                cat: cats[Math.floor(Math.random() * 3)],
+                cat2: cats[Math.floor(Math.random() * 3)]
+              })
+            }
+
+            const lineup = LineUpJS.asLineUp(document.body, arr);
+          </script>
 
 
 <!--        <h3>About</h3>-->
@@ -208,52 +228,55 @@
 <!--          This helped emphasize the data I wanted to see, but then it became partially obscured by a plethora of annoying white lines.</p>-->
 <!--        <p>I also intended to display multiple lines from the same college on the same graph, each representing different parent income quintiles, but RawGraphs wouldn't allow me to do this without doing some serious wrangling.-->
 <!--          Here I have displayed two prototype graphs I made, each showing two college tiers but only data for one parent income quintile.</p><br>-->
+
+
+        </div>
       </div>
-      <!-- End page content -->
-    </div>
-  </section>
+    </section>
+    <!-- End page content -->
 
-  <!-- Page footer -->
-<!--  <div class="false-footer"></div>-->
-  <!-- https://bulma.io/documentation/layout/footer/ -->
-  <footer class="footer smaller-footers-are-better">
-    <div class="content has-text-centered is-size-7">
-      <p>
-        <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
-        </a>
+    <!-- Page footer -->
+    <!--  <div class="false-footer"></div>-->
+    <!-- https://bulma.io/documentation/layout/footer/ -->
+    <footer class="footer smaller-footers-are-better">
+      <div class="content has-text-centered is-size-7">
+        <p>
+          <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+          </a>
 
-        <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
-        </a>
+          <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+          </a>
 
-        <a href="https://bulma.io" class="button is-small">
-          <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
-        </a>
-      </p>
-    </div>
-  </footer>
-  <!-- End page footer -->
+          <a href="https://bulma.io" class="button is-small">
+            <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+          </a>
+        </p>
+      </div>
+    </footer>
+    <!-- End page footer -->
 
-  <!-- Mobile menu responsiveness -->
-  <!-- https://bulma.io/documentation/components/navbar/ -->
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    <!-- Mobile menu responsiveness -->
+    <!-- https://bulma.io/documentation/components/navbar/ -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    if ($navbarBurgers.length > 0) {
-      $navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-          const target = el.dataset.target;
-          const $target = document.getElementById(target);
-          el.classList.toggle('is-active');
-          $target.classList.toggle('is-active');
-        });
+        if ($navbarBurgers.length > 0) {
+          $navbarBurgers.forEach( el => {
+            el.addEventListener('click', () => {
+              const target = el.dataset.target;
+              const $target = document.getElementById(target);
+              el.classList.toggle('is-active');
+              $target.classList.toggle('is-active');
+            });
+          });
+        }
       });
-    }
-  });
-  </script>
-  <!-- End mobile menu responsiveness -->
+    </script>
+    <!-- End mobile menu responsiveness -->
+
   </body>
 
 </html>
