@@ -171,7 +171,7 @@
 
             // Get some data on d3
             let actualData = d3.csv('resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv', function (row) {
-              // console.log('original row', row);
+              console.log('original row', row);
               let toReturn = {
                 'country' : row['Country name'],
                 'ladder score' : parseFloat(row['Ladder score']),
@@ -184,12 +184,12 @@
                 'dystopia + residual' : parseFloat(row['Dystopia + residual']),
                 'region' : row['Regional indicator']
               };
-              // console.log('returned row', toReturn)
+              console.log('returned row', toReturn)
               return toReturn;
             }).then(function(data) {
               // Make the lineup!
               let lineUpLocation = document.getElementById('lineup');
-              const lineup = LineUpJS.asLineUp(lineUpLocation, data);
+              const lineup = LineUpJS.asTaggle(lineUpLocation, data);
             });
             console.log('actualData', actualData);
 

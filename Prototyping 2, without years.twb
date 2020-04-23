@@ -361,6 +361,9 @@
         </metadata-records>
       </connection>
       <aliases enabled='yes' />
+      <column caption='Explaineds + Residual' datatype='real' name='[Calculation_3335056305060507648]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='[Dystopia + residual] + [Explained by: Freedom to make life choices] + [Explained by: Generosity] + [Explained by: Healthy life expectancy] + [Explained by: Log GDP per capita] + [Explained by: Perceptions of corruption] + [Explained by: Social support]' />
+      </column>
       <column aggregation='None' caption='WHR Country name' datatype='string' name='[Country name]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
       <column datatype='real' name='[Dystopia + residual]' role='measure' type='quantitative' />
       <column datatype='real' name='[Explained by: Freedom to make life choices]' role='measure' type='quantitative' />
@@ -598,6 +601,30 @@
       <semantic-values>
         <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
       </semantic-values>
+      <field-sort-info field-sort-order-type='custom-order'>
+        <field-sort-custom-order field='Country name' />
+        <field-sort-custom-order field='Regional indicator' />
+        <field-sort-custom-order field='Ladder score' />
+        <field-sort-custom-order field='Standard error of ladder score' />
+        <field-sort-custom-order field='upperwhisker' />
+        <field-sort-custom-order field='lowerwhisker' />
+        <field-sort-custom-order field='Logged GDP per capita' />
+        <field-sort-custom-order field='Social support' />
+        <field-sort-custom-order field='Healthy life expectancy' />
+        <field-sort-custom-order field='Freedom to make life choices' />
+        <field-sort-custom-order field='Generosity' />
+        <field-sort-custom-order field='Perceptions of corruption' />
+        <field-sort-custom-order field='Ladder score in Dystopia' />
+        <field-sort-custom-order field='Explained by: Log GDP per capita' />
+        <field-sort-custom-order field='Explained by: Social support' />
+        <field-sort-custom-order field='Explained by: Healthy life expectancy' />
+        <field-sort-custom-order field='Explained by: Freedom to make life choices' />
+        <field-sort-custom-order field='Explained by: Generosity' />
+        <field-sort-custom-order field='Explained by: Perceptions of corruption' />
+        <field-sort-custom-order field='Dystopia + residual' />
+        <field-sort-custom-order field='Calculation_3335056305060507648' />
+        <field-sort-custom-order field='Logged GDP per capita (bin)' />
+      </field-sort-info>
     </datasource>
   </datasources>
   <worksheets>
@@ -760,6 +787,7 @@
             <column datatype='real' name='[Explained by: Log GDP per capita]' role='measure' type='quantitative' />
             <column datatype='real' name='[Explained by: Perceptions of corruption]' role='measure' type='quantitative' />
             <column datatype='real' name='[Explained by: Social support]' role='measure' type='quantitative' />
+            <column caption='Happiness Ladder score' datatype='real' name='[Ladder score]' role='measure' type='quantitative' />
             <column caption='Regional indicator1' datatype='string' name='[Regional indicator]' role='dimension' type='nominal' />
             <column-instance column='[Dystopia + residual]' derivation='Attribute' name='[attr:Dystopia + residual:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Explained by: Freedom to make life choices]' derivation='Attribute' name='[attr:Explained by: Freedom to make life choices:qk]' pivot='key' type='quantitative' />
@@ -770,6 +798,7 @@
             <column-instance column='[Explained by: Social support]' derivation='Attribute' name='[attr:Explained by: Social support:qk]' pivot='key' type='quantitative' />
             <column-instance column='[Country name]' derivation='None' name='[none:Country name:nk]' pivot='key' type='nominal' />
             <column-instance column='[Regional indicator]' derivation='None' name='[none:Regional indicator:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Ladder score]' derivation='Sum' name='[sum:Ladder score:qk]' pivot='key' type='quantitative' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.1965dz40tpmeol18tmp6v0tke9x8].[:Measure Names]'>
             <groupfilter function='union' user:op='manual'>
@@ -951,13 +980,14 @@
         </view>
         <style />
         <panes>
-          <pane selection-relaxation-option='selection-relaxation-allow'>
+          <pane id='1' selection-relaxation-option='selection-relaxation-allow'>
             <view>
               <breakdown value='auto' />
             </view>
             <mark class='Automatic' />
             <encodings>
               <color column='[federated.1965dz40tpmeol18tmp6v0tke9x8].[:Measure Names]' />
+              <tooltip column='[federated.1965dz40tpmeol18tmp6v0tke9x8].[sum:Ladder score:qk]' />
               <text column='[federated.1965dz40tpmeol18tmp6v0tke9x8].[Multiple Values]' />
             </encodings>
             <style>
@@ -1034,7 +1064,7 @@
         <edge name='right'>
           <strip size='160'>
             <card param='[federated.1965dz40tpmeol18tmp6v0tke9x8].[none:Regional indicator:nk]' type='filter' />
-            <card pane-specification-id='0' param='[federated.1965dz40tpmeol18tmp6v0tke9x8].[:Measure Names]' type='color' />
+            <card pane-specification-id='1' param='[federated.1965dz40tpmeol18tmp6v0tke9x8].[:Measure Names]' type='color' />
           </strip>
         </edge>
       </cards>
