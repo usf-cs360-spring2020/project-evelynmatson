@@ -11,6 +11,7 @@ let axes;
 let plot;
 let grid;
 let data;
+let longData = [];
 
 let sliders = {
 
@@ -123,6 +124,7 @@ let visualizationTwo = function() {
  */
 let prepVis = function(dataParam) {
     console.log('data as loaded', dataParam);
+    console.log('longData', longData);
 
     data = dataParam
         .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
@@ -174,95 +176,94 @@ let prepVis = function(dataParam) {
             .domain([0,maxOfExplainor])
             .rangeRound([0, scales.explainors.bandwidth()])
             .nice();
-
     }
 
 
         // Finally, set up axes
-    let monthsAxis = d3.axisLeft(scales.month)
-        // .tickPadding(0)
-        .tickFormat(monthsFormatter);
-    axes.months = monthsAxis;
-    let monthsAxisGroup = plot.append("g")
-        .attr("id", "months-axis")
-        .attr("class", "axis hidden-ticks");
-    monthsAxisGroup.call(monthsAxis);
-
-    let regionsAxis = d3.axisTop(scales.regions);
-    axes.regions = regionsAxis;
-    let regionsAxisGroup = plot.append("g")
-        .attr("id", "regions-axis")
-        .attr("class", "axis hidden-ticks");
-    regionsAxisGroup.call(regionsAxis);
-
-    let passengerAxesGroup = plot.append("g")
-        .attr("id", "passenger-axes");
-    let passengersAxis = d3.axisBottom(scales.passengers)
-        // .tickPadding(0)
-        .tickValues([0,100000,200000])
-        .tickFormat(passengerTicksFormatter);
-        // .ticks(3);
-    axes.passengers = passengersAxis;
-    for( let [index, region] of regions.entries() ) {
-        let passengersAxisGroup = passengerAxesGroup.append("g")
-            .attr("class", "axis hidden-ticks")
-            .attr("id", "axis" + index.toString())
-            .attr("transform", translate(scales.regions(region) ,config.plot.height));
-        passengersAxisGroup.call(passengersAxis);
-
-        let title = passengerAxesGroup.append('text')
-            .text('Passengers')
-            .style('fill', 'black')
-            .style('font-size', '0.7rem')
-            .attr('text-anchor', 'middle')
-            .attr("transform", translate(scales.regions(region) ,config.plot.height))
-            .attr('x', midpoint(scales.passengers.range()))
-            .attr('y', 30);
-    }
-
-    // Draw gridlines
-    var ygridlines = d3.axisBottom(scales.passengers)
-        .tickFormat("")
-        .tickSize(-config.plot.height)
-        .ticks(3);
-    for (let [index, region] of regions.entries() ) {
-        let passengersAxisGroup = grid.append("g")
-            .attr("class", "gridline")
-            .attr("id", "grid-" + index.toString())
-            .attr("style", "color: #BBB")
-            .attr("transform", translate(scales.regions(region) ,config.plot.height))
-            .call(ygridlines);
-    }
+    // let monthsAxis = d3.axisLeft(scales.month)
+    //     // .tickPadding(0)
+    //     .tickFormat(monthsFormatter);
+    // axes.months = monthsAxis;
+    // let monthsAxisGroup = plot.append("g")
+    //     .attr("id", "months-axis")
+    //     .attr("class", "axis hidden-ticks");
+    // monthsAxisGroup.call(monthsAxis);
+    //
+    // let regionsAxis = d3.axisTop(scales.regions);
+    // axes.regions = regionsAxis;
+    // let regionsAxisGroup = plot.append("g")
+    //     .attr("id", "regions-axis")
+    //     .attr("class", "axis hidden-ticks");
+    // regionsAxisGroup.call(regionsAxis);
+    //
+    // let passengerAxesGroup = plot.append("g")
+    //     .attr("id", "passenger-axes");
+    // let passengersAxis = d3.axisBottom(scales.passengers)
+    //     // .tickPadding(0)
+    //     .tickValues([0,100000,200000])
+    //     .tickFormat(passengerTicksFormatter);
+    //     // .ticks(3);
+    // axes.passengers = passengersAxis;
+    // for( let [index, region] of regions.entries() ) {
+    //     let passengersAxisGroup = passengerAxesGroup.append("g")
+    //         .attr("class", "axis hidden-ticks")
+    //         .attr("id", "axis" + index.toString())
+    //         .attr("transform", translate(scales.regions(region) ,config.plot.height));
+    //     passengersAxisGroup.call(passengersAxis);
+    //
+    //     let title = passengerAxesGroup.append('text')
+    //         .text('Passengers')
+    //         .style('fill', 'black')
+    //         .style('font-size', '0.7rem')
+    //         .attr('text-anchor', 'middle')
+    //         .attr("transform", translate(scales.regions(region) ,config.plot.height))
+    //         .attr('x', midpoint(scales.passengers.range()))
+    //         .attr('y', 30);
+    // }
+    //
+    // // Draw gridlines
+    // var ygridlines = d3.axisBottom(scales.passengers)
+    //     .tickFormat("")
+    //     .tickSize(-config.plot.height)
+    //     .ticks(3);
+    // for (let [index, region] of regions.entries() ) {
+    //     let passengersAxisGroup = grid.append("g")
+    //         .attr("class", "gridline")
+    //         .attr("id", "grid-" + index.toString())
+    //         .attr("style", "color: #BBB")
+    //         .attr("transform", translate(scales.regions(region) ,config.plot.height))
+    //         .call(ygridlines);
+    // }
 
     // Make a legend
     // https://www.d3-graph-gallery.com/graph/custom_legend.html
-    let legendGroup = d3.select("#legend");
-    let legendKeys = ["Asia", 'Canada', 'Australia / Oceania', 'Central America', 'Europe', 'Mexico',  'Middle East'];
-    let index = 0;
-    for (let region of legendKeys) {
-
-        // Draw a little square
-        legendGroup.append("rect")
-        .attr('class', 'legend-square')
-        .attr('x', config.legend.betweenSquares + (index % 4) * config.legend.column_width)
-        .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)))
-        .attr('width', config.legend.squareSize)
-        .attr('height', config.legend.squareSize)
-        .style('fill', scales.color(region))
-            .style('stroke', 'white');
-
-        // Draw a little label
-        legendGroup.append("text")
-            .attr('x',  config.legend.betweenSquares*2 + config.legend.squareSize + config.legend.betweenSquares + (index % 4) * config.legend.column_width)
-            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)) + config.legend.squareSize / 2)
-            .style('fill', 'black')
-            .text(region)
-            .attr('text-anchor', 'left')
-            .style('alignment-baseline', 'middle')
-            .attr('font-size', '1em');
-
-        index++;
-        }
+    // let legendGroup = d3.select("#legend");
+    // let legendKeys = ["Asia", 'Canada', 'Australia / Oceania', 'Central America', 'Europe', 'Mexico',  'Middle East'];
+    // let index = 0;
+    // for (let region of legendKeys) {
+    //
+    //     // Draw a little square
+    //     legendGroup.append("rect")
+    //     .attr('class', 'legend-square')
+    //     .attr('x', config.legend.betweenSquares + (index % 4) * config.legend.column_width)
+    //     .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)))
+    //     .attr('width', config.legend.squareSize)
+    //     .attr('height', config.legend.squareSize)
+    //     .style('fill', scales.color(region))
+    //         .style('stroke', 'white');
+    //
+    //     // Draw a little label
+    //     legendGroup.append("text")
+    //         .attr('x',  config.legend.betweenSquares*2 + config.legend.squareSize + config.legend.betweenSquares + (index % 4) * config.legend.column_width)
+    //         .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)) + config.legend.squareSize / 2)
+    //         .style('fill', 'black')
+    //         .text(region)
+    //         .attr('text-anchor', 'left')
+    //         .style('alignment-baseline', 'middle')
+    //         .attr('font-size', '1em');
+    //
+    //     index++;
+    // }
 
     // Draw actual bars
     let rect = d3.select("#bars");
@@ -293,7 +294,6 @@ let prepVis = function(dataParam) {
 };
 
 function updateTwo() {
-
 }
 
 /**
@@ -365,6 +365,26 @@ let convertRow = function(row) {
         "Regional indicator" : row["Regional indicator"]
 
     };
+
+    for (let explainor of Object.keys(out)) {
+
+        // Skip non-related things
+        if (!explainor.includes('Explained by')) {
+            continue;
+        }
+
+        let newThing = {
+            'country': row['Country name'],
+            "Regional indicator" : row["Regional indicator"],
+            "Ladder score" : parseFloat(row["Ladder score"]),
+            'value' : parseFloat(row[explainor]),
+            'explainor': explainor
+        };
+        // newThing[value] = parseFloat(row[explainor]);
+
+        longData.push(newThing);
+
+    }
 
     // out["month"] = convertActivityPeriod(row["Activity Period"]);
     // out["geo"] = row["GEO Region"];
