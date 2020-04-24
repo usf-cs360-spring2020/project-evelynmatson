@@ -380,24 +380,10 @@ let convertRow = function(row) {
             'value' : parseFloat(row[explainor]),
             'explainor': explainor
         };
-        // newThing[value] = parseFloat(row[explainor]);
 
         longData.push(newThing);
 
     }
-
-    // out["month"] = convertActivityPeriod(row["Activity Period"]);
-    // out["geo"] = row["GEO Region"];
-    // out["passengers"] = parseInt(row["Passenger Count"]);
-
-    // Wrangle the data to normalize to a 30-day month
-    // let dayCounts = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    // let normalizedDayCount = 30;
-
-    // let normScalingFactor = normalizedDayCount /  dayCounts[out['month'].getMonth()];
-    // console.log(out['month'], dayCounts[out['month'].getMonth()]);
-    // out['passengers'] = out['passengers'] * normScalingFactor;
-
     return out;
 };
 
