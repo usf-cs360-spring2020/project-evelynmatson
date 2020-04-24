@@ -154,12 +154,48 @@
             Data Visualization Beta Prototypes
           </h1>
 
-          <div class="slidecontainer">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-          </div>
-          <svg id="two" class="visualization"></svg>
-          <script src="resources/my-lineup.js.js"></script>
+          <div id="lineup" style="width: 1200px; height: 1200px;border-width: 2px;border-style: solid;border-color: #222222"></div>
 
+          <script>
+            // generate some data
+            const arr = [];
+            const cats = ['c1', 'c2', 'c3'];
+            for (let i = 0; i < 100; ++i) {
+              arr.push({
+                a: Math.random() * 10,
+                d: 'Row ' + i,
+                cat: cats[Math.floor(Math.random() * 3)],
+                cat2: cats[Math.floor(Math.random() * 3)]
+              })
+            }
+
+            // Get some data on d3
+            let actualData = d3.csv('resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv', function (row) {
+              console.log('original row', row);
+              let toReturn = {
+                'country' : row['Country name'],
+                'ladder score' : parseFloat(row['Ladder score']),
+                "Explained by Freedom to make life choices" : parseFloat(row['Explained by: Freedom to make life choices']),
+                "Explained by Generosity" : parseFloat(row['Explained by: Generosity']),
+                "Explained by Healthy life expectancy" : parseFloat(row['Explained by: Healthy life expectancy']),
+                "Explained by Log GDP per capita" : parseFloat(row['Explained by: Log GDP per capita']),
+                "Explained by Perceptions of corruption" : parseFloat(row['Explained by: Perceptions of corruption']),
+                "Explained by Social support" : parseFloat(row['Explained by: Social support']),
+                'dystopia + residual' : parseFloat(row['Dystopia + residual']),
+                'region' : row['Regional indicator']
+              };
+              console.log('returned row', toReturn)
+              return toReturn;
+            }).then(function(data) {
+              // Make the lineup!
+              let lineUpLocation = document.getElementById('lineup');
+              const lineup = LineUpJS.asTaggle(lineUpLocation, data);
+            });
+            console.log('actualData', actualData);
+
+
+            console.log('array as sent to lineup', arr);
+          </script>
 
 
 <!--        <h3>About</h3>-->
