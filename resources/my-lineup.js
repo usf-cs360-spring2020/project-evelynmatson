@@ -113,7 +113,7 @@ let visualizationTwo = function() {
 
     // Load the data
     // let csv = d3.csv("resources/Datasets/2 2018 enplaned per region per month.csv", convertRow).then(drawTwo);
-    let csv = d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(drawTwo);
+    let csv = d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(prepVis);
     // After this promise is loaded, send it in to drawOne().
 };
 
@@ -121,7 +121,7 @@ let visualizationTwo = function() {
  * Draw the actual visualization number one
  * @param data the data loaded from csv to use in the visualization
  */
-let drawTwo = function(dataParam) {
+let prepVis = function(dataParam) {
     console.log('data as loaded', dataParam);
 
     data = dataParam
@@ -143,13 +143,42 @@ let drawTwo = function(dataParam) {
     scales.regions.domain(regions);
     scales.color.domain(regions);
 
-    let maxPassengers = Math.max(... data.map(row => row['passengers']));
-    scales.passengers.domain([0,maxPassengers])
-        .rangeRound([0, scales.regions.bandwidth()])
-        .nice();
+    // let maxPassengers = Math.max(... data.map(row => row['passengers']));
+    // scales.passengers.domain([0,maxPassengers])
+    //     .rangeRound([0, scales.regions.bandwidth()])
+    //     .nice();
+
+    // scales.regions = d3.scaleBand()
+    //     .rangeRound([0, config.plot.width])
+    //     .paddingInner(config.plot.paddingBetweenRegions);
+
+    // Better scales
+    // Band scale for the different explainors
+    scales.explainors = d3.scaleBand()
+        .rangeRound([0, config.plot.width])
+        .paddingInner(config.plot.paddingBetweenRegions);
+
+    // Linear scales, one for each explainor's values
+    for (let explainor of Object.keys(data[0])) {
+        // Skip non-related things
+        if (!explainor.includes('Explained by')) {
+            continue;
+        }
+
+        // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
+        let maxOfExplainor = Math.max(...data.map(d => d[explainor]));
+        console.log('max of ', explainor, maxOfExplainor);
+
+        // console.log('explainor', explainor);
+        scales[explainor] = d3.scaleLinear()
+            .domain([0,maxOfExplainor])
+            .rangeRound([0, scales.explainors.bandwidth()])
+            .nice();
+
+    }
 
 
-    // Finally, set up axes
+        // Finally, set up axes
     let monthsAxis = d3.axisLeft(scales.month)
         // .tickPadding(0)
         .tickFormat(monthsFormatter);
