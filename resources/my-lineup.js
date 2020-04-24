@@ -10,6 +10,11 @@ let svg;
 let axes;
 let plot;
 let grid;
+let data;
+
+let sliders = {
+
+};
 
 /**
  * This function will draw the second visualization.
@@ -107,7 +112,8 @@ let visualizationTwo = function() {
     axes = {};
 
     // Load the data
-    let csv = d3.csv("resources/Datasets/2 2018 enplaned per region per month.csv", convertRow).then(drawOne);
+    // let csv = d3.csv("resources/Datasets/2 2018 enplaned per region per month.csv", convertRow).then(drawTwo);
+    let csv = d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(drawTwo);
     // After this promise is loaded, send it in to drawOne().
 };
 
@@ -115,9 +121,10 @@ let visualizationTwo = function() {
  * Draw the actual visualization number one
  * @param data the data loaded from csv to use in the visualization
  */
-let drawOne = function(data) {
+let drawTwo = function(dataParam) {
+    console.log('data as loaded', dataParam);
 
-    data = data
+    data = dataParam
         .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
 
     // Work on scales
@@ -256,9 +263,13 @@ let drawOne = function(data) {
 
 };
 
+function updateTwo() {
+
+}
+
 /**
  * Sophie's helpful helper method to make translating easier. Thank you, Sophie!
-  */
+ */
 function translate(x, y) {
     return 'translate(' + x + ',' + y + ')';
 }
@@ -310,19 +321,33 @@ function convertActivityPeriod(monthstring) {
  * @returns the converted row
  */
 let convertRow = function(row) {
-    let out = {};
+    // console.log('row', row);
 
-    out["month"] = convertActivityPeriod(row["Activity Period"]);
-    out["geo"] = row["GEO Region"];
-    out["passengers"] = parseInt(row["Passenger Count"]);
+    let out = {
+        'country': row['Country name'],
+        "Dystopia + residual" : parseFloat(row["Dystopia + residual"]),
+        "Explained by: Freedom to make life choices" : parseFloat(row["Explained by: Freedom to make life choices"]),
+        "Explained by: Generosity" : parseFloat(row["Explained by: Generosity"]),
+        "Explained by: Healthy life expectancy" : parseFloat(row["Explained by: Healthy life expectancy"]),
+        "Explained by: Log GDP per capita" : parseFloat(row["Explained by: Log GDP per capita"]),
+        "Explained by: Perceptions of corruption" : parseFloat(row["Explained by: Perceptions of corruption"]),
+        "Explained by: Social support" : parseFloat(row["Explained by: Social support"]),
+        "Ladder score" : parseFloat(row["Ladder score"]),
+        "Regional indicator" : row["Regional indicator"]
+
+    };
+
+    // out["month"] = convertActivityPeriod(row["Activity Period"]);
+    // out["geo"] = row["GEO Region"];
+    // out["passengers"] = parseInt(row["Passenger Count"]);
 
     // Wrangle the data to normalize to a 30-day month
-    let dayCounts = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let normalizedDayCount = 30;
+    // let dayCounts = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    // let normalizedDayCount = 30;
 
-    let normScalingFactor = normalizedDayCount /  dayCounts[out['month'].getMonth()];
+    // let normScalingFactor = normalizedDayCount /  dayCounts[out['month'].getMonth()];
     // console.log(out['month'], dayCounts[out['month'].getMonth()]);
-    out['passengers'] = out['passengers'] * normScalingFactor;
+    // out['passengers'] = out['passengers'] * normScalingFactor;
 
     return out;
 };
