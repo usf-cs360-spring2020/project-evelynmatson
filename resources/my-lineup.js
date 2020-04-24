@@ -107,7 +107,7 @@ let visualizationTwo = function() {
     axes = {};
 
     // Load the data
-    let csv = d3.csv("data/2 2018 enplaned per region per month.csv", convertRow).then(drawOne);
+    let csv = d3.csv("resources/Datasets/2 2018 enplaned per region per month.csv", convertRow).then(drawOne);
     // After this promise is loaded, send it in to drawOne().
 };
 
