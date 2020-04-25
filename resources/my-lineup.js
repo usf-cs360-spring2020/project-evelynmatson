@@ -1,6 +1,7 @@
 // https://bl.ocks.org/d3noob/10632804
 // https://www.w3schools.com/howto/howto_js_rangeslider.asp
-//https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
+// https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
+// https://devdocs.io/html/element/input/range
 
 // Global variables because why not
 let scales = {};
@@ -389,16 +390,6 @@ function translate(x, y) {
     return 'translate(' + x + ',' + y + ')';
 }
 
-
-/**
- * Helps format the ticks for the passenger count axes.
- */
-function passengerTicksFormatter(d) {
-    if(d === 0 ) {return "0"}
-    // if(d % 50000 !== 0) {return ""}
-    return (d/1000).toString() + "k"
-}
-
 /**
  * Helpful unique-ing function
  * @returns {*[]} an array with only the unique elements of the array it was called on
@@ -452,16 +443,6 @@ let convertRow = function(row) {
     }
     return out;
 };
-
-
-/**
- * Finds the largest passenger count for any month for region in data entry a
- */
-// function maxOfRegion(a, data) {
-//     return Math.max(...data
-//         .filter(d => (d['geo'] === a['geo']))
-//         .map(d => d['passengers']));
-// }
 
 visualizationTwo();
 
