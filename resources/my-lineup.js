@@ -1,5 +1,6 @@
 // https://bl.ocks.org/d3noob/10632804
 // https://www.w3schools.com/howto/howto_js_rangeslider.asp
+//https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
 
 // Global variables because why not
 let scales = {};
@@ -29,10 +30,7 @@ let grid;
 let data;
 let longData = [];
 let explainors;
-
-let sliders = {
-
-};
+let weights = {};
 
 /**
  * This function will draw the second visualization.
@@ -60,9 +58,9 @@ let visualizationTwo = function() {
     svg.attr("height", config.svg.height);
 
     // Set up svg plot area
-    plot = svg.append('g');
-    plot.attr('id', 'plot1');
-    plot.attr('transform', translate(config.plot.x, config.plot.y));
+    plot = svg.append('g')
+        .attr('id', 'plot1')
+        .attr('transform', translate(config.plot.x, config.plot.y));
 
     // Set up a group for the legend
     let legendGroup = svg.append("g")
@@ -144,7 +142,7 @@ let prepVis = function(dataParam) {
         .map(row => row['country']);
         // .sort(function(a,b) {return a - b;});
     // scales.month.domain(dates);
-    console.log('found countries', countries);
+    // console.log('found countries', countries);
     scales.countries.domain(countries);
 
     explainors = longData
@@ -153,7 +151,7 @@ let prepVis = function(dataParam) {
         // })
         .map(row => row['explainor'])
         .unique();
-    console.log('found explainors', explainors);
+    // console.log('found explainors', explainors);
     // scales.regions.domain(explainors);
     scales.color.domain(explainors);
 
@@ -182,31 +180,25 @@ let prepVis = function(dataParam) {
 
         // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
         let maxOfExplainor = Math.max(...data.map(d => d[explainor]));
-        console.log('max of ', explainor, maxOfExplainor);
+        // console.log('max of ', explainor, maxOfExplainor);
 
         // console.log('explainor', explainor);
         scales[explainor] = d3.scaleLinear()
             .domain([0,maxOfExplainor])
             .rangeRound([0, scales.explainors.bandwidth()])
             .nice();
+
+        // Also give the weight an initial value
+        weights[explainor] = 50;
     }
 
-
-    // Finally, set up axes
-    let countriesAxis = d3.axisLeft(scales.countries);
-    axes.countries = countriesAxis;
-    let countriesAxisGroup = plot.append("g")
-        .attr("id", "months-axis")
-        .attr("class", "axis hidden-ticks");
-    countriesAxisGroup.call(countriesAxis);
-
-
+    // Make the static axes
     let explainorsAxis = d3.axisTop(scales.explainors)
         .tickFormat(d => d.substring(14));
     axes.explainors = explainorsAxis;
     let explainorsAxisGroup = plot.append("g")
         .attr("id", "explainors-axis")
-        .attr("class", "axis hidden-ticks")
+        .attr("class", "axis hidden-ticks");
     explainorsAxisGroup.call(explainorsAxis);
 
     // let passengerAxesGroup = plot.append("g")
@@ -278,6 +270,26 @@ let prepVis = function(dataParam) {
     //     index++;
     // }
 
+    setupSliders();
+
+    updateVis();
+};
+
+/**
+ * Update the visualization after a modified
+ */
+function updateVis() {
+    // Sort the data according to the current weights
+    let sorted = data.sort(function(a, b) {
+        let weightedSumA = weightedSmExplainors(a);
+        let weightedSumB = weightedSmExplainors(b);
+        return weightedSumB - weightedSumA;
+    });
+    console.log('sorted data: ', sorted);
+
+    // Update the scale to show the new order!
+    scales.countries.domain(sorted.map(r => r.country));
+
     // Draw actual bars
     let rect = d3.select("#bars");
     console.assert(rect.size() === 1); // Make sure we just have one thing
@@ -286,22 +298,51 @@ let prepVis = function(dataParam) {
         .data(longData, function(d) {return d["country"]+d['explainor']});
 
     // Draw new bars for entering data
-    things.enter()
-        .append("rect")
-        .attr("class","bars")
-        .attr("width", d => scales[d['explainor']](d["value"]))
-        .attr("x", d => scales.explainors(d["explainor"]))
-        .attr("y", d => scales.countries(d["country"]))
-        .attr("height", scales.countries.bandwidth())
-        .style("fill", d => scales.color(d['explainor']))
-        .style('stroke', 'white');
+    things.join(
+        enter =>
+            enter
+                .append("rect")
+                .attr("class","bars")
+                // .attr("width", d => scales[d['explainor']](d["value"]))
+                .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
+                .attr("x", d => scales.explainors(d["explainor"]))
+                .attr("y", d => scales.countries(d["country"]))
+                .attr("height", scales.countries.bandwidth())
+                .style("fill", d => scales.color(d['explainor']))
+                .style('stroke', 'white'),
+        update =>
+            update
+                .transition()
+                .duration(750)
+                .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
+                .attr("y", d => scales.countries(d["country"]))
+    );
 
+    // Update Axes
+    let countriesAxis = d3.axisLeft(scales.countries);
+    axes.countries = countriesAxis;
+    plot.remove('g#countries-axis');
+    let countriesAxisGroup = plot.append("g")
+        .attr("id", "countries-axis")
+        .attr("class", "axis hidden-ticks");
+    countriesAxisGroup.call(countriesAxis);
 
-    setupSliders();
-};
+}
 
-function updateVis() {
+/**
+ * Calculate the weighted sum of a given data element's explainors
+ * @param d the data element
+ */
+function weightedSmExplainors(d) {
+    // console.log('weights', weights);
+    let sum = 0;
+    let keys = Object.keys(d)
+        .filter(a => a.includes("Explained"))
+        .map(key => d[key] * weights[key])
+        .forEach(function(d) {sum += d});
 
+    // console.log('calculated sum for', d.country, sum);
+    return sum;
 }
 
 /**
@@ -322,8 +363,12 @@ function setupSliders() {
 
     sliders.on('input', function () {
         let explainor = d3.select(this).attr('id');
-        let scale_factor = this.value;
+        let scale_factor = parseFloat(this.value);
         console.log(explainor, scale_factor);
+
+        weights[explainor] = scale_factor;
+
+        updateVis();
 
         // TODO I have the new value, now do something with it (update the visualization)
     });
