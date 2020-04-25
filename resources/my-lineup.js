@@ -321,15 +321,11 @@ function setupSliders() {
     console.log('sliders', sliders);
 
     sliders.on('input', function () {
-        // console.log('this', this);
-        console.log('this is weird!!!');
-        console.log('this.value', this.value);
+        let explainor = d3.select(this).attr('id');
+        let scale_factor = this.value;
+        console.log(explainor, scale_factor);
 
-        // console.log('d3.select(this)', d3.select(this));
-        // let explainor = d3.select(this).attr('id');
-        // let scale_factor = d3.select(this).attr('value');
-        // console.log(explainor, scale_factor);
-            // console.log(d3.select(this).value);
+        // TODO I have the new value, now do something with it (update the visualization)
     });
 
 }
