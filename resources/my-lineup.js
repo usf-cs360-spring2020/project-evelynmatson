@@ -1,3 +1,6 @@
+// https://bl.ocks.org/d3noob/10632804
+// https://www.w3schools.com/howto/howto_js_rangeslider.asp
+
 // Global variables because why not
 let scales = {};
 let config = {
@@ -293,17 +296,42 @@ let prepVis = function(dataParam) {
         .style("fill", d => scales.color(d['explainor']))
         .style('stroke', 'white');
 
-    // Setup slider
-    // https://www.w3schools.com/howto/howto_js_rangeslider.asp
-    let slider = document.getElementById("myRange");
-    console.log('this is my slider', slider);
-    slider.oninput = function() {
-        console.log('slider is now', this.value);
-    }
 
+    setupSliders();
 };
 
-function updateTwo() {
+function updateVis() {
+
+}
+
+/**
+ * Setup sliders to update the vis each time they get moved
+ */
+function setupSliders() {
+
+    // Setup slider (old)
+    // let slider = document.getElementById("myRange");
+    // console.log('this is my slider', slider);
+    // slider.oninput = function() {
+    //     console.log('slider is now', this.value);
+    // }
+
+
+    let sliders = d3.selectAll('.slider');
+    console.log('sliders', sliders);
+
+    sliders.on('input', function () {
+        // console.log('this', this);
+        console.log('this is weird!!!');
+        console.log('this.value', this.value);
+
+        // console.log('d3.select(this)', d3.select(this));
+        // let explainor = d3.select(this).attr('id');
+        // let scale_factor = d3.select(this).attr('value');
+        // console.log(explainor, scale_factor);
+            // console.log(d3.select(this).value);
+    });
+
 }
 
 /**
