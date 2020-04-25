@@ -1,10 +1,23 @@
 // Global variables because why not
 let scales = {};
 let config = {
-    'svg' : {},
-    'margin' : {},
+    'svg' : {
+        height : 1800,
+        width : 960
+    },
+    'margin' : {
+        top : 80,
+        right : 20,
+        bottom : 110,
+        left : 150
+    },
     'plot' : {},
-    'legend' : {}
+    'legend' : {
+        squareSize : 15,
+        betweenSquares : 5,
+        firstSquareX : 5,
+        column_width : 225,
+    }
 };
 let svg;
 let axes;
@@ -23,26 +36,11 @@ let sliders = {
  */
 let visualizationTwo = function() {
 
-    // Specs of the svg
-    config.svg.height = 1800;
-    config.svg.width = 900;
-
-    // svg margins
-    config.margin.top = 80;
-    config.margin.right = 20;
-    config.margin.bottom = 110;
-    config.margin.left = 70;
-
-    // Legend specs
-    config.legend.squareSize = 15;
-    config.legend.betweenSquares = 5;
-    config.legend.firstSquareX = 5;
     config.legend.width = config.svg.width;
     config.legend.height = config.margin.bottom;
-    config.legend.column_width = 225;
-    // config.legend.leftBorder = 5;
 
-    // Plot specs
+
+        // Plot specs
     // (Move the plot right and down by the margin amounts)
     config.plot.x = config.margin.left;
     config.plot.y = config.margin.top;
@@ -130,6 +128,10 @@ let prepVis = function(dataParam) {
     console.log('data as loaded', dataParam);
     console.log('longData', longData);
 
+    longData = longData.sort(function(a, b) {
+        return a['Ladder score'] - b['Ladder score'];
+    });
+
     data = dataParam
         .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
 
@@ -187,23 +189,23 @@ let prepVis = function(dataParam) {
     }
 
 
-        // Finally, set up axes
-    // let monthsAxis = d3.axisLeft(scales.month)
-    //     // .tickPadding(0)
-    //     .tickFormat(monthsFormatter);
-    // axes.months = monthsAxis;
-    // let monthsAxisGroup = plot.append("g")
-    //     .attr("id", "months-axis")
-    //     .attr("class", "axis hidden-ticks");
-    // monthsAxisGroup.call(monthsAxis);
-    //
-    // let regionsAxis = d3.axisTop(scales.regions);
-    // axes.regions = regionsAxis;
-    // let regionsAxisGroup = plot.append("g")
-    //     .attr("id", "regions-axis")
-    //     .attr("class", "axis hidden-ticks");
-    // regionsAxisGroup.call(regionsAxis);
-    //
+    // Finally, set up axes
+    let countriesAxis = d3.axisLeft(scales.countries);
+    axes.countries = countriesAxis;
+    let countriesAxisGroup = plot.append("g")
+        .attr("id", "months-axis")
+        .attr("class", "axis hidden-ticks");
+    countriesAxisGroup.call(countriesAxis);
+
+
+    let explainorsAxis = d3.axisTop(scales.explainors)
+        .tickFormat(d => d.substring(14));
+    axes.explainors = explainorsAxis;
+    let explainorsAxisGroup = plot.append("g")
+        .attr("id", "explainors-axis")
+        .attr("class", "axis hidden-ticks")
+    explainorsAxisGroup.call(explainorsAxis);
+
     // let passengerAxesGroup = plot.append("g")
     //     .attr("id", "passenger-axes");
     // let passengersAxis = d3.axisBottom(scales.passengers)
@@ -311,15 +313,6 @@ function translate(x, y) {
     return 'translate(' + x + ',' + y + ')';
 }
 
-/**
- * Convert a data entry to a nice month name
- */
-function monthsFormatter(d) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];  // From https://stackoverflow.com/questions/1643320/get-month-name-from-date
-    return monthNames[d.getMonth()];
-}
 
 /**
  * Helps format the ticks for the passenger count axes.
