@@ -174,7 +174,7 @@ let prepVis = function(dataParam) {
     // Linear scales, one for each explainor's values
     for (let explainor of Object.keys(data[0])) {
         // Skip non-related things
-        if (!explainor.includes('Explained by')) {
+        if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
             continue;
         }
 
@@ -194,7 +194,12 @@ let prepVis = function(dataParam) {
 
     // Make the static axes
     let explainorsAxis = d3.axisTop(scales.explainors)
-        .tickFormat(d => d.substring(14));
+        .tickFormat(function(d) {
+            if (d.includes('Explained'))
+                return d.substring(14);
+            else
+                return d;
+        });
     axes.explainors = explainorsAxis;
     let explainorsAxisGroup = plot.append("g")
         .attr("id", "explainors-axis")
@@ -303,8 +308,8 @@ function updateVis() {
             enter
                 .append("rect")
                 .attr("class","bars")
-                // .attr("width", d => scales[d['explainor']](d["value"]))
-                .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
+                .attr("width", d => scales[d['explainor']](d["value"]))
+                // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
                 .attr("x", d => scales.explainors(d["explainor"]))
                 .attr("y", d => scales.countries(d["country"]))
                 .attr("height", scales.countries.bandwidth())
@@ -314,16 +319,18 @@ function updateVis() {
             update
                 .transition()
                 .duration(750)
-                .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
+                .attr("width", d => scales[d['explainor']](d["value"]))
+                // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
                 .attr("y", d => scales.countries(d["country"]))
     );
 
     // Update Axes
     let countriesAxis = d3.axisLeft(scales.countries);
     axes.countries = countriesAxis;
-    plot.remove('g#countries-axis');
+    // plot.remove('g#countries-axis');
+    plot.select('g#countriesaxis').remove();
     let countriesAxisGroup = plot.append("g")
-        .attr("id", "countries-axis")
+        .attr("id", "countriesaxis")
         .attr("class", "axis hidden-ticks");
     countriesAxisGroup.call(countriesAxis);
 
@@ -337,7 +344,7 @@ function weightedSmExplainors(d) {
     // console.log('weights', weights);
     let sum = 0;
     let keys = Object.keys(d)
-        .filter(a => a.includes("Explained"))
+        .filter(a => a.includes("Explained")  || a.includes('residual'))
         .map(key => d[key] * weights[key])
         .forEach(function(d) {sum += d});
 
@@ -361,7 +368,7 @@ function setupSliders() {
     let sliders = d3.selectAll('.slider');
     console.log('sliders', sliders);
 
-    sliders.on('input', function () {
+    sliders.on('change', function () {
         let explainor = d3.select(this).attr('id');
         let scale_factor = parseFloat(this.value);
         console.log(explainor, scale_factor);
@@ -404,17 +411,6 @@ Array.prototype.unique = function() {
 };
 
 /**
- * This function converts a date in YYYYMM form to a Date object
- * @param monthstring the date string in YYYYMM format
- * @returns {Date} Date object that represents the correct month
- */
-function convertActivityPeriod(monthstring) {
-    let parseDate = d3.timeParse('%Y%m');
-    return parseDate(monthstring);
-    // console.log(date);
-}
-
-/**
  * This function converts date values during csv import
  * @param row the row object to convert
  * @returns the converted row
@@ -424,13 +420,13 @@ let convertRow = function(row) {
 
     let out = {
         'country': row['Country name'],
-        "Dystopia + residual" : parseFloat(row["Dystopia + residual"]),
         "Explained by: Freedom to make life choices" : parseFloat(row["Explained by: Freedom to make life choices"]),
         "Explained by: Generosity" : parseFloat(row["Explained by: Generosity"]),
         "Explained by: Healthy life expectancy" : parseFloat(row["Explained by: Healthy life expectancy"]),
         "Explained by: Log GDP per capita" : parseFloat(row["Explained by: Log GDP per capita"]),
         "Explained by: Perceptions of corruption" : parseFloat(row["Explained by: Perceptions of corruption"]),
         "Explained by: Social support" : parseFloat(row["Explained by: Social support"]),
+        "Dystopia + residual" : parseFloat(row["Dystopia + residual"]),
         "Ladder score" : parseFloat(row["Ladder score"]),
         "Regional indicator" : row["Regional indicator"]
 
@@ -439,7 +435,7 @@ let convertRow = function(row) {
     for (let explainor of Object.keys(out)) {
 
         // Skip non-related things
-        if (!explainor.includes('Explained by')) {
+        if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
             continue;
         }
 
