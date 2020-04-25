@@ -12,6 +12,7 @@ let plot;
 let grid;
 let data;
 let longData = [];
+let explainors;
 
 let sliders = {
 
@@ -23,8 +24,8 @@ let sliders = {
 let visualizationTwo = function() {
 
     // Specs of the svg
-    config.svg.height = 450;
-    config.svg.width = 900;   // Golden Ratio!
+    config.svg.height = 1800;
+    config.svg.width = 900;
 
     // svg margins
     config.margin.top = 80;
@@ -86,28 +87,31 @@ let visualizationTwo = function() {
 
     // Make some scales!
     // Month scale (y)
-    scales.month = d3.scaleBand()
+    // scales.month = d3.scaleBand()
+    //     .rangeRound([0, config.plot.height])
+    //     .paddingInner(config.plot.paddingBetweenMonths);
+    scales.countries = d3.scaleBand()
         .rangeRound([0, config.plot.height])
         .paddingInner(config.plot.paddingBetweenMonths);
 
-    scales.passengers = d3.scaleLinear();
+    // scales.passengers = d3.scaleLinear();
         // Will give a range later, when we know more about the data
 
-    scales.regions = d3.scaleBand()
-        .rangeRound([0, config.plot.width])
-        .paddingInner(config.plot.paddingBetweenRegions);
+    // scales.regions = d3.scaleBand()
+    //     .rangeRound([0, config.plot.width])
+    //     .paddingInner(config.plot.paddingBetweenRegions);
 
     scales.color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Title!
-    svg.append('text')
-        .text('2018 Outgoing International Passenger Counts by Region')
-        .attr('class', 'overall-title')
-        .attr('fill', 'black')
-        .attr('x', config.margin.left + midpoint(scales.regions.range()))
-        .attr('y', config.margin.top)
-        .attr('dy', -40)
-        .attr('text-anchor', 'middle');
+    // svg.append('text')
+    //     .text('2018 Outgoing International Passenger Counts by Region')
+    //     .attr('class', 'overall-title')
+    //     .attr('fill', 'black')
+    //     .attr('x', config.margin.left + midpoint(scales.explainors.range()))
+    //     .attr('y', config.margin.top)
+    //     .attr('dy', -40)
+    //     .attr('text-anchor', 'middle');
 
     // Setup axes
     axes = {};
@@ -130,20 +134,23 @@ let prepVis = function(dataParam) {
         .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
 
     // Work on scales
-    let dates = data
-        .filter(row => (row['geo'] === data[0]['geo']))     // Take only the first geo region's months
-        .map(row => row['month'])
-        .sort(function(a,b) {return a - b;});
-    scales.month.domain(dates);
+    let countries = data
+        // .filter(row => (row['geo'] === data[0]['geo']))     // Take only the first geo region's months
+        .map(row => row['country']);
+        // .sort(function(a,b) {return a - b;});
+    // scales.month.domain(dates);
+    console.log('found countries', countries);
+    scales.countries.domain(countries);
 
-    let regions = data
-        .sort(function(a, b) {
-            return maxOfRegion(b, data) - maxOfRegion(a, data);
-        })
-        .map(row => row['geo'])
+    explainors = longData
+        // .sort(function(a, b) {
+        //     return maxOfRegion(b, data) - maxOfRegion(a, data);
+        // })
+        .map(row => row['explainor'])
         .unique();
-    scales.regions.domain(regions);
-    scales.color.domain(regions);
+    console.log('found explainors', explainors);
+    // scales.regions.domain(explainors);
+    scales.color.domain(explainors);
 
     // let maxPassengers = Math.max(... data.map(row => row['passengers']));
     // scales.passengers.domain([0,maxPassengers])
@@ -157,6 +164,7 @@ let prepVis = function(dataParam) {
     // Better scales
     // Band scale for the different explainors
     scales.explainors = d3.scaleBand()
+        .domain(explainors)
         .rangeRound([0, config.plot.width])
         .paddingInner(config.plot.paddingBetweenRegions);
 
@@ -270,17 +278,17 @@ let prepVis = function(dataParam) {
     console.assert(rect.size() === 1); // Make sure we just have one thing
 
     let things = rect.selectAll(".bars")
-        .data(data, function(d) {return d["month"]});
+        .data(longData, function(d) {return d["country"]+d['explainor']});
 
     // Draw new bars for entering data
     things.enter()
         .append("rect")
         .attr("class","bars")
-        .attr("width", d => scales.passengers(d["passengers"]))
-        .attr("x", d => scales.regions(d["geo"]))
-        .attr("y", d => scales.month(d["month"]))
-        .attr("height", scales.month.bandwidth())
-        .style("fill", d => scales.color(d['geo']))
+        .attr("width", d => scales[d['explainor']](d["value"]))
+        .attr("x", d => scales.explainors(d["explainor"]))
+        .attr("y", d => scales.countries(d["country"]))
+        .attr("height", scales.countries.bandwidth())
+        .style("fill", d => scales.color(d['explainor']))
         .style('stroke', 'white');
 
     // Setup slider
@@ -391,11 +399,11 @@ let convertRow = function(row) {
 /**
  * Finds the largest passenger count for any month for region in data entry a
  */
-function maxOfRegion(a, data) {
-    return Math.max(...data
-        .filter(d => (d['geo'] === a['geo']))
-        .map(d => d['passengers']));
-}
+// function maxOfRegion(a, data) {
+//     return Math.max(...data
+//         .filter(d => (d['geo'] === a['geo']))
+//         .map(d => d['passengers']));
+// }
 
 visualizationTwo();
 
