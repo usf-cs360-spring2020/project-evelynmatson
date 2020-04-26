@@ -3,6 +3,7 @@
 // https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
 // https://devdocs.io/html/element/input/range
 // https://datahub.io/core/geo-countries#readme
+// https://bl.ocks.org/sjengle/2f6d4832397e3cdd78d735774cb5a4f2
 
 // Global variables because why not
 let config = {
@@ -300,7 +301,23 @@ let prepMap = function(dataParam) {
     let mapData = dataParam;
     console.log('mapData', mapData);
 
-    // d3.geoNaturalEarth2();
+    let projection = d3.geoNaturalEarth1()
+        .rotate([-10, 0])
+        .fitSize([config.map_svg.width, config.map_svg.height], mapData);
+    let pathGenerator = d3.geoPath(projection);
+
+
+    let outlinesG = map_svg.select('g#outlines');
+    // console.log('outlines', outlinesG);
+    let outlines = outlinesG.selectAll('path.country_outline')
+        .data(mapData.features)
+        .enter()
+        .append('path')
+        .attr('class', 'country_outline')
+        // .attr('id', function(d) {
+        //     console.log('d', d);
+        // })
+        .attr('d', pathGenerator);
 
 };
 
