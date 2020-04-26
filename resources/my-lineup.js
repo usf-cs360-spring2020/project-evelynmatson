@@ -4,6 +4,9 @@
 // https://devdocs.io/html/element/input/range
 // https://datahub.io/core/geo-countries#readme
 // https://bl.ocks.org/sjengle/2f6d4832397e3cdd78d735774cb5a4f2
+// http://techslides.com/demos/d3/d3-continents-projections.html
+// https://bl.ocks.org/syntagmatic/ba569633d51ebec6ec6e
+// https://observablehq.com/@d3/world-map-svg
 
 // Global variables because why not
 let config = {
@@ -314,11 +317,16 @@ let prepMap = function(dataParam) {
         .enter()
         .append('path')
         .attr('class', 'country_outline')
-        // .attr('id', function(d) {
-        //     console.log('d', d);
-        // })
         .attr('d', pathGenerator);
 
+
+    let graticule = d3.geoGraticule10();
+    let graticuleG = map_svg.select('g#graticule');
+    console.log('graticule', graticule);
+    graticuleG.append('path')
+        .attr('d', None => pathGenerator(graticule))
+        .attr('stroke', '#ccc')
+        .attr('fill', 'none');
 };
 
 /**
