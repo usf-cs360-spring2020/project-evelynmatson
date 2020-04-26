@@ -2,13 +2,16 @@
 // https://www.w3schools.com/howto/howto_js_rangeslider.asp
 // https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
 // https://devdocs.io/html/element/input/range
+// https://datahub.io/core/geo-countries#readme
 
 // Global variables because why not
-let scales = {};
 let config = {
-    'svg' : {
+    'lineup_svg' : {
         height : 1800,
         width : 960
+    },
+    'map_svg' : {
+        height : 500
     },
     'margin' : {
         top : 80,
@@ -24,8 +27,12 @@ let config = {
         column_width : 225,
     }
 };
-let svg;
-let axes;
+let scales = {};
+
+let map_svg;
+let lineup_svg;
+
+let axes = {};
 let plot;
 let grid;
 let data;
@@ -34,39 +41,47 @@ let explainors;
 let weights = {};
 
 /**
- * This function will draw the second visualization.
+ * This function will draw all of the visualization.
  */
-let visualizationTwo = function() {
+let letsGetItStarted = function() {
 
-    config.legend.width = config.svg.width;
+    config.legend.width = config.lineup_svg.width;
     config.legend.height = config.margin.bottom;
 
 
-        // Plot specs
+    // Plot specs
     // (Move the plot right and down by the margin amounts)
     config.plot.x = config.margin.left;
     config.plot.y = config.margin.top;
+
+    config.map_svg.width = config.lineup_svg.width;
+
     // (Calculate the width and height of the plot area)
-    config.plot.width = config.svg.width - config.margin.left - config.margin.right;
-    config.plot.height = config.svg.height - config.margin.top - config.margin.bottom;
+    config.plot.width = config.lineup_svg.width - config.margin.left - config.margin.right;
+    config.plot.height = config.lineup_svg.height - config.margin.top - config.margin.bottom;
 
     config.plot.paddingBetweenRegions = .05;
     config.plot.paddingBetweenMonths = .05;
 
-    // Set up the SVG
-    svg = d3.select("#two");
-    svg.attr("width", config.svg.width);
-    svg.attr("height", config.svg.height);
+    // Set up the SVGs
+    lineup_svg = d3.select("#lineupVisualization")
+        .attr("width", config.lineup_svg.width)
+        .attr("height", config.lineup_svg.height);
+
+    map_svg = d3.select('#mapVisualization')
+        .attr('width', config.map_svg.width)
+        .attr('height', config.map_svg.height);
+
 
     // Set up svg plot area
-    plot = svg.append('g')
+    plot = lineup_svg.append('g')
         .attr('id', 'plot1')
         .attr('transform', translate(config.plot.x, config.plot.y));
 
     // Set up a group for the legend
-    let legendGroup = svg.append("g")
+    let legendGroup = lineup_svg.append("g")
         .attr("id", "legend")
-        .attr('transform', translate(config.margin.left - 10, config.svg.height - config.margin.bottom + 50))
+        .attr('transform', translate(config.margin.left - 10, config.lineup_svg.height - config.margin.bottom + 50))
         .attr('width', config.legend.width)
         .attr('height', config.legend.height)
         .attr('fill', 'black');
@@ -113,13 +128,9 @@ let visualizationTwo = function() {
     //     .attr('dy', -40)
     //     .attr('text-anchor', 'middle');
 
-    // Setup axes
-    axes = {};
-
-    // Load the data
-    // let csv = d3.csv("resources/Datasets/2 2018 enplaned per region per month.csv", convertRow).then(drawTwo);
-    let csv = d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(prepVis);
-    // After this promise is loaded, send it in to drawOne().
+    // Load the data, continue in later methods
+    d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(prepVis);
+    d3.json('resources/Datasets/countries.geojson').then(prepMap);
 };
 
 /**
@@ -279,6 +290,18 @@ let prepVis = function(dataParam) {
     setupSliders();
 
     updateVis();
+};
+
+/**
+ * Prep the map visualization
+ * @param dataParam the data loaded from CSV
+ */
+let prepMap = function(dataParam) {
+    let mapData = dataParam;
+    console.log('mapData', mapData);
+
+    // d3.geoNaturalEarth2();
+
 };
 
 /**
@@ -444,7 +467,7 @@ let convertRow = function(row) {
     return out;
 };
 
-visualizationTwo();
+letsGetItStarted();
 
 /**
  * calculates the midpoint of a range given as a 2 element array
