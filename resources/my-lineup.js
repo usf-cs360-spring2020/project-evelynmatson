@@ -8,6 +8,7 @@
 // https://bl.ocks.org/syntagmatic/ba569633d51ebec6ec6e
 // https://observablehq.com/@d3/world-map-svg
 // https://lineup.js.org
+// https://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
 
 // Global variables because why not
 let config = {
@@ -211,10 +212,32 @@ let prepVis = function(dataParam) {
     // Make the static axes
     let explainorsAxis = d3.axisTop(scales.explainors)
         .tickFormat(function(d) {
-            if (d.includes('Explained'))
-                return d.substring(14);
-            else
-                return 'Residual Happiness';
+            switch (d) {
+                case 'Explained by: Freedom to make life choices' :
+                    return 'Freedom';
+
+                case 'Explained by: Generosity' :
+                    return 'Generosity';
+
+                case 'Explained by: Healthy life expectancy' :
+                    return 'Healthy Life Exp.';
+
+                case 'Explained by: Log GDP per capita' :
+                    return 'GDP per capita';
+
+                case 'Explained by: Perceptions of corruption' :
+                    return 'Corruption';
+
+                case 'Explained by: Social support' :
+                    return 'Social support';
+
+                case 'Dystopia + residual' :
+                    return 'Residual Happiness';
+            }
+            // if (d.includes('Explained'))
+            //     return d.substring(14);
+            // else
+            //     return 'Residual Happiness';
         });
     axes.explainors = explainorsAxis;
     let explainorsAxisGroup = plot.append("g")
