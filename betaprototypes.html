@@ -38,6 +38,8 @@
     <script src="https://d3js.org/d3-transition.v1.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha256-qo76Vs9B6JAALbrTn+PcN1r09hbNLd2M78V19glOMeU=" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
 
     <!-- Lineup Scripts -->
     <link href="https://unpkg.com/lineupjs/build/LineUpJS.css" rel="stylesheet">
@@ -155,14 +157,27 @@
           </h1>
 
           <h3>Question</h3>
-          <p>'Which country best matches what I value?'</p>
+          <p><em>'Which country best matches my values?'</em></p>
           <p>
             This is the question I designed these visualizations to answer.
             The World Happiness Report reports an average 'happiness ladder' (<a href="https://worldhappiness.report/faq/#what-is-the-original-source-of-the-data-for-figure-21-how-are-the-rankings-calculated">More info about this metric</a>) score for each country, on a scale from one to ten.
-            It then uses other data about each country and their own model to calculate six 'explained by' values for that country, as well as a residual (the amonut of 'extra' happiness unexplained by those factors).
-            These report how much of that country's happiness the researchers can ascribe to each of these six factors
+            It then uses other data about each country and their own model to calculate six 'explained by' values for that country, as well as a residual (the amount of 'extra' happiness unexplained by those factors).
+            These report how much of that country's happiness the researchers can ascribe to each of the following six factors :
           </p>
+          <ul>
+            <li>GDP per capita</li>
+            <li>Social support</li>
+            <li>Healthy life expectancy</li>
+            <li>Freedom to make life choices</li>
+            <li>Generosity</li>
+            <li>Perceived (absence of) corruption</li>
+          </ul>
+          <p>Together, these seven factors (the 'residual', included) add up to the average happiness score recorded in each country.</p>
 
+          <p>
+            However, people are different! Some may want social support but not care much about GDP, and some the other way around.
+            I designed this visualization so that people can customize how much weight each factor is given, then see how the countries may rank differently.
+          </p>
           <svg id="mapVisualization" class="visualization">
             <g id="graticule"></g>
             <g id="outlines"></g>

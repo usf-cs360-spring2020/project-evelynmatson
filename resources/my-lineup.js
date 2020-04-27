@@ -7,15 +7,15 @@
 // http://techslides.com/demos/d3/d3-continents-projections.html
 // https://bl.ocks.org/syntagmatic/ba569633d51ebec6ec6e
 // https://observablehq.com/@d3/world-map-svg
+// https://lineup.js.org
 
 // Global variables because why not
 let config = {
     'lineup_svg' : {
         height : 1800,
-        width : 960
+        width : 800
     },
     'map_svg' : {
-        height : 500
     },
     'margin' : {
         top : 80,
@@ -74,7 +74,7 @@ let letsGetItStarted = function() {
 
     map_svg = d3.select('#mapVisualization')
         .attr('width', config.map_svg.width)
-        .attr('height', config.map_svg.height);
+        // .attr('height', config.map_svg.height);
 
 
     // Set up svg plot area
@@ -214,7 +214,7 @@ let prepVis = function(dataParam) {
             if (d.includes('Explained'))
                 return d.substring(14);
             else
-                return d;
+                return 'Residual Happiness';
         });
     axes.explainors = explainorsAxis;
     let explainorsAxisGroup = plot.append("g")
@@ -304,10 +304,15 @@ let prepMap = function(dataParam) {
     let mapData = dataParam;
     console.log('mapData', mapData);
 
+    // Make the map projection and path generator
     let projection = d3.geoNaturalEarth1()
         .rotate([-10, 0])
-        .fitSize([config.map_svg.width, config.map_svg.height], mapData);
+        .fitWidth(config.map_svg.width, mapData);
     let pathGenerator = d3.geoPath(projection);
+
+    // Update the map SVG's height
+    // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
+    map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
 
     let outlinesG = map_svg.select('g#outlines');
