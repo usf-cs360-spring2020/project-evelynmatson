@@ -53,7 +53,7 @@ let weights = {};
 /**
  * This function will draw all of the visualization.
  */
-let letsGetItStarted = function() {
+function letsGetItStarted() {
 
     config.legend.width = config.lineup_svg.width;
     config.legend.height = config.margin.bottom;
@@ -149,7 +149,7 @@ let letsGetItStarted = function() {
  * Draw the actual visualization number one
  * @param dataParam the data loaded from csv to use in the visualization
  */
-let prepVis = function(dataParam) {
+function prepVis(dataParam) {
     console.log('data as loaded', dataParam);
     console.log('longData', longData);
 
@@ -330,7 +330,7 @@ let prepVis = function(dataParam) {
  * Prep the map visualization
  * @param dataParam the data loaded from CSV
  */
-let prepMap = function(dataParam) {
+function prepMap(dataParam) {
     mapData = dataParam;
     console.log('mapData', mapData);
 
@@ -346,7 +346,7 @@ let prepMap = function(dataParam) {
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
-};
+}
 
 /**
  * Update the visualization after a modification.
@@ -567,9 +567,9 @@ Array.prototype.unique = function() {
 /**
  * This function converts date values during csv import
  * @param row the row object to convert
- * @returns {"Regional indicator": *, country: *, "Dystopia + residual": number, "Explained by: Freedom to make life choices": number, "Explained by: Perceptions of corruption": number, "Explained by: Healthy life expectancy": number, "Explained by: Log GDP per capita": number, "Explained by: Generosity": number, "Explained by: Social support": number, "Ladder score": number} converted row
+ * @returns converted row
  */
-let convertRow = function(row) {
+function convertRow(row) {
     // console.log('row', row);
 
     let out = {
@@ -605,6 +605,6 @@ let convertRow = function(row) {
 
     }
     return out;
-};
+}
 
 letsGetItStarted();
