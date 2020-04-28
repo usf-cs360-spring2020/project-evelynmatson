@@ -10,6 +10,7 @@
 // https://lineup.js.org
 // https://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
 // https://www.w3schools.com/howto/howto_js_rangeslider.asp
+// https://d3-legend.susielu.com
 
 // Global variables because why not
 let config = {
@@ -536,7 +537,7 @@ function updateVis() {
 }
 
 /**
- * Update the map visualization
+ * Update the map visualization.
  */
 function updateMapVis(sortedData) {
 

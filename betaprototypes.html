@@ -178,15 +178,40 @@
             However, people are different! Some may want social support but not care much about GDP, and some the other way around.
             I designed this visualization so that people can customize how much weight each factor is given, then see how the countries may rank differently.
           </p>
+
+          <h3>Answer</h3>
           <p>
-            So give it a try! Tweak the calculation to match what you value most, and find which countries most closely match those values!
+            Everyone's answer to this question will be different, so give it a try! Tweak the calculation to match what you value most, and find which countries most closely match those values.
           </p>
+
+          <h3>Interactivity (Implemented)</h3>
+          <p>
+            This visualization's main form of interactivity is the ability to scale each factor's weight using the range sliders, then see the map and lineup update.
+            To use this, drag the control element of a slider to the left or right (left will give this factor less weight, right will give it more).
+            After you let go, the visualization will update, reordering countries in the small multiples the bar chart according to remain sorted given their newly weighted values.
+            The map and its scale will also update, to show which countries have the largest (happiest) and smallest (least happy) weighted happiness values given the new weights that have been inputted.
+          </p>
+
+          <h3>Interactivity (Planned)</h3>
+          <p>
+            I plan to implement a hover tooltip in the map, so that hovering over a country will highlight its outline, and display a tooltip with its name and details about its value for each factor.
+          </p>
+          <p>
+            If I have time, I will also implement brushing in d3.
+            This will enable users to select a range of countries in the ranked bar chart or a group of countries on the map, and see those same countries highlighted in the other visualization.
+          </p>
+          <p>
+            Finally, if I have time I will allow users to narrow down the scope of the visualization to zoom into any one of several geographic regions.
+            This will enable a more detailed view of the map of that region, and let the user focus on only those countries in the ranked bar chart.
+          </p>
+
+
           <svg id="mapVisualization" class="visualization">
             <g id="graticule"></g>
             <g id="countries"></g>
           </svg>
 
-<!--          TODO put numbers on the range sliders-->
+<!--          TODO put numbers on the range sliders maybe-->
 
           <div class="slidecontainer">
             <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices" list="steplist"> Freedom<br>
@@ -213,6 +238,32 @@
           <svg id="lineupVisualization" class="visualization"></svg>
           <script src="resources/my-lineup.js"></script>
 
+          <h3>Encoding</h3>
+          <p>
+            In the map, data is encoded on as color on a choropleth visualization on an equal area map projection. Each colored shape is a country, and data is encoded as follows :
+          </p>
+          <ul>
+            <li>Location of the country : where in the world the country is located (projected using the Natural Earth projection) (North is up, East is right)</li>
+            <li>Area of country on the map : the area of the country in the world</li>
+            <li>Color of country : weighted happiness value calculation (see legend)</li>
+          </ul>
+
+          <p>
+            In the small multiples bar chart that follows, each country is represented by a row of data bars, and each bar encodes the data value for one of the seven explaining factors.
+            The rows are sorted by the sum of each explaining factor, so that the countries with the greatest average happiness value are the highest.
+            The rows are automatically re-sorted based on the weight factors the user sets on the slider input controls whenever the weights change.
+            More specifically :
+          </p>
+          <ul>
+            <li>Vertical location of row/country : weighted average happiness rank of that country (higher happiness values are higher up)</li>
+            <li>Vertical location of a bar/explaining factor : which country it refers to</li>
+            <li>Horizontal location of a bar/explaining factor : which factor it is (see labels at top)</li>
+            <li>
+              Width of the bar : the country's value for that explaining factor<br>
+              <em>Each factor has a different scale, but the specific values are unimportant and are not displayed.
+                The bars are for the purpose of comparison, not for exact value calculation. </em>
+            </li>
+          </ul>
 
 <!--        <h3>About</h3>-->
 <!--        <p>In order to explore the datasets a bit, I created two prototype visualizations in Tableau.</p>-->
