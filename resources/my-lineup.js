@@ -31,7 +31,9 @@ let config = {
         betweenSquares : 5,
         firstSquareX : 5,
         column_width : 225,
-    }
+    },
+
+    other_countries_color : '#eee'
 };
 let scales = {};
 
@@ -554,22 +556,28 @@ async function updateMapVis(sortedData) {
     let outlines = outlinesG.selectAll('path.country_outline')
         .data(mapData.features);
 
+    // Color function defined here ahead of time
+    let map_feature_to_color = function(feature) {
+        if ('whrdata' in feature) {
+            return scales.mapColorScale(color_numbers[feature['whrdata']['country']]);
+        } else {
+            return config.other_countries_color;
 
-    // TODO use the Data Wrangling Country Names excel sheet to fix mismatched countries (black countries)
-        // TODO decide what to do about map countries without data
-        // TODO decide how to show the 'right' AKA WHR names for countries when highlighting
+        }
+    };
+
     outlines.join(
     enter =>
           enter
               // Make the main shape with color
             .append('path')
             .attr('class', 'country_outline')
-            .style('fill', d => scales.mapColorScale(color_numbers[d['properties']['ADMIN']]))
+            .style('fill', map_feature_to_color)
             .attr('d', pathGenerator),
     update =>
         update.
             transition()
-            .style('fill', d => scales.mapColorScale(color_numbers[d['properties']['ADMIN']]))
+            .style('fill', map_feature_to_color)
     );
 
     // let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
@@ -817,17 +825,18 @@ function matchCountries() {
     console.log('Second pass made. Custom matches made.');
 
     // Third pass : give 'none' to others
-    for (let entry of remaining_map_country_names.entries()) {
-
-        let map_data_index = entry[0];
-        let map_name = entry[1];
-
-        // Skip entries for since-removed countries
-        if (entry[1] == undefined) {
-            continue;
-        }
-        mapData.features[map_data_index]['whrdata'] = null;
-    }
+    // for (let entry of remaining_map_country_names.entries()) {
+    //
+    //     let map_data_index = entry[0];
+    //     let map_name = entry[1];
+    //
+    //     // Skip entries for since-removed countries
+    //     if (entry[1] == undefined) {
+    //         continue;
+    //     }
+    //     // mapData.features[map_data_index]['whrdata'] = null;
+    // }
+    // ACTUALLY, instead of this, I'm just not going to define whrdata for those elements that should be grey.
     // TODO make these be grey
 
     console.log('Matched exact matches');
