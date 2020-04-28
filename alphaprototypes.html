@@ -141,119 +141,119 @@
     </nav>
     <!-- End page navigation -->
 
-  <section class="section">
-    <div class="container">
+    <!-- Begin page content -->
+    <section class="section">
+      <div class="container">
+        <div class="content page-content">
+          <h1 class="title">
+            Data Visualization Alpha Prototypes
+          </h1>
 
-      <!-- Begin page content -->
-      <div class="content page-content">
-        <h1 class="title">
-          Data Visualization Alpha Prototypes
-        </h1>
+          <p>
+            In order to explore the datasets a bit, I created two prototype visualizations in Tableau.
+            My goal here was to try out different kinds of visualizations and questions I might use them to investigate.
+            As such, these visualizations don't track closely with the direction where my project ended up going, but that's ok!
+          </p>
 
-
-<!--        <h3>About</h3>-->
-        <p>In order to explore the datasets a bit, I created two prototype visualizations in Tableau.</p>
-
-        <br>
-        <h3>Bubble Plot Visualization</h3>
-        <p>The first is a multivariate bubble plot of various countries, encoding several different metrics. Each bubble is a country, and information about them are encoded in the following ways :</p>
-        <ul>
-          <li>Color of bubble - amount of income inequality as a GINI coefficient (blue means more equal, red means less. See legend.)</li>
-          <li>Size of bubble - most recent population size (larger is more populous)</li>
-          <li>Horizontal position of bubble - average happiness ladder score (further right is happier)</li>
-          <li>Vertical position of bubble - GDP per capita on a logarithmic scale (higher is greater GDP per capita)</li>
-        </ul>
-        <img src="resources/prototypes/Bubble%20Dashboard.png">
-
-
-        <br>
-        <h3>Stacked Bar Visualization</h3>
-        <p>The second is a stacked bar chart where each bar is a country, and the heights of different colors correspond to different factors that contribute to happiness.
-          Each of the six factors identified by the World Happiness Report is represented by a color (see legend), and the pink color shows the 'residual' amount of happiness.
-          This is the 'extra' amount of happiness not explained in their model by the measured values for each of the six factors.
-          The data is encoded as follows : </p>
-        <ul>
-          <li>Height of bar - average happiness ladder score</li>
-          <li>Height of colored sections - amount of happiness 'explained by' a given factor's measured value in the researchers' model</li>
-          <li>Height of pink section - residual happiness, or the 'extra' amount of happiness not explained in the model by the six factors</li>
-<!--          <li>Vertical position of bubble - GDP per capita on a logarithmic scale (higher is greater GDP per capita)</li>-->
-        </ul>
-        <img src="resources/prototypes/Stack%20Dashboard.png">
-        <!--        <p>This is a small multiples parallel coordinates chart that compares different college tiers' impact on their students' economic outcomes, and examines in what ways this depends on the students' economic backgrounds.</p>-->
-<!--        <p>Here, <strong>each line represents a cohort of students from a certain economic background, going to a certain college</strong>. Infomation about their cohort is encoded in the following way : </p>-->
-<!--        <ul>-->
-<!--          <li><strong>Color of line</strong> - Economic background, determined by their parents' income quintile. Yellow lines represent the most wealthy backgrounds, and purple lines represent the least wealthy backgrounds. See legend.</li>-->
-<!--          <li><strong>Height of line on axis</strong> - Percent of cohort who end up in that income quintile. Higher values meaan higher percents, and axes further to the right are wealthier.</li>-->
-<!--          <li><strong>Location of subplot</strong> - Each subplot is labeled with the tier of college it represents. Subplots are broadly grouped near similar tiers of school for ease of comparison.</li>-->
-<!--          &lt;!&ndash;          <li>Opacity of line - Representation of that economic background in a college's student body, determined by percentage of students at that college who come from that same economic background. A more prominent line means a greater percentage of students at that college come from that same background, and a fainter line means students from that background are underrepresented at that college.</li>&ndash;&gt;-->
-<!--        </ul>-->
-<!--        <p>Broadly, tiers where <strong>all the lines are close together</strong> regardless of their color demonstrate student outcomes uninfluenced by economic background, and tiers where the <strong>lines separate based on color</strong> show student outcomes that differ based on economic background.</p>-->
-<!--        <p>Also, for a any line or group of lines, a <strong>positive trend</strong> (lower on the left ond higher on the right) shows that students in that cohort are more likely to end up in a wealthy income quintile.-->
-<!--          A <strong>negative trend</strong> (higher on the left and lower on the right) shows that students in that cohort are more likely to end up in a less wealthy income quintile.</p>-->
-
-<!--        <h3>Conclusions</h3>-->
-<!--        <p>The visualization was designed to support the study's second finding, and seems to do so. The authors of the study write:</p>-->
-<!--        <blockquote>Second, children from low- and high-income families have similar earnings outcomes conditional on the college they attend, indicating that low-income students are not mismatched at selective colleges.</blockquote>-->
-<!--        In this visualization, higher college tiers (especially "Ivy Plus") have plots where the lines are all tightly bound together, regardless of what quintile of economic background they represent.-->
-<!--        <p>This supports the finding by showing that students who attend elite schools can expect similar outcomes regardless of their backgrounds.</p><br>-->
-<!--        <p>Additionally, in this visualization the plots of lower tier schools (especially "Two-Year (Public + Private) show lines clearly separated by color.-->
-<!--          Purple and blue lines mostly peak an the left side of the graph, and yellow and light green lines mostly peak on the right side of the graph.-->
-<!--          This shows that students who attend these lower-tier colleges have very different economic outcomes depending on their background.-->
-<!--          Students who go to these schools often end up wealthy when they come from wealthy backgrounds, but often end up in the working class when they come from working class backgrounds.</p>-->
+          <h3>Bubble Plot Visualization</h3>
+          <p>The first is a multivariate bubble plot of various countries, encoding several different metrics. Each bubble is a country, and information about them are encoded in the following ways :</p>
+          <ul>
+            <li>Color of bubble - amount of income inequality as a GINI coefficient (blue means more equal, red means less. See legend.)</li>
+            <li>Size of bubble - most recent population size (larger is more populous)</li>
+            <li>Horizontal position of bubble - average happiness ladder score (further right is happier)</li>
+            <li>Vertical position of bubble - GDP per capita on a logarithmic scale (higher is greater GDP per capita)</li>
+          </ul>
+          <img src="resources/prototypes/Bubble%20Dashboard.png">
 
 
-<!--        <h3>Prototypes</h3>-->
-<!--        <p>I used <a href="https://rawgraphs.io">RawGraphs</a> for initial prototyping, then moved to D3 to implement my final visualization.-->
-<!--          I was unable to filter rows out of the dataset using RawGraphs, so I changed the color for unwanted lines to be white.-->
-<!--          This helped emphasize the data I wanted to see, but then it became partially obscured by a plethora of annoying white lines.</p>-->
-<!--        <p>I also intended to display multiple lines from the same college on the same graph, each representing different parent income quintiles, but RawGraphs wouldn't allow me to do this without doing some serious wrangling.-->
-<!--          Here I have displayed two prototype graphs I made, each showing two college tiers but only data for one parent income quintile.</p><br>-->
+          <br>
+          <h3>Stacked Bar Visualization</h3>
+          <p>The second is a stacked bar chart where each bar is a country, and the heights of different colors correspond to different factors that contribute to happiness.
+            Each of the six factors identified by the World Happiness Report is represented by a color (see legend), and the pink color shows the 'residual' amount of happiness.
+            This is the 'extra' amount of happiness not explained in their model by the measured values for each of the six factors.
+            The data is encoded as follows : </p>
+          <ul>
+            <li>Height of bar - average happiness ladder score</li>
+            <li>Height of colored sections - amount of happiness 'explained by' a given factor's measured value in the researchers' model</li>
+            <li>Height of pink section - residual happiness, or the 'extra' amount of happiness not explained in the model by the six factors</li>
+  <!--          <li>Vertical position of bubble - GDP per capita on a logarithmic scale (higher is greater GDP per capita)</li>-->
+          </ul>
+          <img src="resources/prototypes/Stack%20Dashboard.png">
+          <!--        <p>This is a small multiples parallel coordinates chart that compares different college tiers' impact on their students' economic outcomes, and examines in what ways this depends on the students' economic backgrounds.</p>-->
+  <!--        <p>Here, <strong>each line represents a cohort of students from a certain economic background, going to a certain college</strong>. Infomation about their cohort is encoded in the following way : </p>-->
+  <!--        <ul>-->
+  <!--          <li><strong>Color of line</strong> - Economic background, determined by their parents' income quintile. Yellow lines represent the most wealthy backgrounds, and purple lines represent the least wealthy backgrounds. See legend.</li>-->
+  <!--          <li><strong>Height of line on axis</strong> - Percent of cohort who end up in that income quintile. Higher values meaan higher percents, and axes further to the right are wealthier.</li>-->
+  <!--          <li><strong>Location of subplot</strong> - Each subplot is labeled with the tier of college it represents. Subplots are broadly grouped near similar tiers of school for ease of comparison.</li>-->
+  <!--          &lt;!&ndash;          <li>Opacity of line - Representation of that economic background in a college's student body, determined by percentage of students at that college who come from that same economic background. A more prominent line means a greater percentage of students at that college come from that same background, and a fainter line means students from that background are underrepresented at that college.</li>&ndash;&gt;-->
+  <!--        </ul>-->
+  <!--        <p>Broadly, tiers where <strong>all the lines are close together</strong> regardless of their color demonstrate student outcomes uninfluenced by economic background, and tiers where the <strong>lines separate based on color</strong> show student outcomes that differ based on economic background.</p>-->
+  <!--        <p>Also, for a any line or group of lines, a <strong>positive trend</strong> (lower on the left ond higher on the right) shows that students in that cohort are more likely to end up in a wealthy income quintile.-->
+  <!--          A <strong>negative trend</strong> (higher on the left and lower on the right) shows that students in that cohort are more likely to end up in a less wealthy income quintile.</p>-->
+
+  <!--        <h3>Conclusions</h3>-->
+  <!--        <p>The visualization was designed to support the study's second finding, and seems to do so. The authors of the study write:</p>-->
+  <!--        <blockquote>Second, children from low- and high-income families have similar earnings outcomes conditional on the college they attend, indicating that low-income students are not mismatched at selective colleges.</blockquote>-->
+  <!--        In this visualization, higher college tiers (especially "Ivy Plus") have plots where the lines are all tightly bound together, regardless of what quintile of economic background they represent.-->
+  <!--        <p>This supports the finding by showing that students who attend elite schools can expect similar outcomes regardless of their backgrounds.</p><br>-->
+  <!--        <p>Additionally, in this visualization the plots of lower tier schools (especially "Two-Year (Public + Private) show lines clearly separated by color.-->
+  <!--          Purple and blue lines mostly peak an the left side of the graph, and yellow and light green lines mostly peak on the right side of the graph.-->
+  <!--          This shows that students who attend these lower-tier colleges have very different economic outcomes depending on their background.-->
+  <!--          Students who go to these schools often end up wealthy when they come from wealthy backgrounds, but often end up in the working class when they come from working class backgrounds.</p>-->
+
+
+  <!--        <h3>Prototypes</h3>-->
+  <!--        <p>I used <a href="https://rawgraphs.io">RawGraphs</a> for initial prototyping, then moved to D3 to implement my final visualization.-->
+  <!--          I was unable to filter rows out of the dataset using RawGraphs, so I changed the color for unwanted lines to be white.-->
+  <!--          This helped emphasize the data I wanted to see, but then it became partially obscured by a plethora of annoying white lines.</p>-->
+  <!--        <p>I also intended to display multiple lines from the same college on the same graph, each representing different parent income quintiles, but RawGraphs wouldn't allow me to do this without doing some serious wrangling.-->
+  <!--          Here I have displayed two prototype graphs I made, each showing two college tiers but only data for one parent income quintile.</p><br>-->
+        </div>
       </div>
-      <!-- End page content -->
-    </div>
-  </section>
+    </section>
+    <!-- End page content -->
 
-  <!-- Page footer -->
-<!--  <div class="false-footer"></div>-->
-  <!-- https://bulma.io/documentation/layout/footer/ -->
-  <footer class="footer smaller-footers-are-better">
-    <div class="content has-text-centered is-size-7">
-      <p>
-        <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
-        </a>
+    <!-- Page footer -->
+    <!--  <div class="false-footer"></div>-->
+    <!-- https://bulma.io/documentation/layout/footer/ -->
+    <footer class="footer smaller-footers-are-better">
+      <div class="content has-text-centered is-size-7">
+        <p>
+          <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+          </a>
 
-        <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
-        </a>
+          <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+          </a>
 
-        <a href="https://bulma.io" class="button is-small">
-          <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
-        </a>
-      </p>
-    </div>
-  </footer>
-  <!-- End page footer -->
+          <a href="https://bulma.io" class="button is-small">
+            <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+          </a>
+        </p>
+      </div>
+    </footer>
+    <!-- End page footer -->
 
-  <!-- Mobile menu responsiveness -->
-  <!-- https://bulma.io/documentation/components/navbar/ -->
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    <!-- Mobile menu responsiveness -->
+    <!-- https://bulma.io/documentation/components/navbar/ -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    if ($navbarBurgers.length > 0) {
-      $navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-          const target = el.dataset.target;
-          const $target = document.getElementById(target);
-          el.classList.toggle('is-active');
-          $target.classList.toggle('is-active');
+      if ($navbarBurgers.length > 0) {
+        $navbarBurgers.forEach( el => {
+          el.addEventListener('click', () => {
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+          });
         });
-      });
-    }
-  });
-  </script>
-  <!-- End mobile menu responsiveness -->
+      }
+    });
+    </script>
+    <!-- End mobile menu responsiveness -->
   </body>
 
 </html>
