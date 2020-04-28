@@ -124,7 +124,7 @@ let letsGetItStarted = function() {
 
     scales.color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    scales.mapColorScale = d3.scaleSequential(d3.interpolateWarm);
+    scales.mapColorScale = d3.scaleSequential(d3.interpolateRdYlBu);
 
     // Title!
     // svg.append('text')
@@ -336,6 +336,8 @@ let prepMap = function(dataParam) {
         .fitWidth(config.map_svg.width, mapData);
     pathGenerator = d3.geoPath(projection);
 
+    // TODO edit the bounds to skip antarctica
+
     // Update the map SVG's height
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
@@ -460,10 +462,10 @@ function updateMapVis(sortedData) {
             .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
     );
 
-    let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
-    let data_country_names = sortedData.map(d => d.country).forEach(name => console.log('data', name));
-    console.log('map_country_names', map_country_names);
-    console.log('data_country_names', data_country_names);
+    // let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
+    // let data_country_names = sortedData.map(d => d.country).forEach(name => console.log('data', name));
+    // console.log('map_country_names', map_country_names);
+    // console.log('data_country_names', data_country_names);
 
     let graticule = d3.geoGraticule10();
     let graticuleG = map_svg.select('g#graticule');
