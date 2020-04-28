@@ -441,25 +441,29 @@ async function updateMapVis(sortedData) {
  * Use the recently sorted values from my lineup to change the scale of the map visualization.
  */
 function updateMapScale(sorted) {
-    // Update the map scale
-    let maxWeighted = Object.keys(sorted[0]).reduce(function (accumulator, currentValue) {
-        let also = sorted[0][currentValue];
-        let include = currentValue.includes('Explained') || currentValue.includes('residual');
 
-        // console.log(currentValue, accumulator, include, also);
-        return accumulator + (include ? also : 0);
-
-    }, 0);
+    // Calculate the country with the max weighted value
+    // let maxWeighted = Object.keys(sorted[0]).reduce(function (accumulator, currentValue) {
+    //     let also = sorted[0][currentValue];
+    //     let include = currentValue.includes('Explained') || currentValue.includes('residual');
+    //
+    //     // console.log(currentValue, accumulator, include, also);
+    //     return accumulator + (include ? also : 0);
+    //
+    // }, 0);
+    let maxWeighted = weightedSmExplainors(sorted[0]);
     console.log('maxWeighted', maxWeighted);
 
-    let minWeighted = Object.keys(sorted[sorted.length -1]).reduce(function (accumulator, currentValue) {
-        let also = sorted[sorted.length - 1][currentValue];
-        let include = currentValue.includes('Explained') || currentValue.includes('residual');
-
-        // console.log(currentValue, accumulator, include, also);
-        return accumulator + (include ? also : 0);
-
-    }, 0);
+    // Calculate the country with the min weighted value
+    // let minWeighted = Object.keys(sorted[sorted.length -1]).reduce(function (accumulator, currentValue) {
+    //     let also = sorted[sorted.length - 1][currentValue];
+    //     let include = currentValue.includes('Explained') || currentValue.includes('residual');
+    //
+    //     // console.log(currentValue, accumulator, include, also);
+    //     return accumulator + (include ? also : 0);
+    //
+    // }, 0);
+    let minWeighted = weightedSmExplainors(sorted[sorted.length - 1]);
     console.log('minWeighted', minWeighted);
 
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
@@ -593,10 +597,12 @@ function makeMapLegend() {
  */
 function weightedSmExplainors(d) {
     // console.log('weights', weights);
+    let weights_to_use = weights;
+
     let sum = 0;
     Object.keys(d)
         .filter(a => a.includes("Explained")  || a.includes('residual'))
-        .map(key => d[key] * weights[key])
+        .map(key => d[key] * weights_to_use[key])
         .forEach(function(d) {sum += d});
 
     // console.log('calculated sum for', d.country, sum);
@@ -619,12 +625,24 @@ function setupSliders() {
     let sliders = d3.selectAll('.slider');
     console.log('sliders', sliders);
 
-    sliders.on('change', function () {
+    // Setup the weights to begin with
+    sliders.each(function () {
         let explainor = d3.select(this).attr('id');
-        let scale_factor = parseFloat(this.value);
-        console.log(explainor, scale_factor);
+        let scale_factor = parseFloat(this.value) * 0.1;
+        // console.log(explainor, scale_factor);
 
         weights[explainor] = scale_factor;
+    });
+    normalizeWeights();
+
+    // Setup modification/interactivty
+    sliders.on('change', function () {
+        let explainor = d3.select(this).attr('id');
+        let scale_factor = parseFloat(this.value) * 0.1;
+        console.log(explainor, 'set to', scale_factor);
+
+        weights[explainor] = scale_factor;
+        normalizeWeights();
 
         updateVis();
 
@@ -637,6 +655,22 @@ function setupSliders() {
  */
 function translate(x, y) {
     return 'translate(' + x + ',' + y + ')';
+}
+
+/**
+ * Normalize the weights to sum to 7
+ */
+function normalizeWeights() {
+    console.log('weights before norm', weights);
+    let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
+    // console.log('hello');
+    let scaling_factor = 7 / weights_sum;
+
+    for (let key in weights) {
+        weights[key] = weights[key] * scaling_factor;
+    }
+
+    console.log('weights after norm', weights);
 }
 
 /**
