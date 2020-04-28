@@ -27,7 +27,7 @@ let config = {
     },
     'plot' : {},
     'legend' : {
-        squareSize : 15,
+        squareSize : 10,
         betweenSquares : 5,
         firstSquareX : 5,
         column_width : 225,
@@ -164,33 +164,15 @@ function prepVis(dataParam) {
 
     // Work on scales
     let countries = data
-        // .filter(row => (row['geo'] === data[0]['geo']))     // Take only the first geo region's months
         .map(row => row['country']);
-        // .sort(function(a,b) {return a - b;});
-    // scales.month.domain(dates);
-    // console.log('found countries', countries);
     scales.countries.domain(countries);
 
     explainors = longData
-        // .sort(function(a, b) {
-        //     return maxOfRegion(b, data) - maxOfRegion(a, data);
-        // })
         .map(row => row['explainor'])
         .unique();
     // console.log('found explainors', explainors);
-    // scales.regions.domain(explainors);
     scales.color.domain(explainors);
 
-    // let maxPassengers = Math.max(... data.map(row => row['passengers']));
-    // scales.passengers.domain([0,maxPassengers])
-    //     .rangeRound([0, scales.regions.bandwidth()])
-    //     .nice();
-
-    // scales.regions = d3.scaleBand()
-    //     .rangeRound([0, config.plot.width])
-    //     .paddingInner(config.plot.paddingBetweenRegions);
-
-    // Better scales
     // Band scale for the different explainors
     scales.explainors = d3.scaleBand()
         .domain(explainors)
@@ -218,44 +200,19 @@ function prepVis(dataParam) {
         weights[explainor] = 50;
     }
 
+
+
     // Make the static axes
     let explainorsAxis = d3.axisTop(scales.explainors)
-        .tickFormat(function(d) {
-            switch (d) {
-                case 'Explained by: Freedom to make life choices' :
-                    return 'Freedom';
-
-                case 'Explained by: Generosity' :
-                    return 'Generosity';
-
-                case 'Explained by: Healthy life expectancy' :
-                    return 'Healthy Life Exp.';
-
-                case 'Explained by: Log GDP per capita' :
-                    return 'GDP per capita';
-
-                case 'Explained by: Perceptions of corruption' :
-                    return 'Corruption';
-
-                case 'Explained by: Social support' :
-                    return 'Social support';
-
-                case 'Dystopia + residual' :
-                    return 'Residual Happiness';
-            }
-            // if (d.includes('Explained'))
-            //     return d.substring(14);
-            // else
-            //     return 'Residual Happiness';
-        });
+        .tickFormat(explainor_name_abbreviator);
     axes.explainors = explainorsAxis;
     let explainorsAxisGroup = plot.append("g")
         .attr("id", "explainors-axis")
         .attr("class", "axis hidden-ticks");
     explainorsAxisGroup.call(explainorsAxis);
 
-    // let passengerAxesGroup = plot.append("g")
-    //     .attr("id", "passenger-axes");
+    let passengerAxesGroup = plot.append("g")
+        .attr("id", "passenger-axes");
     // let passengersAxis = d3.axisBottom(scales.passengers)
     //     // .tickPadding(0)
     //     .tickValues([0,100000,200000])
@@ -279,8 +236,8 @@ function prepVis(dataParam) {
     //         .attr('y', 30);
     // }
     //
-    // // Draw gridlines
-    // var ygridlines = d3.axisBottom(scales.passengers)
+    // Draw gridlines
+    // let ygridlines = d3.axisBottom(scales.explainors)
     //     .tickFormat("")
     //     .tickSize(-config.plot.height)
     //     .ticks(3);
@@ -289,43 +246,46 @@ function prepVis(dataParam) {
     //         .attr("class", "gridline")
     //         .attr("id", "grid-" + index.toString())
     //         .attr("style", "color: #BBB")
-    //         .attr("transform", translate(scales.regions(region) ,config.plot.height))
+    //         .attr("transform", translate(scales.regions(region), config.plot.height))
     //         .call(ygridlines);
     // }
 
-    // Make a legend
-    // https://www.d3-graph-gallery.com/graph/custom_legend.html
-    // let legendGroup = d3.select("#legend");
-    // let legendKeys = ["Asia", 'Canada', 'Australia / Oceania', 'Central America', 'Europe', 'Mexico',  'Middle East'];
-    // let index = 0;
-    // for (let region of legendKeys) {
-    //
-    //     // Draw a little square
-    //     legendGroup.append("rect")
-    //     .attr('class', 'legend-square')
-    //     .attr('x', config.legend.betweenSquares + (index % 4) * config.legend.column_width)
-    //     .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)))
-    //     .attr('width', config.legend.squareSize)
-    //     .attr('height', config.legend.squareSize)
-    //     .style('fill', scales.color(region))
-    //         .style('stroke', 'white');
-    //
-    //     // Draw a little label
-    //     legendGroup.append("text")
-    //         .attr('x',  config.legend.betweenSquares*2 + config.legend.squareSize + config.legend.betweenSquares + (index % 4) * config.legend.column_width)
-    //         .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)) + config.legend.squareSize / 2)
-    //         .style('fill', 'black')
-    //         .text(region)
-    //         .attr('text-anchor', 'left')
-    //         .style('alignment-baseline', 'middle')
-    //         .attr('font-size', '1em');
-    //
-    //     index++;
-    // }
+    makeLineupLegend();
+
+    makeMapLegend();
 
     setupSliders();
 
     updateVis();
+}
+
+/**
+ * Convert a long explainor name to a shorter abbreviaton
+ * @param long_name
+ */
+function explainor_name_abbreviator(long_name) {
+    switch (long_name) {
+        case 'Explained by: Freedom to make life choices' :
+            return 'Freedom';
+
+        case 'Explained by: Generosity' :
+            return 'Generosity';
+
+        case 'Explained by: Healthy life expectancy' :
+            return 'Healthy Life Exp.';
+
+        case 'Explained by: Log GDP per capita' :
+            return 'GDP per capita';
+
+        case 'Explained by: Perceptions of corruption' :
+            return 'Corruption';
+
+        case 'Explained by: Social support' :
+            return 'Social support';
+
+        case 'Dystopia + residual' :
+            return 'Residual Happiness';
+    }
 }
 
 /**
@@ -502,6 +462,52 @@ function updateMapScale(sorted) {
     console.log('minWeighted', minWeighted);
 
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
+}
+
+/**
+ * Draw a legend for the lineup visualization.
+ */
+function makeLineupLegend() {
+    // Make a legend
+    // https://www.d3-graph-gallery.com/graph/custom_legend.html
+    let legendGroup = lineup_svg.append('g')
+        .attr('id', "legend")
+        .attr('transform', translate(0, config.lineup_svg.height - config.margin.bottom ));
+    // let legendKeys = ["Asia", 'Canada', 'Australia / Oceania', 'Central America', 'Europe', 'Mexico',  'Middle East'];
+    // let legendKeys = ['Freedom','Generosity','Healthy Life Exp.','GDP per capita','Corruption','Social support','Residual Happiness'];
+    let legendKeys = explainors;
+    let index = 0;
+    for (let explainorName of legendKeys) {
+
+        // Draw a little square
+        legendGroup.append("rect")
+            .attr('class', 'legend-square')
+            .attr('x', config.legend.betweenSquares + (index % 4) * config.legend.column_width)
+            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)))
+            .attr('width', config.legend.squareSize)
+            .attr('height', config.legend.squareSize)
+            .style('fill', scales.color(explainorName))
+            .style('stroke', 'white');
+
+        // Draw a little label
+        legendGroup.append("text")
+            .attr('x',  config.legend.betweenSquares*2 + config.legend.squareSize + config.legend.betweenSquares + (index % 4) * config.legend.column_width)
+            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)) + config.legend.squareSize / 2)
+            .style('fill', 'black')
+            .text(explainor_name_abbreviator(explainorName))
+            .attr('text-anchor', 'left')
+            .style('alignment-baseline', 'middle')
+            .attr('font-size', '0.75em');
+
+        index++;
+    }
+}
+
+/**
+ * Draw a legend for the map visualization.
+ */
+function makeMapLegend() {
+
 }
 
 /**
