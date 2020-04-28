@@ -47,6 +47,8 @@ let mapData;
 let explainors;
 let weights = {};
 
+let mapPromise;
+
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
 
@@ -142,7 +144,7 @@ function letsGetItStarted() {
 
     // Load the data, continue in later methods
     d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(prepVis);
-    d3.json('resources/Datasets/countries.geojson').then(prepMap);
+    mapPromise = d3.json('resources/Datasets/countries.geojson').then(prepMap);
 }
 
 /**
@@ -411,7 +413,7 @@ function updateVis() {
 /**
  * Update the map visualization
  */
-function updateMapVis(sortedData) {
+async function updateMapVis(sortedData) {
 
     // Add a new domain to the scale.
     updateMapScale(sortedData);
@@ -437,6 +439,7 @@ function updateMapVis(sortedData) {
 
     let outlinesG = map_svg.select('g#outlines');
     // console.log('outlines', outlinesG);
+    await mapPromise;
     let outlines = outlinesG.selectAll('path.country_outline')
         .data(mapData.features);
 
