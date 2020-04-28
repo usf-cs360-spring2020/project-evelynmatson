@@ -728,25 +728,27 @@ function matchCountries() {
     console.log('mapData', mapData);
     console.log('data', data);
 
-    let whr_data = data.copy();
-    let remaining_whr_countries = function() {whr_data.map(elem => elem.country)};
-    let remaining_map_features = function () {mapData.features.filter(feature => 'mapped_whr_data' in feature)};
+    // let remaining_whr_countries= data.map(entry => entry.country);
+    // // let remaining_whr_countries = function() {whr_data.map(elem => elem.country)};
+    // let remaining_map_features = function () {mapData.features.filter(feature => 'mapped_whr_data' in feature)};
+    //
+    //
+    // for (let feature of mapData.features) {
+    //
+    //     // If we find an exact match!
+    //     if (remaining_whr_countries.includes(feature.properties['ADMIN'] )) {
+    //         let matched_index = data.indexOf(feature.properties['ADMIN']);
+    //
+    //         feature.mapped_whr_data = data[matched_index];
+    //         delete remaining_whr_countries[matched_index];
+    //     }
+    // }
+    //
+    // console.log('Matched exact matches');
+    // console.log('Remaining WHR data', remaining_whr_countries);
+    // console.log('Remaining map features', remaining_map_features());
 
-
-    for (let feature of mapData.features) {
-
-        // If we find an exact match!
-        if (remaining_whr_countries.includes(feature.properties['ADMIN'] )) {
-            let matched_index = whr_data.indexOf(feature.properties['ADMIN']);
-
-            feature.mapped_whr_data = whr_data[matched_index];
-            whr_data.splice(matched_index, 1);
-        }
-    }
-
-    console.log('Matched exact matches');
-    console.log('Remaining WHR data', remaining_whr_countries());
-    console.log('Remaining map features', remaining_map_features());
+    // TODO NEXT un-comment this, keep working
 }
 
 
