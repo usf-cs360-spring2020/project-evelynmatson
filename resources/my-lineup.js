@@ -9,6 +9,7 @@
 // https://observablehq.com/@d3/world-map-svg
 // https://lineup.js.org
 // https://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
+// https://www.w3schools.com/howto/howto_js_rangeslider.asp
 
 // Global variables because why not
 let config = {
@@ -45,6 +46,9 @@ let longData = [];
 let mapData;
 let explainors;
 let weights = {};
+
+// TODO allow zooming into specific map regions
+// TODO allow selecting just a specific region
 
 /**
  * This function will draw all of the visualization.
@@ -85,12 +89,12 @@ let letsGetItStarted = function() {
         .attr('transform', translate(config.plot.x, config.plot.y));
 
     // Set up a group for the legend
-    let legendGroup = lineup_svg.append("g")
-        .attr("id", "legend")
-        .attr('transform', translate(config.margin.left - 10, config.lineup_svg.height - config.margin.bottom + 50))
-        .attr('width', config.legend.width)
-        .attr('height', config.legend.height)
-        .attr('fill', 'black');
+    // let legendGroup = lineup_svg.append("g")
+    //     .attr("id", "legend")
+    //     .attr('transform', translate(config.margin.left - 10, config.lineup_svg.height - config.margin.bottom + 50))
+    //     .attr('width', config.legend.width)
+    //     .attr('height', config.legend.height)
+    //     .attr('fill', 'black');
 
     // Set up a group for gridlines in the svg
     grid = plot.append("g")
@@ -99,7 +103,7 @@ let letsGetItStarted = function() {
         .attr("class", "gridlines");
 
     // Set up a group inside the g for bars
-    let rect = plot.append('g')
+    plot.append('g')
         .attr('id', 'bars')
         .attr('x', 0)
         .attr('y', 0)
@@ -139,11 +143,11 @@ let letsGetItStarted = function() {
     // Load the data, continue in later methods
     d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(prepVis);
     d3.json('resources/Datasets/countries.geojson').then(prepMap);
-};
+}
 
 /**
  * Draw the actual visualization number one
- * @param data the data loaded from csv to use in the visualization
+ * @param dataParam the data loaded from csv to use in the visualization
  */
 let prepVis = function(dataParam) {
     console.log('data as loaded', dataParam);
@@ -320,7 +324,7 @@ let prepVis = function(dataParam) {
     setupSliders();
 
     updateVis();
-};
+}
 
 /**
  * Prep the map visualization
@@ -343,14 +347,6 @@ let prepMap = function(dataParam) {
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
 };
-
-// /**
-//  * Update both visualizations.
-//  */
-// function updateVis() {
-//     updateLineupVis();
-//     updateMapVis();
-// }
 
 /**
  * Update the visualization after a modification.
@@ -454,12 +450,12 @@ function updateMapVis(sortedData) {
               // Make the main shape with color
             .append('path')
             .attr('class', 'country_outline')
-            .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
+            .style('fill', d => scales.mapColorScale(color_numbers[d['properties']['ADMIN']]))
             .attr('d', pathGenerator),
     update =>
         update.
             transition()
-            .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
+            .style('fill', d => scales.mapColorScale(color_numbers[d['properties']['ADMIN']]))
     );
 
     // let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
@@ -471,7 +467,7 @@ function updateMapVis(sortedData) {
     let graticuleG = map_svg.select('g#graticule');
     console.log('graticule', graticule);
     graticuleG.append('path')
-        .attr('d', None => pathGenerator(graticule))
+        .attr('d', pathGenerator(graticule))
         .attr('stroke', '#ccc')
         .attr('fill', 'none');
 
@@ -512,7 +508,7 @@ function updateMapScale(sorted) {
 function weightedSmExplainors(d) {
     // console.log('weights', weights);
     let sum = 0;
-    let keys = Object.keys(d)
+    Object.keys(d)
         .filter(a => a.includes("Explained")  || a.includes('residual'))
         .map(key => d[key] * weights[key])
         .forEach(function(d) {sum += d});
@@ -548,7 +544,6 @@ function setupSliders() {
 
         // TODO I have the new value, now do something with it (update the visualization)
     });
-
 }
 
 /**
@@ -572,7 +567,7 @@ Array.prototype.unique = function() {
 /**
  * This function converts date values during csv import
  * @param row the row object to convert
- * @returns the converted row
+ * @returns {"Regional indicator": *, country: *, "Dystopia + residual": number, "Explained by: Freedom to make life choices": number, "Explained by: Perceptions of corruption": number, "Explained by: Healthy life expectancy": number, "Explained by: Log GDP per capita": number, "Explained by: Generosity": number, "Explained by: Social support": number, "Ladder score": number} converted row
  */
 let convertRow = function(row) {
     // console.log('row', row);
@@ -613,11 +608,3 @@ let convertRow = function(row) {
 };
 
 letsGetItStarted();
-
-/**
- * calculates the midpoint of a range given as a 2 element array
- * @source Sophie! Thank you.
- */
-function midpoint(range) {
-    return range[0] + (range[1] - range[0]) / 2.0;
-}
