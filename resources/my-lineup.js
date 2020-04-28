@@ -157,8 +157,8 @@ function letsGetItStarted() {
  * @param dataParam the data loaded from csv to use in the visualization
  */
 function prepVis(dataParam) {
-    console.log('data as loaded', dataParam);
-    console.log('longData', longData);
+    // console.log('data as loaded', dataParam);
+    // console.log('longData', longData);
 
     longData = longData.sort(function(a, b) {
         return a['Ladder score'] - b['Ladder score'];
@@ -268,7 +268,7 @@ function prepVis(dataParam) {
  */
 function prepMap(dataParam) {
     mapData = dataParam;
-    console.log('mapData', mapData);
+    // console.log('mapData', mapData);
 
     // Make the map projection and path generator
     let projection = d3.geoNaturalEarth1()
@@ -379,7 +379,7 @@ function makeMapLegend() {
 
     legendG.call(legend);
 
-    console.log('scales.mapColorScale.domain()', scales.mapColorScale.domain());
+    // console.log('scales.mapColorScale.domain()', scales.mapColorScale.domain());
 
     // Interactivity
     // let swatches = g.legend.selectAll('rect.swatch')
@@ -428,7 +428,7 @@ function setupSliders() {
 
 
     let sliders = d3.selectAll('.slider');
-    console.log('sliders', sliders);
+    // console.log('sliders', sliders);
 
     // Setup the weights to begin with
     sliders.each(function () {
@@ -470,13 +470,12 @@ function updateVis() {
         let weightedSumB = weightedSmExplainors(b);
         return weightedSumB - weightedSumA;
     });
-    console.log('sorted data: ', sorted);
+    // console.log('sorted data: ', sorted);
 
     // Update the lineup y scale to show the new order!
     scales.countries.domain(sorted.map(r => r.country));
 
     // Use the map visualization too!
-    console.log('sorted again', sorted);
     updateMapVis(sorted);
 
     // Draw actual bars
@@ -528,8 +527,6 @@ async function updateMapVis(sortedData) {
     // Add a new domain to the scale.
     updateMapScale(sortedData);
 
-    console.log('sorted once again', sortedData);
-
     // Calculate values for color calculations
     let color_numbers = {};
     sortedData.forEach(function (row) {
@@ -545,11 +542,15 @@ async function updateMapVis(sortedData) {
         // Store the sum
         color_numbers[row['country']] = sum;
     });
-    console.log('calculated color_numbers', color_numbers);
+    // console.log('calculated color_numbers', color_numbers);
 
     let outlinesG = map_svg.select('g#outlines');
     // console.log('outlines', outlinesG);
+
     await mapPromise;
+
+    matchCountries();
+
     let outlines = outlinesG.selectAll('path.country_outline')
         .data(mapData.features);
 
@@ -578,7 +579,7 @@ async function updateMapVis(sortedData) {
 
     let graticule = d3.geoGraticule10();
     let graticuleG = map_svg.select('g#graticule');
-    console.log('graticule', graticule);
+    // console.log('graticule', graticule);
     graticuleG.append('path')
         .attr('d', pathGenerator(graticule))
         .attr('stroke', '#ccc')
@@ -594,29 +595,11 @@ async function updateMapVis(sortedData) {
  */
 function updateMapScale(sorted) {
 
-    // Calculate the country with the max weighted value
-    // let maxWeighted = Object.keys(sorted[0]).reduce(function (accumulator, currentValue) {
-    //     let also = sorted[0][currentValue];
-    //     let include = currentValue.includes('Explained') || currentValue.includes('residual');
-    //
-    //     // console.log(currentValue, accumulator, include, also);
-    //     return accumulator + (include ? also : 0);
-    //
-    // }, 0);
     let maxWeighted = weightedSmExplainors(sorted[0]);
-    console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
+    // console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
 
-    // Calculate the country with the min weighted value
-    // let minWeighted = Object.keys(sorted[sorted.length -1]).reduce(function (accumulator, currentValue) {
-    //     let also = sorted[sorted.length - 1][currentValue];
-    //     let include = currentValue.includes('Explained') || currentValue.includes('residual');
-    //
-    //     // console.log(currentValue, accumulator, include, also);
-    //     return accumulator + (include ? also : 0);
-    //
-    // }, 0);
     let minWeighted = weightedSmExplainors(sorted[sorted.length - 1]);
-    console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
+    // console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
 
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
 }
@@ -631,7 +614,7 @@ function updateMapScale(sorted) {
  * Normalize the weights to sum to 7
  */
 function normalizeWeights() {
-    console.log('weights before norm', weights);
+    // console.log('weights before norm', weights);
     let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
     // console.log('hello');
     let scaling_factor = 7 / weights_sum;
@@ -645,7 +628,7 @@ function normalizeWeights() {
         weights[key] = weights[key] * scaling_factor;
     }
 
-    console.log('weights after norm', weights);
+    // console.log('weights after norm', weights);
 }
 
 /**
@@ -736,6 +719,34 @@ function explainor_name_abbreviator(long_name) {
         case 'Dystopia + residual' :
             return 'Residual Happiness';
     }
+}
+
+/**
+ * Make sure the countries in the map match the countries in the dataset
+ */
+function matchCountries() {
+    console.log('mapData', mapData);
+    console.log('data', data);
+
+    let whr_data = data.copy();
+    let remaining_whr_countries = function() {whr_data.map(elem => elem.country)};
+    let remaining_map_features = function () {mapData.features.filter(feature => 'mapped_whr_data' in feature)};
+
+
+    for (let feature of mapData.features) {
+
+        // If we find an exact match!
+        if (remaining_whr_countries.includes(feature.properties['ADMIN'] )) {
+            let matched_index = whr_data.indexOf(feature.properties['ADMIN']);
+
+            feature.mapped_whr_data = whr_data[matched_index];
+            whr_data.splice(matched_index, 1);
+        }
+    }
+
+    console.log('Matched exact matches');
+    console.log('Remaining WHR data', remaining_whr_countries());
+    console.log('Remaining map features', remaining_map_features());
 }
 
 
