@@ -108,3 +108,11 @@ circle.symbol {
 th {
     text-align: right;
 }
+
+/***********************/
+/* Final project stuff */
+/***********************/
+#mapLegend .cell text {
+    font-size: 0.75em;
+    font-weight: normal;
+}

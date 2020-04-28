@@ -134,7 +134,8 @@ function letsGetItStarted() {
 
     scales.color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    scales.mapColorScale = d3.scaleSequential(d3.interpolateRdYlBu);
+    // Restrict to the lighter parts of the scale
+    scales.mapColorScale = d3.scaleSequential(num => d3.interpolateRdYlBu(num * 0.6 + 0.2));
 
     // Title!
     // svg.append('text')
@@ -281,6 +282,12 @@ function prepMap(dataParam) {
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
+    // map_svg.select('g#water')
+    //     .append('rect')
+    //     .style('fill', '#E3EFF8')
+    //     .attr('width', map_svg.attr('width'))
+    //     .attr('height', map_svg.attr('height'));
+
 }
 
 
@@ -366,6 +373,7 @@ function makeMapLegend() {
         .shapeHeight(15)
         .cells(7)
         .title('Country Colors :')
+        .labels(['Most Happy', '.',   '.', '.', '.', '.', 'Least Happy'])
         .orient('vertical')
         .scale(scales.mapColorScale);
 
@@ -449,7 +457,7 @@ function setupSliders() {
 
 
 //////////////////////////
-// My Updator Functions //
+// My Updater Functions //
 //////////////////////////
 
 /**
