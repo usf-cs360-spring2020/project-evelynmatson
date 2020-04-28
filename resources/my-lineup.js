@@ -49,8 +49,6 @@ let mapData;
 let explainors;
 let weights = {};
 
-let mapPromise;
-
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
 
@@ -64,7 +62,7 @@ let mapPromise;
 /**
  * This function will draw all of the visualization.
  */
-function letsGetItStarted() {
+async function letsGetItStarted() {
 
     config.legend.width = config.lineup_svg.width;
     config.legend.height = config.margin.bottom;
@@ -154,8 +152,15 @@ function letsGetItStarted() {
     //     .attr('text-anchor', 'middle');
 
     // Load the data, continue in later methods
-    d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow).then(prepVis);
-    mapPromise = d3.json('resources/Datasets/countries.geojson').then(prepMap);
+    whr_data = await d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow); //.then();
+    mapData = await d3.json('resources/Datasets/countries.geojson'); //.then(prepMap);
+    // await whr_data;
+    // await mapData;
+
+    prepVis(whr_data);
+    // prepMap(mapData);
+
+    // TODO clean up the order of 'prep', 'draw', etc... methods and their waiting and such
 }
 
 /**
@@ -170,8 +175,9 @@ function prepVis(dataParam) {
         return a['Ladder score'] - b['Ladder score'];
     });
 
-    whr_data = dataParam
-        .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
+    console.log('dataParam', dataParam);
+    whr_data = dataParam;
+    //     .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
 
     // Work on scales
     let countries = whr_data
@@ -261,6 +267,8 @@ function prepVis(dataParam) {
     //         .call(ygridlines);
     // }
 
+    prepMap(mapData);
+
     makeLineupLegend();
 
     setupSliders();
@@ -288,12 +296,16 @@ function prepMap(dataParam) {
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
-    // map_svg.select('g#water')
-    //     .append('rect')
-    //     .style('fill', '#E3EFF8')
-    //     .attr('width', map_svg.attr('width'))
-    //     .attr('height', map_svg.attr('height'));
+    // Make some graticule lines
+    let graticule = d3.geoGraticule10();
+    let graticuleG = map_svg.select('g#graticule');
+    console.log('graticule', graticule);
+    // graticule.coordinates.splice(0, 0, [[179, -80.000001], [179, 9.999999000000003], [179, 80.000001]]);
+    graticuleG.append('path')
+        .attr('class', 'graticule')
+        .attr('d', pathGenerator(graticule));
 
+    matchCountries();
 }
 
 
@@ -479,8 +491,8 @@ function updateVis() {
     scales.countries.domain(sorted.map(r => r.country));
 
     // Use the map visualization too!
-    mapPromise = updateMapVis(sorted);
-    mapPromise.then(makeMapLegend);
+    updateMapVis(sorted);
+    makeMapLegend();
 
     // Draw actual bars
     let rect = d3.select("#bars");
@@ -526,7 +538,7 @@ function updateVis() {
 /**
  * Update the map visualization
  */
-async function updateMapVis(sortedData) {
+function updateMapVis(sortedData) {
 
     // Add a new domain to the scale.
     updateMapScale(sortedData);
@@ -534,14 +546,6 @@ async function updateMapVis(sortedData) {
     // Calculate values for color calculations
     let color_numbers = {};
     sortedData.forEach(function (row) {
-
-        // // Sum up all explainors for that country
-        // let sum = 0;
-        // Object.keys(row).forEach(function(key) {
-        //     if (key.includes('Explained') || key.includes('residual')) {
-        //         sum += row[key];
-        //     }
-        // });
 
         let sum = weightedSmExplainors(row);
 
@@ -553,9 +557,7 @@ async function updateMapVis(sortedData) {
     let countriesG = map_svg.select('g#countries');
     // console.log('outlines', outlinesG);
 
-    await mapPromise;
-
-    matchCountries();
+    // matchCountries();
 
     let country_shapes = countriesG.selectAll('path.country_outline')
         .data(mapData.features);
@@ -587,15 +589,6 @@ async function updateMapVis(sortedData) {
     // let data_country_names = sortedData.map(d => d.country).forEach(name => console.log('data', name));
     // console.log('map_country_names', map_country_names);
     // console.log('data_country_names', data_country_names);
-
-    let graticule = d3.geoGraticule10();
-    let graticuleG = map_svg.select('g#graticule');
-    console.log('graticule', graticule);
-    // graticule.coordinates.splice(0, 0, [[179, -80.000001], [179, 9.999999000000003], [179, 80.000001]]);
-    graticuleG.append('path')
-        .attr('class', 'graticule')
-        .attr('d', pathGenerator(graticule));
-
 
     // Make (or update the map legend)
     // makeMapLegend();
