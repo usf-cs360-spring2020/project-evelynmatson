@@ -124,7 +124,8 @@ function letsGetItStarted() {
     //     .rangeRound([0, config.plot.height])
     //     .paddingInner(config.plot.paddingBetweenMonths);
     scales.countries = d3.scaleBand()
-        .rangeRound([0, config.plot.height])
+        .range([3, config.plot.height])
+        .paddingOuter(config.plot.paddingBetweenMonths)
         .paddingInner(config.plot.paddingBetweenMonths);
 
     // scales.passengers = d3.scaleLinear();

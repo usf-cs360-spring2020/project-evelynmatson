@@ -116,3 +116,8 @@ th {
     font-size: 0.75em;
     font-weight: normal;
 }
+
+#mapVisualization path.country_outline {
+    stroke: #999;
+    stroke-width: 0.5px;
+}
