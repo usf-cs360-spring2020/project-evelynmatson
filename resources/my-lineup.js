@@ -41,7 +41,7 @@ let lineup_svg;
 let axes = {};
 let plot;
 let grid;
-let data;
+let whr_data;
 let longData = [];
 let mapData;
 let explainors;
@@ -164,11 +164,11 @@ function prepVis(dataParam) {
         return a['Ladder score'] - b['Ladder score'];
     });
 
-    data = dataParam
+    whr_data = dataParam
         .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
 
     // Work on scales
-    let countries = data
+    let countries = whr_data
         .map(row => row['country']);
     scales.countries.domain(countries);
 
@@ -185,14 +185,14 @@ function prepVis(dataParam) {
         .paddingInner(config.plot.paddingBetweenRegions);
 
     // Linear scales, one for each explainor's values
-    for (let explainor of Object.keys(data[0])) {
+    for (let explainor of Object.keys(whr_data[0])) {
         // Skip non-related things
         if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
             continue;
         }
 
         // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
-        let maxOfExplainor = Math.max(...data.map(d => d[explainor]));
+        let maxOfExplainor = Math.max(...whr_data.map(d => d[explainor]));
         // console.log('max of ', explainor, maxOfExplainor);
 
         // console.log('explainor', explainor);
@@ -465,7 +465,7 @@ function setupSliders() {
  */
 function updateVis() {
     // Sort the data according to the current weights
-    let sorted = data.sort(function(a, b) {
+    let sorted = whr_data.sort(function(a, b) {
         let weightedSumA = weightedSmExplainors(a);
         let weightedSumB = weightedSmExplainors(b);
         return weightedSumB - weightedSumA;
@@ -726,29 +726,40 @@ function explainor_name_abbreviator(long_name) {
  */
 function matchCountries() {
     console.log('mapData', mapData);
-    console.log('data', data);
+    console.log('whr_data', whr_data);
 
-    // let remaining_whr_countries= data.map(entry => entry.country);
-    // // let remaining_whr_countries = function() {whr_data.map(elem => elem.country)};
-    // let remaining_map_features = function () {mapData.features.filter(feature => 'mapped_whr_data' in feature)};
-    //
-    //
-    // for (let feature of mapData.features) {
-    //
-    //     // If we find an exact match!
-    //     if (remaining_whr_countries.includes(feature.properties['ADMIN'] )) {
-    //         let matched_index = data.indexOf(feature.properties['ADMIN']);
-    //
-    //         feature.mapped_whr_data = data[matched_index];
-    //         delete remaining_whr_countries[matched_index];
-    //     }
-    // }
-    //
-    // console.log('Matched exact matches');
-    // console.log('Remaining WHR data', remaining_whr_countries);
-    // console.log('Remaining map features', remaining_map_features());
+    // Arrays of country names. Will be kept sparse, to preserve indexing of original datasets
+    let remaining_whr_country_names = whr_data.map(entry => entry.country);
+    let remaining_map_country_names = mapData.features.map(feature => feature.properties['ADMIN']);
 
-    // TODO NEXT un-comment this, keep working
+    // First pass : look for exact name-name matches
+    for (let entry of remaining_map_country_names.entries()) {
+        let map_data_index = entry[0];
+        let map_name = entry[1];
+
+        // Success! Exact match:
+        if (remaining_whr_country_names.includes(map_name)) {
+
+            // Remove this from the map country names
+            delete remaining_map_country_names[map_data_index];
+
+            // Remove this from the whr country names
+            let whr_index = remaining_whr_country_names.indexOf(map_name);
+            delete remaining_whr_country_names[whr_index];
+
+            // Store the match in the real mapData
+            mapData.features[map_data_index]['whrdata'] = whr_data[whr_index];
+        }
+    }
+
+    // Second pass : manually match a few
+    // TODO
+
+    // Third pass : give 'none' to others
+    // TODO
+    // TODO make these be grey
+
+    console.log('Matched exact matches');
 }
 
 
