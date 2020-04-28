@@ -452,7 +452,7 @@ function updateMapScale(sorted) {
     //
     // }, 0);
     let maxWeighted = weightedSmExplainors(sorted[0]);
-    console.log('maxWeighted', maxWeighted);
+    console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
 
     // Calculate the country with the min weighted value
     // let minWeighted = Object.keys(sorted[sorted.length -1]).reduce(function (accumulator, currentValue) {
@@ -464,7 +464,7 @@ function updateMapScale(sorted) {
     //
     // }, 0);
     let minWeighted = weightedSmExplainors(sorted[sorted.length - 1]);
-    console.log('minWeighted', minWeighted);
+    console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
 
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
 }
@@ -628,7 +628,7 @@ function setupSliders() {
     // Setup the weights to begin with
     sliders.each(function () {
         let explainor = d3.select(this).attr('id');
-        let scale_factor = parseFloat(this.value) * 0.1;
+        let scale_factor = parseFloat(this.value);
         // console.log(explainor, scale_factor);
 
         weights[explainor] = scale_factor;
@@ -665,6 +665,11 @@ function normalizeWeights() {
     let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
     // console.log('hello');
     let scaling_factor = 7 / weights_sum;
+
+    // Fix the division by zero problem by defaulting to
+    if (scaling_factor == NaN) {
+        scaling_factor = 0;
+    }
 
     for (let key in weights) {
         weights[key] = weights[key] * scaling_factor;
