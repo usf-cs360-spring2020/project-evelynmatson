@@ -549,14 +549,14 @@ async function updateMapVis(sortedData) {
     });
     // console.log('calculated color_numbers', color_numbers);
 
-    let outlinesG = map_svg.select('g#outlines');
+    let countriesG = map_svg.select('g#countries');
     // console.log('outlines', outlinesG);
 
     await mapPromise;
 
     matchCountries();
 
-    let outlines = outlinesG.selectAll('path.country_outline')
+    let country_shapes = countriesG.selectAll('path.country_outline')
         .data(mapData.features);
 
     // Color function defined here ahead of time
@@ -569,10 +569,9 @@ async function updateMapVis(sortedData) {
         }
     };
 
-    outlines.join(
+    country_shapes.join(
     enter =>
           enter
-              // Make the main shape with color
             .append('path')
             .attr('class', 'country_outline')
             .style('fill', map_feature_to_color)
@@ -593,9 +592,8 @@ async function updateMapVis(sortedData) {
     console.log('graticule', graticule);
     // graticule.coordinates.splice(0, 0, [[179, -80.000001], [179, 9.999999000000003], [179, 80.000001]]);
     graticuleG.append('path')
-        .attr('d', pathGenerator(graticule))
-        .attr('stroke', '#ccc')
-        .attr('fill', 'none');
+        .attr('class', 'graticule')
+        .attr('d', pathGenerator(graticule));
 
 
     // Make (or update the map legend)
@@ -621,28 +619,6 @@ function updateMapScale(sorted) {
 /////////////////////////
 // My Helper Functions //
 /////////////////////////
-
-/**
- * Normalize the weights to sum to 7
- */
-// function normalizeWeights() {
-//     let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
-//     console.log('weights before norm', Object.values(weights), 'sum', weights_sum);
-//
-//     let scaling_factor = 7 / weights_sum;
-//
-//     // Fix the division by zero problem by defaulting to
-//     if (isNaN(scaling_factor)) {
-//         scaling_factor = 0;
-//     }
-//
-//     for (let key in weights) {
-//         weights[key] = weights[key] * scaling_factor;
-//     }
-//
-//     let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
-//     console.log('weights after norm', Object.values(weights), 'sum', );
-// }
 
 /**
  * This function converts date values during csv import

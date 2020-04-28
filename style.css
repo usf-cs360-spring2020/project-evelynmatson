@@ -117,7 +117,13 @@ th {
     font-weight: normal;
 }
 
-#mapVisualization path.country_outline {
+svg#mapVisualization path.country_outline {
     stroke: #999;
     stroke-width: 0.5px;
+}
+
+svg#mapVisualization g#graticule path.graticule {
+    stroke: #ddd;
+    stroke-width: .75px;
+    fill: none;
 }
