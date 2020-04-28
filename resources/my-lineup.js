@@ -42,6 +42,7 @@ let plot;
 let grid;
 let data;
 let longData = [];
+let mapData;
 let explainors;
 let weights = {};
 
@@ -74,7 +75,7 @@ let letsGetItStarted = function() {
         .attr("height", config.lineup_svg.height);
 
     map_svg = d3.select('#mapVisualization')
-        .attr('width', config.map_svg.width)
+        .attr('width', config.map_svg.width);
         // .attr('height', config.map_svg.height);
 
 
@@ -122,6 +123,8 @@ let letsGetItStarted = function() {
     //     .paddingInner(config.plot.paddingBetweenRegions);
 
     scales.color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    scales.mapColorScale = d3.scaleSequential(d3.interpolateWarm);
 
     // Title!
     // svg.append('text')
@@ -324,41 +327,31 @@ let prepVis = function(dataParam) {
  * @param dataParam the data loaded from CSV
  */
 let prepMap = function(dataParam) {
-    let mapData = dataParam;
+    mapData = dataParam;
     console.log('mapData', mapData);
 
     // Make the map projection and path generator
     let projection = d3.geoNaturalEarth1()
         .rotate([-10, 0])
         .fitWidth(config.map_svg.width, mapData);
-    let pathGenerator = d3.geoPath(projection);
+    pathGenerator = d3.geoPath(projection);
 
     // Update the map SVG's height
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
-
-    let outlinesG = map_svg.select('g#outlines');
-    // console.log('outlines', outlinesG);
-    let outlines = outlinesG.selectAll('path.country_outline')
-        .data(mapData.features)
-        .enter()
-        .append('path')
-        .attr('class', 'country_outline')
-        .attr('d', pathGenerator);
-
-
-    let graticule = d3.geoGraticule10();
-    let graticuleG = map_svg.select('g#graticule');
-    console.log('graticule', graticule);
-    graticuleG.append('path')
-        .attr('d', None => pathGenerator(graticule))
-        .attr('stroke', '#ccc')
-        .attr('fill', 'none');
 };
 
+// /**
+//  * Update both visualizations.
+//  */
+// function updateVis() {
+//     updateLineupVis();
+//     updateMapVis();
+// }
+
 /**
- * Update the visualization after a modified
+ * Update the visualization after a modification.
  */
 function updateVis() {
     // Sort the data according to the current weights
@@ -369,8 +362,12 @@ function updateVis() {
     });
     console.log('sorted data: ', sorted);
 
-    // Update the scale to show the new order!
+    // Update the lineup y scale to show the new order!
     scales.countries.domain(sorted.map(r => r.country));
+
+    // Use the map visualization too!
+    console.log('sorted again', sorted);
+    updateMapVis(sorted);
 
     // Draw actual bars
     let rect = d3.select("#bars");
@@ -411,6 +408,93 @@ function updateVis() {
         .attr("class", "axis hidden-ticks");
     countriesAxisGroup.call(countriesAxis);
 
+}
+
+/**
+ * Update the map visualization
+ */
+function updateMapVis(sortedData) {
+
+    // Add a new domain to the scale.
+    updateMapScale(sortedData);
+
+    console.log('sorted once again', sortedData);
+
+    // Calculate values for color calculations
+    let color_numbers = {};
+    sortedData.forEach(function (row) {
+
+        // Sum up all explainors for that country
+        let sum = 0;
+        Object.keys(row).forEach(function(key) {
+            if (key.includes('Explained') || key.includes('residual')) {
+                sum += row[key];
+            }
+        });
+
+        // Store the sum
+        color_numbers[row['country']] = sum;
+    });
+    console.log('calculated color_numbers', color_numbers);
+
+    let outlinesG = map_svg.select('g#outlines');
+    // console.log('outlines', outlinesG);
+    let outlines = outlinesG.selectAll('path.country_outline')
+        .data(mapData.features);
+
+
+    outlines.join(
+    enter =>
+          enter
+              // Make the main shape with color
+            .append('path')
+            .attr('class', 'country_outline')
+            .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
+
+            .attr('d', pathGenerator),
+    update =>
+        update.
+            transition()
+            .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
+    );
+
+
+    let graticule = d3.geoGraticule10();
+    let graticuleG = map_svg.select('g#graticule');
+    console.log('graticule', graticule);
+    graticuleG.append('path')
+        .attr('d', None => pathGenerator(graticule))
+        .attr('stroke', '#ccc')
+        .attr('fill', 'none');
+
+}
+
+/**
+ * Use the recently sorted values from my lineup to change the scale of the map visualization.
+ */
+function updateMapScale(sorted) {
+    // Update the map scale
+    let maxWeighted = Object.keys(sorted[0]).reduce(function (accumulator, currentValue) {
+        let also = sorted[0][currentValue];
+        let include = currentValue.includes('Explained') || currentValue.includes('residual');
+
+        // console.log(currentValue, accumulator, include, also);
+        return accumulator + (include ? also : 0);
+
+    }, 0);
+    console.log('maxWeighted', maxWeighted);
+
+    let minWeighted = Object.keys(sorted[sorted.length -1]).reduce(function (accumulator, currentValue) {
+        let also = sorted[sorted.length - 1][currentValue];
+        let include = currentValue.includes('Explained') || currentValue.includes('residual');
+
+        // console.log(currentValue, accumulator, include, also);
+        return accumulator + (include ? also : 0);
+
+    }, 0);
+    console.log('minWeighted', minWeighted);
+
+    scales.mapColorScale.domain([minWeighted, maxWeighted]);
 }
 
 /**
