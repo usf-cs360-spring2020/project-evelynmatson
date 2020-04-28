@@ -252,8 +252,6 @@ function prepVis(dataParam) {
 
     makeLineupLegend();
 
-    makeMapLegend();
-
     setupSliders();
 
     updateVis();
@@ -434,6 +432,9 @@ async function updateMapVis(sortedData) {
         .attr('stroke', '#ccc')
         .attr('fill', 'none');
 
+
+    // Make (or update the map legend)
+    makeMapLegend();
 }
 
 /**
@@ -508,6 +509,82 @@ function makeLineupLegend() {
  */
 function makeMapLegend() {
 
+    let legendHeight = 220;
+    let legendWidth = 130;
+
+    let legendTranslateX = 20;
+    // let legendTranslateY = 200;
+    let legendTranslateY = parseInt(map_svg.attr('height')) - legendHeight + 10;
+    // console.log()
+
+
+    map_svg.select('g#mapLegend').remove();
+    let parentLegendG = map_svg.append('g')
+        .attr('id', 'mapLegend')
+        .attr("transform", translate(legendTranslateX, legendTranslateY));
+
+    // Make the white background first
+    parentLegendG.append('rect')
+        .style('fill', 'white')
+        .style('stroke-width', '1px')
+        .style('stroke', '#222')
+        .style('border-style', 'solid')
+        // .style('fill', 'white')
+        .attr('x', -10)
+        .attr('y', -25)
+        .attr('width', legendWidth)
+        .attr('height', legendHeight);
+
+    // Then make the actual legend
+    let legendG = parentLegendG.append('g')
+        .attr('class', 'legendLinear');
+
+    let legend = d3.legendColor()
+        .ascending(true)
+        .titleWidth(200)
+        .shapePadding(5)
+        .shapeWidth(20)
+        .shapeHeight(15)
+        .cells(7)
+        .title('Country Colors :')
+        .orient('vertical')
+        .scale(scales.mapColorScale);
+
+    legendG.call(legend);
+
+    console.log('scales.mapColorScale.domain()', scales.mapColorScale.domain());
+
+    // Interactivity
+    // let swatches = g.legend.selectAll('rect.swatch')
+    //     .attr('enabled', 'true');       // Set all to be enabled by default
+    // swatches.on('click', function(element) {
+    //         let thisSelect = d3.select(this);
+    //
+    //         let clickedCategory = reverseTypeLookup[thisSelect.style('fill')];
+    //         // console.log('clickedCategory', clickedCategory)
+    //
+    //         // Toggle enabled-ness
+    //         if (thisSelect.attr('enabled') === 'true') {
+    //             thisSelect.attr('enabled', 'false');
+    //             thisSelect.style('opacity', .1);
+    //
+    //             // Now disable those dots
+    //             let jsindexisdumb = allowedTypes.indexOf(clickedCategory);
+    //             allowedTypes.splice(jsindexisdumb, 1);
+    //             drawDots(dotsJson);
+    //
+    //         } else {
+    //             thisSelect.attr('enabled', 'true');
+    //             thisSelect.style('opacity', .8);
+    //
+    //             // Now enable those dots
+    //             allowedTypes.push(clickedCategory);
+    //
+    //             drawDots(dotsJson)
+    //
+    //         }
+    //         // console.log(thisSelect);
+    //     });
 }
 
 /**
