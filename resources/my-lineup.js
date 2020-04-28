@@ -753,7 +753,34 @@ function matchCountries() {
     }
 
     // Second pass : manually match a few
-    // TODO
+    for (let entry of remaining_whr_country_names.entries()) {
+        let whr_data_index = entry[0];
+        let whr_name = entry[1];
+
+        let map_name;
+        switch (whr_name) {
+            case 'United States':
+                map_name = 'United States of America';
+                break;
+
+            case 'Taiwan Province of China':
+                map_name = 'Taiwan';
+                break;
+
+            case 'Serbia' :
+                map_name = 'Republic of Serbia';
+                break;
+
+            case 'North Cyprus':
+                map_name = 'Northern Cyprus';
+                break;
+
+            case 'Hong Kong S.A.R. of China':
+                map_name = 'Hong Kong S.A.R.';
+                break;
+            }
+        }
+    }
 
     // Third pass : give 'none' to others
     // TODO
