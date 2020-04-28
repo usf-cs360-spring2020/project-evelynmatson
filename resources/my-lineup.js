@@ -480,6 +480,7 @@ function updateVis() {
 
     // Use the map visualization too!
     mapPromise = updateMapVis(sorted);
+    mapPromise.then(makeMapLegend);
 
     // Draw actual bars
     let rect = d3.select("#bars");
@@ -597,7 +598,7 @@ async function updateMapVis(sortedData) {
 
 
     // Make (or update the map legend)
-    makeMapLegend();
+    // makeMapLegend();
 }
 
 /**
