@@ -740,23 +740,32 @@ function matchCountries() {
         // Success! Exact match:
         if (remaining_whr_country_names.includes(map_name)) {
 
+            let whr_index = remaining_whr_country_names.indexOf(map_name);
+
+            // Store the match in the real mapData
+            mapData.features[map_data_index]['whrdata'] = whr_data[whr_index];
+
             // Remove this from the map country names
             delete remaining_map_country_names[map_data_index];
 
             // Remove this from the whr country names
-            let whr_index = remaining_whr_country_names.indexOf(map_name);
             delete remaining_whr_country_names[whr_index];
-
-            // Store the match in the real mapData
-            mapData.features[map_data_index]['whrdata'] = whr_data[whr_index];
         }
     }
+    console.log('First pass made, exact matches made.');
 
     // Second pass : manually match a few
     for (let entry of remaining_whr_country_names.entries()) {
+
+        // Skip entries for since-removed countries
+        if (entry[1] == undefined) {
+            continue;
+        }
+
         let whr_data_index = entry[0];
         let whr_name = entry[1];
 
+        // Lookup what that WHR country is called in the map dataset...
         let map_name;
         switch (whr_name) {
             case 'United States':
@@ -778,12 +787,47 @@ function matchCountries() {
             case 'Hong Kong S.A.R. of China':
                 map_name = 'Hong Kong S.A.R.';
                 break;
-            }
+
+            case 'Congo (Brazzaville)':
+                map_name = 'Republic of Congo';
+                break;
+
+            case 'Palestinian Territories':
+                map_name = 'Palestine';
+                break;
+
+            case 'Congo (Kinshasa)':
+                map_name = 'Democratic Republic of the Congo';
+                break;
+
+            case 'Tanzania':
+                map_name = 'United Republic of Tanzania'
+                break;
         }
+        let map_data_index = remaining_map_country_names.indexOf(map_name);
+
+        // Store the match in the real mapData
+        mapData.features[map_data_index]['whrdata'] = whr_data[whr_data_index];
+
+        // Delete from the remaining name lists
+        delete remaining_map_country_names[map_data_index];
+        delete remaining_whr_country_names[whr_data_index];
+
     }
+    console.log('Second pass made. Custom matches made.');
 
     // Third pass : give 'none' to others
-    // TODO
+    for (let entry of remaining_map_country_names.entries()) {
+
+        let map_data_index = entry[0];
+        let map_name = entry[1];
+
+        // Skip entries for since-removed countries
+        if (entry[1] == undefined) {
+            continue;
+        }
+        mapData.features[map_data_index]['whrdata'] = null;
+    }
     // TODO make these be grey
 
     console.log('Matched exact matches');
