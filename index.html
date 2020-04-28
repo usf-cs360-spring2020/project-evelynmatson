@@ -124,72 +124,72 @@
     </nav>
     <!-- End page navigation -->
 
-  <section class="section">
-    <div class="container">
-      <!-- Begin page content -->
-      <div class="content page-content">
+    <!-- Begin page content -->
+    <section class="section">
+      <div class="container">
+        <div class="content page-content">
 
-        <h2>Project Goals</h2>
-        <p>
-          With this project, I plan to create visual explorations of the current state of world happiness and other factors like inequality, that investigate the connection between people's happiness and other indicators of life today.
-        </p>
-        <p>
-          I hope to make these visualizations visually appealing and easy to explore and interact with, and I plan to use strong encodings for data that are simple and intuitive, yet convey large amounts of data.
-        </p>
+          <h2>Project Goals</h2>
+          <p>
+            With this project, I plan to create visual explorations of the current state of world happiness and other factors like inequality, that investigate the connection between people's happiness and other indicators of life today.
+          </p>
+          <p>
+            I hope to make these visualizations visually appealing and easy to explore and interact with, and I plan to use strong encodings for data that are simple and intuitive, yet convey large amounts of data.
+          </p>
 
-        <h2>Project Narrative</h2>
-        <p>
-          In this project, I will explore what factors contribute to people's happiness. This includes social factors like perceived generosity or perceived social support, political factors like freedom to make life choices or perceptions of corruption, economic factors like GDP per capita or amount of income inequality, and others.
-          I hope to make a visual demonstration of what parts of a society help or hinder people's ability to live happy, fulfilled lives.
-        </p>
+          <h2>Project Narrative</h2>
+          <p>
+            In this project, I will explore what factors contribute to people's happiness. This includes social factors like perceived generosity or perceived social support, political factors like freedom to make life choices or perceptions of corruption, economic factors like GDP per capita or amount of income inequality, and others.
+            I hope to make a visual demonstration of what parts of a society help or hinder people's ability to live happy, fulfilled lives.
+          </p>
 
 
+        </div>
       </div>
-    </div>
+    </section>
     <!-- End page content -->
-  </section>
-<!--  </main>-->
+
     <!-- Page footer -->
-  <!-- https://bulma.io/documentation/layout/footer/ -->
-  <footer class="footer smaller-footers-are-better">
-    <div class="content has-text-centered is-size-7">
-      <p>
+    <!-- https://bulma.io/documentation/layout/footer/ -->
+    <footer class="footer smaller-footers-are-better">
+      <div class="content has-text-centered is-size-7">
+        <p>
 
-        <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
-        </a>
+          <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+          </a>
 
-        <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
-        </a>
+          <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+          </a>
 
-        <a href="https://bulma.io" class="button is-small">
-          <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
-        </a>
-      </p>
-    </div>
-  </footer>
-  <!-- End page footer -->
+          <a href="https://bulma.io" class="button is-small">
+            <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+          </a>
+        </p>
+      </div>
+    </footer>
+    <!-- End page footer -->
 
-  <!-- Mobile menu responsiveness -->
-  <!-- https://bulma.io/documentation/components/navbar/ -->
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    <!-- Mobile menu responsiveness -->
+    <!-- https://bulma.io/documentation/components/navbar/ -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    if ($navbarBurgers.length > 0) {
-      $navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-          const target = el.dataset.target;
-          const $target = document.getElementById(target);
-          el.classList.toggle('is-active');
-          $target.classList.toggle('is-active');
+      if ($navbarBurgers.length > 0) {
+        $navbarBurgers.forEach( el => {
+          el.addEventListener('click', () => {
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+          });
         });
-      });
-    }
-  });
-  </script>
-  <!-- End mobile menu responsiveness -->
+      }
+    });
+    </script>
+    <!-- End mobile menu responsiveness -->
 
 
   </body>
