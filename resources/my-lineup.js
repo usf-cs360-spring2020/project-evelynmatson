@@ -51,7 +51,7 @@ let weights = {};
 
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
-// TODO highlight on country
+// TODO tooltip highlight on country
 
 ///////////////////////////////
 // My Main Drawing Functions //
