@@ -218,8 +218,8 @@ function prepVis(dataParam) {
         .attr("class", "axis hidden-ticks");
     explainorsAxisGroup.call(explainorsAxis);
 
-    let passengerAxesGroup = plot.append("g")
-        .attr("id", "passenger-axes");
+    // let passengerAxesGroup = plot.append("g")
+    //     .attr("id", "passenger-axes");
     // let passengersAxis = d3.axisBottom(scales.passengers)
     //     // .tickPadding(0)
     //     .tickValues([0,100000,200000])
@@ -435,10 +435,10 @@ function setupSliders() {
     // Setup the weights to begin with
     sliders.each(function () {
         let explainor = d3.select(this).attr('id');
-        let scale_factor = parseFloat(this.value);
+        // let scale_factor = parseFloat(this.value);
         // console.log(explainor, scale_factor);
 
-        weights[explainor] = scale_factor;
+        weights[explainor] = parseFloat(this.value);
     });
     normalizeWeights();
 
@@ -478,7 +478,7 @@ function updateVis() {
     scales.countries.domain(sorted.map(r => r.country));
 
     // Use the map visualization too!
-    updateMapVis(sorted);
+    mapPromise = updateMapVis(sorted);
 
     // Draw actual bars
     let rect = d3.select("#bars");
@@ -628,7 +628,7 @@ function normalizeWeights() {
     let scaling_factor = 7 / weights_sum;
 
     // Fix the division by zero problem by defaulting to
-    if (scaling_factor == NaN) {
+    if (isNaN(scaling_factor)) {
         scaling_factor = 0;
     }
 
@@ -766,7 +766,7 @@ function matchCountries() {
     for (let entry of remaining_whr_country_names.entries()) {
 
         // Skip entries for since-removed countries
-        if (entry[1] == undefined) {
+        if (entry[1] === undefined) {
             continue;
         }
 
@@ -809,7 +809,7 @@ function matchCountries() {
                 break;
 
             case 'Tanzania':
-                map_name = 'United Republic of Tanzania'
+                map_name = 'United Republic of Tanzania';
                 break;
         }
         let map_data_index = remaining_map_country_names.indexOf(map_name);
