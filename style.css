@@ -8,11 +8,11 @@
     min-width: 900px;
 }
 
-.visualization {
-    border-width: 2px;
-    border-color: #888888;
-    border-style: solid;
-}
+/*.visualization {*/
+/*    border-width: 2px;*/
+/*    border-color: #888888;*/
+/*    border-style: solid;*/
+/*}*/
 
 
 .overall-title {
@@ -60,29 +60,29 @@ footer.smaller-footers-are-better {
 }
 
 /* HOMEWORK 3 STUFF */
-path.land {
-    fill : #DDDDDD;
-    stroke: none;
-}
+/*path.land {*/
+/*    fill : #DDDDDD;*/
+/*    stroke: none;*/
+/*}*/
 
-path.neighborhood {
-    fill: none;
-    stroke: white;
-    stroke-width: 3px;
-    pointer-events: none;
-}
+/*path.neighborhood {*/
+/*    fill: none;*/
+/*    stroke: white;*/
+/*    stroke-width: 3px;*/
+/*    pointer-events: none;*/
+/*}*/
 
 .active {
     stroke: red !important;
     stroke-width: 1.5px !important;
 }
 
-path.street {
-    fill: none;
-    stroke: white;
-    stroke-width: 1px;
-    pointer-events: none;
-}
+/*path.street {*/
+/*    fill: none;*/
+/*    stroke: white;*/
+/*    stroke-width: 1px;*/
+/*    pointer-events: none;*/
+/*}*/
 
 #tooltip {
     font-weight: 500;
