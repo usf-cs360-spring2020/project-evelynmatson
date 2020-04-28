@@ -440,16 +440,16 @@ function setupSliders() {
 
         weights[explainor] = parseFloat(this.value);
     });
-    normalizeWeights();
+    // normalizeWeights();
 
     // Setup modification/interactivty
     sliders.on('change', function () {
         let explainor = d3.select(this).attr('id');
-        let scale_factor = parseFloat(this.value) * 0.1;
+        let scale_factor = parseFloat(this.value);
         console.log(explainor, 'set to', scale_factor);
 
         weights[explainor] = scale_factor;
-        normalizeWeights();
+        // normalizeWeights();
 
         updateVis();
 
@@ -533,13 +533,15 @@ async function updateMapVis(sortedData) {
     let color_numbers = {};
     sortedData.forEach(function (row) {
 
-        // Sum up all explainors for that country
-        let sum = 0;
-        Object.keys(row).forEach(function(key) {
-            if (key.includes('Explained') || key.includes('residual')) {
-                sum += row[key];
-            }
-        });
+        // // Sum up all explainors for that country
+        // let sum = 0;
+        // Object.keys(row).forEach(function(key) {
+        //     if (key.includes('Explained') || key.includes('residual')) {
+        //         sum += row[key];
+        //     }
+        // });
+
+        let sum = weightedSmExplainors(row);
 
         // Store the sum
         color_numbers[row['country']] = sum;
@@ -604,10 +606,10 @@ async function updateMapVis(sortedData) {
 function updateMapScale(sorted) {
 
     let maxWeighted = weightedSmExplainors(sorted[0]);
-    // console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
+    console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
 
     let minWeighted = weightedSmExplainors(sorted[sorted.length - 1]);
-    // console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
+    console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
 
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
 }
@@ -621,23 +623,24 @@ function updateMapScale(sorted) {
 /**
  * Normalize the weights to sum to 7
  */
-function normalizeWeights() {
-    // console.log('weights before norm', weights);
-    let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
-    // console.log('hello');
-    let scaling_factor = 7 / weights_sum;
-
-    // Fix the division by zero problem by defaulting to
-    if (isNaN(scaling_factor)) {
-        scaling_factor = 0;
-    }
-
-    for (let key in weights) {
-        weights[key] = weights[key] * scaling_factor;
-    }
-
-    // console.log('weights after norm', weights);
-}
+// function normalizeWeights() {
+//     let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
+//     console.log('weights before norm', Object.values(weights), 'sum', weights_sum);
+//
+//     let scaling_factor = 7 / weights_sum;
+//
+//     // Fix the division by zero problem by defaulting to
+//     if (isNaN(scaling_factor)) {
+//         scaling_factor = 0;
+//     }
+//
+//     for (let key in weights) {
+//         weights[key] = weights[key] * scaling_factor;
+//     }
+//
+//     let weights_sum = Object.keys(weights).reduce((accumulator, current) => accumulator + weights[current], 0);
+//     console.log('weights after norm', Object.values(weights), 'sum', );
+// }
 
 /**
  * This function converts date values during csv import
@@ -733,8 +736,8 @@ function explainor_name_abbreviator(long_name) {
  * Make sure the countries in the map match the countries in the dataset
  */
 function matchCountries() {
-    console.log('mapData', mapData);
-    console.log('whr_data', whr_data);
+    // console.log('mapData', mapData);
+    // console.log('whr_data', whr_data);
 
     // Arrays of country names. Will be kept sparse, to preserve indexing of original datasets
     let remaining_whr_country_names = whr_data.map(entry => entry.country);
@@ -760,7 +763,7 @@ function matchCountries() {
             delete remaining_whr_country_names[whr_index];
         }
     }
-    console.log('First pass made, exact matches made.');
+    // console.log('First pass made, exact matches made.');
 
     // Second pass : manually match a few
     for (let entry of remaining_whr_country_names.entries()) {
@@ -822,24 +825,12 @@ function matchCountries() {
         delete remaining_whr_country_names[whr_data_index];
 
     }
-    console.log('Second pass made. Custom matches made.');
+    // console.log('Second pass made. Custom matches made.');
 
     // Third pass : give 'none' to others
-    // for (let entry of remaining_map_country_names.entries()) {
-    //
-    //     let map_data_index = entry[0];
-    //     let map_name = entry[1];
-    //
-    //     // Skip entries for since-removed countries
-    //     if (entry[1] == undefined) {
-    //         continue;
-    //     }
-    //     // mapData.features[map_data_index]['whrdata'] = null;
-    // }
     // ACTUALLY, instead of this, I'm just not going to define whrdata for those elements that should be grey.
-    // TODO make these be grey
 
-    console.log('Matched exact matches');
+    // console.log('Matched exact matches');
 }
 
 
