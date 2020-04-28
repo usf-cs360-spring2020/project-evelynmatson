@@ -52,6 +52,10 @@ let mapPromise;
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
 
+///////////////////////////////
+// My Main Drawing Functions //
+///////////////////////////////
+
 /**
  * This function will draw all of the visualization.
  */
@@ -258,35 +262,6 @@ function prepVis(dataParam) {
 }
 
 /**
- * Convert a long explainor name to a shorter abbreviaton
- * @param long_name
- */
-function explainor_name_abbreviator(long_name) {
-    switch (long_name) {
-        case 'Explained by: Freedom to make life choices' :
-            return 'Freedom';
-
-        case 'Explained by: Generosity' :
-            return 'Generosity';
-
-        case 'Explained by: Healthy life expectancy' :
-            return 'Healthy Life Exp.';
-
-        case 'Explained by: Log GDP per capita' :
-            return 'GDP per capita';
-
-        case 'Explained by: Perceptions of corruption' :
-            return 'Corruption';
-
-        case 'Explained by: Social support' :
-            return 'Social support';
-
-        case 'Dystopia + residual' :
-            return 'Residual Happiness';
-    }
-}
-
-/**
  * Prep the map visualization
  * @param dataParam the data loaded from CSV
  */
@@ -307,6 +282,175 @@ function prepMap(dataParam) {
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
 
 }
+
+
+/**
+ * Draw a legend for the lineup visualization.
+ */
+function makeLineupLegend() {
+    // Make a legend
+    // https://www.d3-graph-gallery.com/graph/custom_legend.html
+    let legendGroup = lineup_svg.append('g')
+        .attr('id', "legend")
+        .attr('transform', translate(0, config.lineup_svg.height - config.margin.bottom ));
+    // let legendKeys = ["Asia", 'Canada', 'Australia / Oceania', 'Central America', 'Europe', 'Mexico',  'Middle East'];
+    // let legendKeys = ['Freedom','Generosity','Healthy Life Exp.','GDP per capita','Corruption','Social support','Residual Happiness'];
+    let legendKeys = explainors;
+    let index = 0;
+    for (let explainorName of legendKeys) {
+
+        // Draw a little square
+        legendGroup.append("rect")
+            .attr('class', 'legend-square')
+            .attr('x', config.legend.betweenSquares + (index % 4) * config.legend.column_width)
+            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)))
+            .attr('width', config.legend.squareSize)
+            .attr('height', config.legend.squareSize)
+            .style('fill', scales.color(explainorName))
+            .style('stroke', 'white');
+
+        // Draw a little label
+        legendGroup.append("text")
+            .attr('x',  config.legend.betweenSquares*2 + config.legend.squareSize + config.legend.betweenSquares + (index % 4) * config.legend.column_width)
+            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)) + config.legend.squareSize / 2)
+            .style('fill', 'black')
+            .text(explainor_name_abbreviator(explainorName))
+            .attr('text-anchor', 'left')
+            .style('alignment-baseline', 'middle')
+            .attr('font-size', '0.75em');
+
+        index++;
+    }
+}
+
+/**
+ * Draw a legend for the map visualization.
+ */
+function makeMapLegend() {
+
+    let legendHeight = 220;
+    let legendWidth = 130;
+
+    let legendTranslateX = 20;
+    // let legendTranslateY = 200;
+    let legendTranslateY = parseInt(map_svg.attr('height')) - legendHeight + 10;
+    // console.log()
+
+
+    map_svg.select('g#mapLegend').remove();
+    let parentLegendG = map_svg.append('g')
+        .attr('id', 'mapLegend')
+        .attr("transform", translate(legendTranslateX, legendTranslateY));
+
+    // Make the white background first
+    parentLegendG.append('rect')
+        .style('fill', 'white')
+        .style('stroke-width', '1px')
+        .style('stroke', '#222')
+        .style('border-style', 'solid')
+        // .style('fill', 'white')
+        .attr('x', -10)
+        .attr('y', -25)
+        .attr('width', legendWidth)
+        .attr('height', legendHeight);
+
+    // Then make the actual legend
+    let legendG = parentLegendG.append('g')
+        .attr('class', 'legendLinear');
+
+    let legend = d3.legendColor()
+        .ascending(true)
+        .titleWidth(200)
+        .shapePadding(5)
+        .shapeWidth(20)
+        .shapeHeight(15)
+        .cells(7)
+        .title('Country Colors :')
+        .orient('vertical')
+        .scale(scales.mapColorScale);
+
+    legendG.call(legend);
+
+    console.log('scales.mapColorScale.domain()', scales.mapColorScale.domain());
+
+    // Interactivity
+    // let swatches = g.legend.selectAll('rect.swatch')
+    //     .attr('enabled', 'true');       // Set all to be enabled by default
+    // swatches.on('click', function(element) {
+    //         let thisSelect = d3.select(this);
+    //
+    //         let clickedCategory = reverseTypeLookup[thisSelect.style('fill')];
+    //         // console.log('clickedCategory', clickedCategory)
+    //
+    //         // Toggle enabled-ness
+    //         if (thisSelect.attr('enabled') === 'true') {
+    //             thisSelect.attr('enabled', 'false');
+    //             thisSelect.style('opacity', .1);
+    //
+    //             // Now disable those dots
+    //             let jsindexisdumb = allowedTypes.indexOf(clickedCategory);
+    //             allowedTypes.splice(jsindexisdumb, 1);
+    //             drawDots(dotsJson);
+    //
+    //         } else {
+    //             thisSelect.attr('enabled', 'true');
+    //             thisSelect.style('opacity', .8);
+    //
+    //             // Now enable those dots
+    //             allowedTypes.push(clickedCategory);
+    //
+    //             drawDots(dotsJson)
+    //
+    //         }
+    //         // console.log(thisSelect);
+    //     });
+}
+
+/**
+ * Setup sliders to update the vis each time they get moved
+ */
+function setupSliders() {
+
+    // Setup slider (old)
+    // let slider = document.getElementById("myRange");
+    // console.log('this is my slider', slider);
+    // slider.oninput = function() {
+    //     console.log('slider is now', this.value);
+    // }
+
+
+    let sliders = d3.selectAll('.slider');
+    console.log('sliders', sliders);
+
+    // Setup the weights to begin with
+    sliders.each(function () {
+        let explainor = d3.select(this).attr('id');
+        let scale_factor = parseFloat(this.value);
+        // console.log(explainor, scale_factor);
+
+        weights[explainor] = scale_factor;
+    });
+    normalizeWeights();
+
+    // Setup modification/interactivty
+    sliders.on('change', function () {
+        let explainor = d3.select(this).attr('id');
+        let scale_factor = parseFloat(this.value) * 0.1;
+        console.log(explainor, 'set to', scale_factor);
+
+        weights[explainor] = scale_factor;
+        normalizeWeights();
+
+        updateVis();
+
+        // TODO I have the new value, now do something with it (update the visualization)
+    });
+}
+
+
+//////////////////////////
+// My Updator Functions //
+//////////////////////////
 
 /**
  * Update the visualization after a modification.
@@ -469,193 +613,11 @@ function updateMapScale(sorted) {
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
 }
 
-/**
- * Draw a legend for the lineup visualization.
- */
-function makeLineupLegend() {
-    // Make a legend
-    // https://www.d3-graph-gallery.com/graph/custom_legend.html
-    let legendGroup = lineup_svg.append('g')
-        .attr('id', "legend")
-        .attr('transform', translate(0, config.lineup_svg.height - config.margin.bottom ));
-    // let legendKeys = ["Asia", 'Canada', 'Australia / Oceania', 'Central America', 'Europe', 'Mexico',  'Middle East'];
-    // let legendKeys = ['Freedom','Generosity','Healthy Life Exp.','GDP per capita','Corruption','Social support','Residual Happiness'];
-    let legendKeys = explainors;
-    let index = 0;
-    for (let explainorName of legendKeys) {
-
-        // Draw a little square
-        legendGroup.append("rect")
-            .attr('class', 'legend-square')
-            .attr('x', config.legend.betweenSquares + (index % 4) * config.legend.column_width)
-            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)))
-            .attr('width', config.legend.squareSize)
-            .attr('height', config.legend.squareSize)
-            .style('fill', scales.color(explainorName))
-            .style('stroke', 'white');
-
-        // Draw a little label
-        legendGroup.append("text")
-            .attr('x',  config.legend.betweenSquares*2 + config.legend.squareSize + config.legend.betweenSquares + (index % 4) * config.legend.column_width)
-            .attr('y', config.legend.firstSquareX + ((index > 3) * (config.legend.squareSize + config.legend.betweenSquares)) + config.legend.squareSize / 2)
-            .style('fill', 'black')
-            .text(explainor_name_abbreviator(explainorName))
-            .attr('text-anchor', 'left')
-            .style('alignment-baseline', 'middle')
-            .attr('font-size', '0.75em');
-
-        index++;
-    }
-}
-
-/**
- * Draw a legend for the map visualization.
- */
-function makeMapLegend() {
-
-    let legendHeight = 220;
-    let legendWidth = 130;
-
-    let legendTranslateX = 20;
-    // let legendTranslateY = 200;
-    let legendTranslateY = parseInt(map_svg.attr('height')) - legendHeight + 10;
-    // console.log()
 
 
-    map_svg.select('g#mapLegend').remove();
-    let parentLegendG = map_svg.append('g')
-        .attr('id', 'mapLegend')
-        .attr("transform", translate(legendTranslateX, legendTranslateY));
-
-    // Make the white background first
-    parentLegendG.append('rect')
-        .style('fill', 'white')
-        .style('stroke-width', '1px')
-        .style('stroke', '#222')
-        .style('border-style', 'solid')
-        // .style('fill', 'white')
-        .attr('x', -10)
-        .attr('y', -25)
-        .attr('width', legendWidth)
-        .attr('height', legendHeight);
-
-    // Then make the actual legend
-    let legendG = parentLegendG.append('g')
-        .attr('class', 'legendLinear');
-
-    let legend = d3.legendColor()
-        .ascending(true)
-        .titleWidth(200)
-        .shapePadding(5)
-        .shapeWidth(20)
-        .shapeHeight(15)
-        .cells(7)
-        .title('Country Colors :')
-        .orient('vertical')
-        .scale(scales.mapColorScale);
-
-    legendG.call(legend);
-
-    console.log('scales.mapColorScale.domain()', scales.mapColorScale.domain());
-
-    // Interactivity
-    // let swatches = g.legend.selectAll('rect.swatch')
-    //     .attr('enabled', 'true');       // Set all to be enabled by default
-    // swatches.on('click', function(element) {
-    //         let thisSelect = d3.select(this);
-    //
-    //         let clickedCategory = reverseTypeLookup[thisSelect.style('fill')];
-    //         // console.log('clickedCategory', clickedCategory)
-    //
-    //         // Toggle enabled-ness
-    //         if (thisSelect.attr('enabled') === 'true') {
-    //             thisSelect.attr('enabled', 'false');
-    //             thisSelect.style('opacity', .1);
-    //
-    //             // Now disable those dots
-    //             let jsindexisdumb = allowedTypes.indexOf(clickedCategory);
-    //             allowedTypes.splice(jsindexisdumb, 1);
-    //             drawDots(dotsJson);
-    //
-    //         } else {
-    //             thisSelect.attr('enabled', 'true');
-    //             thisSelect.style('opacity', .8);
-    //
-    //             // Now enable those dots
-    //             allowedTypes.push(clickedCategory);
-    //
-    //             drawDots(dotsJson)
-    //
-    //         }
-    //         // console.log(thisSelect);
-    //     });
-}
-
-/**
- * Calculate the weighted sum of a given data element's explainors
- * @param d the data element
- */
-function weightedSmExplainors(d) {
-    // console.log('weights', weights);
-    let weights_to_use = weights;
-
-    let sum = 0;
-    Object.keys(d)
-        .filter(a => a.includes("Explained")  || a.includes('residual'))
-        .map(key => d[key] * weights_to_use[key])
-        .forEach(function(d) {sum += d});
-
-    // console.log('calculated sum for', d.country, sum);
-    return sum;
-}
-
-/**
- * Setup sliders to update the vis each time they get moved
- */
-function setupSliders() {
-
-    // Setup slider (old)
-    // let slider = document.getElementById("myRange");
-    // console.log('this is my slider', slider);
-    // slider.oninput = function() {
-    //     console.log('slider is now', this.value);
-    // }
-
-
-    let sliders = d3.selectAll('.slider');
-    console.log('sliders', sliders);
-
-    // Setup the weights to begin with
-    sliders.each(function () {
-        let explainor = d3.select(this).attr('id');
-        let scale_factor = parseFloat(this.value);
-        // console.log(explainor, scale_factor);
-
-        weights[explainor] = scale_factor;
-    });
-    normalizeWeights();
-
-    // Setup modification/interactivty
-    sliders.on('change', function () {
-        let explainor = d3.select(this).attr('id');
-        let scale_factor = parseFloat(this.value) * 0.1;
-        console.log(explainor, 'set to', scale_factor);
-
-        weights[explainor] = scale_factor;
-        normalizeWeights();
-
-        updateVis();
-
-        // TODO I have the new value, now do something with it (update the visualization)
-    });
-}
-
-/**
- * Sophie's helpful helper method to make translating easier. Thank you, Sophie!
- */
-function translate(x, y) {
-    return 'translate(' + x + ',' + y + ')';
-}
+/////////////////////////
+// My Helper Functions //
+/////////////////////////
 
 /**
  * Normalize the weights to sum to 7
@@ -677,17 +639,6 @@ function normalizeWeights() {
 
     console.log('weights after norm', weights);
 }
-
-/**
- * Helpful unique-ing function
- * @returns {*[]} an array with only the unique elements of the array it was called on
- * @source https://coderwall.com/p/nilaba/simple-pure-javascript-array-unique-method-with-5-lines-of-code
- */
-Array.prototype.unique = function() {
-    return this.filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    });
-};
 
 /**
  * This function converts date values during csv import
@@ -732,4 +683,81 @@ function convertRow(row) {
     return out;
 }
 
+/**
+ * Calculate the weighted sum of a given data element's explainors
+ * @param d the data element
+ */
+function weightedSmExplainors(d) {
+    // console.log('weights', weights);
+    let weights_to_use = weights;
+
+    let sum = 0;
+    Object.keys(d)
+        .filter(a => a.includes("Explained")  || a.includes('residual'))
+        .map(key => d[key] * weights_to_use[key])
+        .forEach(function(d) {sum += d});
+
+    // console.log('calculated sum for', d.country, sum);
+    return sum;
+}
+
+/**
+ * Convert a long explainor name to a shorter abbreviaton
+ * @param long_name
+ */
+function explainor_name_abbreviator(long_name) {
+    switch (long_name) {
+        case 'Explained by: Freedom to make life choices' :
+            return 'Freedom';
+
+        case 'Explained by: Generosity' :
+            return 'Generosity';
+
+        case 'Explained by: Healthy life expectancy' :
+            return 'Healthy Life Exp.';
+
+        case 'Explained by: Log GDP per capita' :
+            return 'GDP per capita';
+
+        case 'Explained by: Perceptions of corruption' :
+            return 'Corruption';
+
+        case 'Explained by: Social support' :
+            return 'Social support';
+
+        case 'Dystopia + residual' :
+            return 'Residual Happiness';
+    }
+}
+
+
+
+
+//////////////////////////////
+// Others' Helper Functions //
+//////////////////////////////
+
+/**
+ * Helpful unique-ing function
+ * @returns {*[]} an array with only the unique elements of the array it was called on
+ * @source https://coderwall.com/p/nilaba/simple-pure-javascript-array-unique-method-with-5-lines-of-code
+ */
+Array.prototype.unique = function() {
+    return this.filter(function (value, index, self) {
+        return self.indexOf(value) === index;
+    });
+};
+
+/**
+ * Sophie's helpful helper method to make translating easier. Thank you, Sophie!
+ */
+function translate(x, y) {
+    return 'translate(' + x + ',' + y + ')';
+}
+
+
+
+////////////////////
+// Run this show! //
+////////////////////
 letsGetItStarted();
