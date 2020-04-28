@@ -443,6 +443,9 @@ function updateMapVis(sortedData) {
         .data(mapData.features);
 
 
+    // TODO use the Data Wrangling Country Names excel sheet to fix mismatched countries (black countries)
+        // TODO decide what to do about map countries without data
+        // TODO decide how to show the 'right' AKA WHR names for countries when highlighting
     outlines.join(
     enter =>
           enter
@@ -450,7 +453,6 @@ function updateMapVis(sortedData) {
             .append('path')
             .attr('class', 'country_outline')
             .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
-
             .attr('d', pathGenerator),
     update =>
         update.
@@ -458,6 +460,10 @@ function updateMapVis(sortedData) {
             .style('fill', d => scales.mapColorScale(color_numbers[d.properties.ADMIN]))
     );
 
+    let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
+    let data_country_names = sortedData.map(d => d.country).forEach(name => console.log('data', name));
+    console.log('map_country_names', map_country_names);
+    console.log('data_country_names', data_country_names);
 
     let graticule = d3.geoGraticule10();
     let graticuleG = map_svg.select('g#graticule');
