@@ -34,7 +34,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">Happiness and Inequality</h1>
-          <h2 class="subtitle">By Eve Matson for CS 360 'Data Visualization'</h2>
+          <h2 class="subtitle">By Evelyn Matson for CS 360 'Data Visualization'</h2>
         </div>
       </div>
     </section>
@@ -206,141 +206,179 @@
 
         <br><br>
 
-        <!--        OECD-->
-        <h2>OECD Income Inequality Dataset</h2>
-        <p>This is a supplemental dataset I will use from the Organization for Economic Co-operation and Development about income inequality in different countries: <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">OECD Income Inequality Data</a>.
-          This dataset gives a measure of the amount of income inequality by country by year, which I will use to compare with different countries' happiness scores.</p>
-
+        <!--        Map -->
+        <h2>Country Polygons from Natural Earth</h2>
+        <p>
+          This is a supplemental dataset I will use from <a href="http://www.naturalearthdata.com">Natural Earth</a> to define countries for my map visualization.
+          Each row is a polygon defining the borders of a country.
+        </p>
         <div class="tile is-ancestor">
           <div class="tile is-4 is-vertical is-parent">
             <div class="tile is-child box">
               <p class="title">Accessed</p>
-              <p class="subtitle">April 13, 2020</p>
+              <p class="subtitle">April 25, 2020</p>
             </div>
             <div class="tile is-child box">
               <p class="subtitle">Rows</p>
-              <p class="title">2,581</p>
+              <p class="title">255</p>
             </div>
           </div>
           <div class="tile is-parent is-8">
             <div class="tile is-child box">
               <p class="title">
-                OECD Income Inequality</p>
-              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.</p>
+                Country Polygons
+              <p>Defines country borders as polygon objects to be used in geospatial visualizations. he data comes from Natural Earth, a community effort to make visually pleasing, well-crafted maps with cartography or GIS software at small scale. </p>
             </div>
           </div>
         </div><br>
 
-        <!--        OECD Columns-->
-        <h4>
-          Relevant Columns
-        </h4>
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Column Name</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>LOCATION</td>
-            <td>Name of the country (as a 3-letter code).<br>
-              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>
-          </tr>
-          <tr>
-            <td>MEASURE</td>
-            <td>Whether a row gives the GINI coefficient or some other measure.<br>
-              <span class="has-text-grey-light">Example: <em>GINI</em></span></td>
-          </tr>
-          <tr>
-            <td>TIME</td>
-            <td>Year when the row refers to.<br>
-              <span class="has-text-grey-light">Example: <em>2015</em></span></td>
-          </tr>
-          <tr>
-            <td>Value</td>
-            <td>The GINI score itself.<br>
-              <span class="has-text-grey-light">Example: <em>0.257</em></span></td>
-          </tr>
-          <!--          <tr>-->
-          <!--            <td>Longitude</td>-->
-          <!--            <td>Horizontal geographic position.<br>-->
-          <!--              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>-->
-          <!--          </tr>-->
-          </tbody>
-        </table>
 
         <!--        OECD License-->
         <h4>License</h4>
-        <p>OECD's Terms and Conditions says that "<em>You can extract from, download, copy, adapt, print, distribute, share and embed Data for any purpose, even for commercial use. You must give appropriate credit to the OECD by using the citation associated with the relevant Data</em>"</p>
-        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>
+        <blockquote>
+          <p>All data is licensed under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>.</p>
+          <p>Note that the original data from <a href="http://www.naturalearthdata.com/">Natural Earth</a> is public domain. While no credit is
+            formally required a link back or credit to <a href="http://www.naturalearthdata.com/">Natural Earth</a>, <a href="https://github.com/lexman">Lexman</a> and the <a href="https://okfn.org/">Open Knowledge Foundation</a> is much appreciated.</p>
+        </blockquote>
 
         <br><br>
 
-        <!--        World Bank-->
-        <h2>World Bank Population Data</h2>
-        <p>This is a supplemental dataset I will use from the World Bank that lists the population of different countries: <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank Population Data</a>.
-          This dataset gives the populations of different countries, which I will compare with different countries' happiness scores.</p>
 
-        <div class="tile is-ancestor">
-          <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child box">
-              <p class="title">Accessed</p>
-              <p class="subtitle">April 13, 2020</p>
-            </div>
-            <div class="tile is-child box">
-              <p class="subtitle">Rows</p>
-              <p class="title">264</p>
-            </div>
-          </div>
-          <div class="tile is-parent is-8">
-            <div class="tile is-child box">
-              <p class="title">
-                World Bank Population, Total</p>
-              <p>Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</p>
-            </div>
-          </div>
-        </div><br>
+<!--        &lt;!&ndash;        OECD&ndash;&gt;-->
+<!--        <h2>OECD Income Inequality Dataset</h2>-->
+<!--        <p>This is a supplemental dataset I will use from the Organization for Economic Co-operation and Development about income inequality in different countries: <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">OECD Income Inequality Data</a>.-->
+<!--          This dataset gives a measure of the amount of income inequality by country by year, which I will use to compare with different countries' happiness scores.</p>-->
 
-        <!--        World Bank Columns-->
-        <h4>
-          Relevant Columns
-        </h4>
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Column Name</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>Country Name</td>
-            <td>Full name of the country.<br>
-              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>
-          </tr>
-          <tr>
-            <td>Country Code</td>
-            <td>Name of the country (as a 3-letter code).<br>
-              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>
-          </tr>
-          <tr>
-            <td>[Year Number]</td>
-            <td>Population at that year.<br>
-              <span class="has-text-grey-light">Example: <em>330815</em></span></td>
-          </tr>
-          <!--          <tr>-->
-          <!--            <td>Longitude</td>-->
-          <!--            <td>Horizontal geographic position.<br>-->
-          <!--              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>-->
-          <!--          </tr>-->
-          </tbody>
-        </table>
+<!--        <div class="tile is-ancestor">-->
+<!--          <div class="tile is-4 is-vertical is-parent">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">Accessed</p>-->
+<!--              <p class="subtitle">April 13, 2020</p>-->
+<!--            </div>-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="subtitle">Rows</p>-->
+<!--              <p class="title">2,581</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="tile is-parent is-8">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">-->
+<!--                OECD Income Inequality</p>-->
+<!--              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div><br>-->
 
-        <!--        World Bank License-->
-        <h4>License</h4>
-        <p>This data is distributed under the <a href="https://datacatalog.worldbank.org/public-licenses#cc-by">CC BY-4.0 license</a>, which allows users to "copy, modify and distribute data in any format for any purpose, including commercial use", as long as attribution is given.</p>
+<!--        &lt;!&ndash;        OECD Columns&ndash;&gt;-->
+<!--        <h4>-->
+<!--          Relevant Columns-->
+<!--        </h4>-->
+<!--        <table class="table">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>Column Name</th>-->
+<!--            <th>Description</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr>-->
+<!--            <td>LOCATION</td>-->
+<!--            <td>Name of the country (as a 3-letter code).<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>MEASURE</td>-->
+<!--            <td>Whether a row gives the GINI coefficient or some other measure.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>GINI</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>TIME</td>-->
+<!--            <td>Year when the row refers to.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>2015</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Value</td>-->
+<!--            <td>The GINI score itself.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>0.257</em></span></td>-->
+<!--          </tr>-->
+<!--          &lt;!&ndash;          <tr>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Longitude</td>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Horizontal geographic position.<br>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </tr>&ndash;&gt;-->
+<!--          </tbody>-->
+<!--        </table>-->
+
+<!--        &lt;!&ndash;        OECD License&ndash;&gt;-->
+<!--        <h4>License</h4>-->
+<!--        <p>OECD's Terms and Conditions says that "<em>You can extract from, download, copy, adapt, print, distribute, share and embed Data for any purpose, even for commercial use. You must give appropriate credit to the OECD by using the citation associated with the relevant Data</em>"</p>-->
+<!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
+
+<!--        <br><br>-->
+
+<!--        &lt;!&ndash;        World Bank&ndash;&gt;-->
+<!--        <h2>World Bank Population Data</h2>-->
+<!--        <p>This is a supplemental dataset I will use from the World Bank that lists the population of different countries: <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank Population Data</a>.-->
+<!--          This dataset gives the populations of different countries, which I will compare with different countries' happiness scores.</p>-->
+
+<!--        <div class="tile is-ancestor">-->
+<!--          <div class="tile is-4 is-vertical is-parent">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">Accessed</p>-->
+<!--              <p class="subtitle">April 13, 2020</p>-->
+<!--            </div>-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="subtitle">Rows</p>-->
+<!--              <p class="title">264</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="tile is-parent is-8">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">-->
+<!--                World Bank Population, Total</p>-->
+<!--              <p>Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div><br>-->
+
+<!--        &lt;!&ndash;        World Bank Columns&ndash;&gt;-->
+<!--        <h4>-->
+<!--          Relevant Columns-->
+<!--        </h4>-->
+<!--        <table class="table">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>Column Name</th>-->
+<!--            <th>Description</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr>-->
+<!--            <td>Country Name</td>-->
+<!--            <td>Full name of the country.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Country Code</td>-->
+<!--            <td>Name of the country (as a 3-letter code).<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>[Year Number]</td>-->
+<!--            <td>Population at that year.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>330815</em></span></td>-->
+<!--          </tr>-->
+<!--          &lt;!&ndash;          <tr>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Longitude</td>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Horizontal geographic position.<br>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </tr>&ndash;&gt;-->
+<!--          </tbody>-->
+<!--        </table>-->
+
+<!--        &lt;!&ndash;        World Bank License&ndash;&gt;-->
+<!--        <h4>License</h4>-->
+<!--        <p>This data is distributed under the <a href="https://datacatalog.worldbank.org/public-licenses#cc-by">CC BY-4.0 license</a>, which allows users to "copy, modify and distribute data in any format for any purpose, including commercial use", as long as attribution is given.</p>-->
 <!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
 
 

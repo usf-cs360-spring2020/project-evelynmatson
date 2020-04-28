@@ -270,7 +270,7 @@ function prepVis(dataParam) {
 
     prepMap(mapData);
 
-    makeLineupLegend();
+    // makeLineupLegend();
 
     setupSliders();
 
