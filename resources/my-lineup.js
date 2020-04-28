@@ -54,92 +54,12 @@ let weights = {};
 // TODO allow selecting just a specific region
 // TODO tooltip highlight on country
 
-///////////////////////////////
-// My Main Drawing Functions //
-///////////////////////////////
-
 /**
  * This function will draw all of the visualization.
  */
 async function letsGetItStarted() {
 
-    config.legend.width = config.lineup_svg.width;
-    config.legend.height = config.margin.bottom;
-
-
-    // Plot specs
-    // (Move the plot right and down by the margin amounts)
-    config.plot.x = config.margin.left;
-    config.plot.y = config.margin.top;
-
-    config.map_svg.width = config.lineup_svg.width;
-
-    // (Calculate the width and height of the plot area)
-    config.plot.width = config.lineup_svg.width - config.margin.left - config.margin.right;
-    config.plot.height = config.lineup_svg.height - config.margin.top - config.margin.bottom;
-
-    config.plot.paddingBetweenRegions = .05;
-    config.plot.paddingBetweenMonths = .05;
-
-    // Set up the SVGs
-    lineup_svg = d3.select("#lineupVisualization")
-        .attr("width", config.lineup_svg.width)
-        .attr("height", config.lineup_svg.height);
-
-    map_svg = d3.select('#mapVisualization')
-        .attr('width', config.map_svg.width);
-        // .attr('height', config.map_svg.height);
-
-
-    // Set up svg plot area
-    plot = lineup_svg.append('g')
-        .attr('id', 'plot1')
-        .attr('transform', translate(config.plot.x, config.plot.y));
-
-    // Set up a group for the legend
-    // let legendGroup = lineup_svg.append("g")
-    //     .attr("id", "legend")
-    //     .attr('transform', translate(config.margin.left - 10, config.lineup_svg.height - config.margin.bottom + 50))
-    //     .attr('width', config.legend.width)
-    //     .attr('height', config.legend.height)
-    //     .attr('fill', 'black');
-
-    // Set up a group for gridlines in the svg
-    grid = plot.append("g")
-        // .attr('transform', translate(config.plot.x, config.plot.y + config.plot.height))
-        // .attr('transform', translate(config.plot.x, config.plot.y))
-        .attr("class", "gridlines");
-
-    // Set up a group inside the g for bars
-    plot.append('g')
-        .attr('id', 'bars')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', config.plot.width)
-        .attr('height', config.plot.height);
-
-    // Make some scales!
-    // Month scale (y)
-    // scales.month = d3.scaleBand()
-    //     .rangeRound([0, config.plot.height])
-    //     .paddingInner(config.plot.paddingBetweenMonths);
-    scales.countries = d3.scaleBand()
-        .range([3, config.plot.height])
-        .paddingOuter(config.plot.paddingBetweenMonths)
-        .paddingInner(config.plot.paddingBetweenMonths);
-
-    // scales.passengers = d3.scaleLinear();
-        // Will give a range later, when we know more about the data
-
-    // scales.regions = d3.scaleBand()
-    //     .rangeRound([0, config.plot.width])
-    //     .paddingInner(config.plot.paddingBetweenRegions);
-
-    // scales.color = d3.scaleOrdinal(d3.schemeCategory10);
-    scales.color = anything => "#666";
-
-    // Restrict to the lighter parts of the scale
-    scales.mapColorScale = d3.scaleSequential(num => d3.interpolateRdYlBu(num * 0.6 + 0.2));
+    initialPrep();
 
     // Title!
     // svg.append('text')
@@ -152,11 +72,12 @@ async function letsGetItStarted() {
     //     .attr('text-anchor', 'middle');
 
     // Load the data, continue in later methods
-    whr_data = await d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow); //.then();
-    mapData = await d3.json('resources/Datasets/countries.geojson'); //.then(prepMap);
-    // await whr_data;
-    // await mapData;
+    whr_data = await d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow); //.then(prepWithWHRData);
+    mapData = await  d3.json('resources/Datasets/countries.geojson'); //.then(prepMap);
+    // whr_data = await whr_promise;
+    // mapData = await map_promise;
 
+    prepWithWHRData();
     prepVis(whr_data);
     // prepMap(mapData);
 
@@ -171,102 +92,7 @@ function prepVis(dataParam) {
     // console.log('data as loaded', dataParam);
     // console.log('longData', longData);
 
-    longData = longData.sort(function(a, b) {
-        return a['Ladder score'] - b['Ladder score'];
-    });
-
-    console.log('dataParam', dataParam);
-    whr_data = dataParam;
-    //     .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
-
-    // Work on scales
-    let countries = whr_data
-        .map(row => row['country']);
-    scales.countries.domain(countries);
-
-    explainors = longData
-        .map(row => row['explainor'])
-        .unique();
-    // console.log('found explainors', explainors);
-    if ('domain' in scales.color)
-        scales.color.domain(explainors);
-
-    // Band scale for the different explainors
-    scales.explainors = d3.scaleBand()
-        .domain(explainors)
-        .rangeRound([0, config.plot.width])
-        .paddingInner(config.plot.paddingBetweenRegions);
-
-    // Linear scales, one for each explainor's values
-    for (let explainor of Object.keys(whr_data[0])) {
-        // Skip non-related things
-        if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
-            continue;
-        }
-
-        // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
-        let maxOfExplainor = Math.max(...whr_data.map(d => d[explainor]));
-        // console.log('max of ', explainor, maxOfExplainor);
-
-        // console.log('explainor', explainor);
-        scales[explainor] = d3.scaleLinear()
-            .domain([0,maxOfExplainor])
-            .rangeRound([0, scales.explainors.bandwidth()])
-            .nice();
-
-        // Also give the weight an initial value
-        weights[explainor] = 50;
-    }
-
-
-
-    // Make the static axes
-    let explainorsAxis = d3.axisTop(scales.explainors)
-        .tickFormat(explainor_name_abbreviator);
-    axes.explainors = explainorsAxis;
-    let explainorsAxisGroup = plot.append("g")
-        .attr("id", "explainors-axis")
-        .attr("class", "axis hidden-ticks");
-    explainorsAxisGroup.call(explainorsAxis);
-
-    // let passengerAxesGroup = plot.append("g")
-    //     .attr("id", "passenger-axes");
-    // let passengersAxis = d3.axisBottom(scales.passengers)
-    //     // .tickPadding(0)
-    //     .tickValues([0,100000,200000])
-    //     .tickFormat(passengerTicksFormatter);
-    //     // .ticks(3);
-    // axes.passengers = passengersAxis;
-    // for( let [index, region] of regions.entries() ) {
-    //     let passengersAxisGroup = passengerAxesGroup.append("g")
-    //         .attr("class", "axis hidden-ticks")
-    //         .attr("id", "axis" + index.toString())
-    //         .attr("transform", translate(scales.regions(region) ,config.plot.height));
-    //     passengersAxisGroup.call(passengersAxis);
-    //
-    //     let title = passengerAxesGroup.append('text')
-    //         .text('Passengers')
-    //         .style('fill', 'black')
-    //         .style('font-size', '0.7rem')
-    //         .attr('text-anchor', 'middle')
-    //         .attr("transform", translate(scales.regions(region) ,config.plot.height))
-    //         .attr('x', midpoint(scales.passengers.range()))
-    //         .attr('y', 30);
-    // }
-    //
-    // Draw gridlines
-    // let ygridlines = d3.axisBottom(scales.explainors)
-    //     .tickFormat("")
-    //     .tickSize(-config.plot.height)
-    //     .ticks(3);
-    // for (let [index, region] of regions.entries() ) {
-    //     let passengersAxisGroup = grid.append("g")
-    //         .attr("class", "gridline")
-    //         .attr("id", "grid-" + index.toString())
-    //         .attr("style", "color: #BBB")
-    //         .attr("transform", translate(scales.regions(region), config.plot.height))
-    //         .call(ygridlines);
-    // }
+    makeLineupAxes();
 
     prepMap(mapData);
 
@@ -472,6 +298,213 @@ function setupSliders() {
         // TODO I have the new value, now do something with it (update the visualization)
     });
 }
+
+
+///////////////////////////////
+// My Main Drawing Functions //
+///////////////////////////////
+
+/**
+ * Draw the axes for the lineup visualization
+ */
+function makeLineupAxes() {
+    // Make the static axes
+    let explainorsAxis = d3.axisTop(scales.explainors)
+        .tickFormat(explainor_name_abbreviator);
+    axes.explainors = explainorsAxis;
+    let explainorsAxisGroup = plot.append("g")
+        .attr("id", "explainors-axis")
+        .attr("class", "axis hidden-ticks");
+    explainorsAxisGroup.call(explainorsAxis);
+
+    // let passengerAxesGroup = plot.append("g")
+    //     .attr("id", "passenger-axes");
+    // let passengersAxis = d3.axisBottom(scales.passengers)
+    //     // .tickPadding(0)
+    //     .tickValues([0,100000,200000])
+    //     .tickFormat(passengerTicksFormatter);
+    //     // .ticks(3);
+    // axes.passengers = passengersAxis;
+    // for( let [index, region] of regions.entries() ) {
+    //     let passengersAxisGroup = passengerAxesGroup.append("g")
+    //         .attr("class", "axis hidden-ticks")
+    //         .attr("id", "axis" + index.toString())
+    //         .attr("transform", translate(scales.regions(region) ,config.plot.height));
+    //     passengersAxisGroup.call(passengersAxis);
+    //
+    //     let title = passengerAxesGroup.append('text')
+    //         .text('Passengers')
+    //         .style('fill', 'black')
+    //         .style('font-size', '0.7rem')
+    //         .attr('text-anchor', 'middle')
+    //         .attr("transform", translate(scales.regions(region) ,config.plot.height))
+    //         .attr('x', midpoint(scales.passengers.range()))
+    //         .attr('y', 30);
+    // }
+    //
+    // Draw gridlines
+    // let ygridlines = d3.axisBottom(scales.explainors)
+    //     .tickFormat("")
+    //     .tickSize(-config.plot.height)
+    //     .ticks(3);
+    // for (let [index, region] of regions.entries() ) {
+    //     let passengersAxisGroup = grid.append("g")
+    //         .attr("class", "gridline")
+    //         .attr("id", "grid-" + index.toString())
+    //         .attr("style", "color: #BBB")
+    //         .attr("transform", translate(scales.regions(region), config.plot.height))
+    //         .call(ygridlines);
+    // }
+}
+
+
+
+///////////////////////
+// My Prep Functions //
+///////////////////////
+
+/**
+ * Prepare config values and svg selections.
+ */
+function initialPrep() {
+    config.legend.width = config.lineup_svg.width;
+    config.legend.height = config.margin.bottom;
+
+
+    // Plot specs
+    // (Move the plot right and down by the margin amounts)
+    config.plot.x = config.margin.left;
+    config.plot.y = config.margin.top;
+
+    config.map_svg.width = config.lineup_svg.width;
+
+    // (Calculate the width and height of the plot area)
+    config.plot.width = config.lineup_svg.width - config.margin.left - config.margin.right;
+    config.plot.height = config.lineup_svg.height - config.margin.top - config.margin.bottom;
+
+    config.plot.paddingBetweenRegions = .05;
+    config.plot.paddingBetweenMonths = .05;
+
+    // Set up the SVGs
+    lineup_svg = d3.select("#lineupVisualization")
+        .attr("width", config.lineup_svg.width)
+        .attr("height", config.lineup_svg.height);
+
+    map_svg = d3.select('#mapVisualization')
+        .attr('width', config.map_svg.width);
+    // .attr('height', config.map_svg.height);
+
+
+    // Set up svg plot area
+    plot = lineup_svg.append('g')
+        .attr('id', 'plot1')
+        .attr('transform', translate(config.plot.x, config.plot.y));
+
+    // Set up a group for the legend
+    // let legendGroup = lineup_svg.append("g")
+    //     .attr("id", "legend")
+    //     .attr('transform', translate(config.margin.left - 10, config.lineup_svg.height - config.margin.bottom + 50))
+    //     .attr('width', config.legend.width)
+    //     .attr('height', config.legend.height)
+    //     .attr('fill', 'black');
+
+    // Set up a group for gridlines in the svg
+    grid = plot.append("g")
+        // .attr('transform', translate(config.plot.x, config.plot.y + config.plot.height))
+        // .attr('transform', translate(config.plot.x, config.plot.y))
+        .attr("class", "gridlines");
+
+    // Set up a group inside the g for bars
+    plot.append('g')
+        .attr('id', 'bars')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', config.plot.width)
+        .attr('height', config.plot.height);
+
+    prepScales();
+}
+
+/**
+ * Do all the prepwork that can be done to scales before data is loaded.
+ */
+function prepScales() {
+    // Make some scales!
+    // Month scale (y)
+    // scales.month = d3.scaleBand()
+    //     .rangeRound([0, config.plot.height])
+    //     .paddingInner(config.plot.paddingBetweenMonths);
+    scales.countries = d3.scaleBand()
+        .range([3, config.plot.height])
+        .paddingOuter(config.plot.paddingBetweenMonths)
+        .paddingInner(config.plot.paddingBetweenMonths);
+
+    // scales.passengers = d3.scaleLinear();
+    // Will give a range later, when we know more about the data
+
+    // scales.regions = d3.scaleBand()
+    //     .rangeRound([0, config.plot.width])
+    //     .paddingInner(config.plot.paddingBetweenRegions);
+
+    // scales.color = d3.scaleOrdinal(d3.schemeCategory10);
+    scales.color = anything => "#666";
+
+    // Restrict to the lighter parts of the scale
+    scales.mapColorScale = d3.scaleSequential(num => d3.interpolateRdYlBu(num * 0.6 + 0.2));
+}
+
+/**
+ * Do the next round of preparation work that can be done with the WHR dataset.
+ */
+function prepWithWHRData() {
+    longData = longData.sort(function(a, b) {
+        return a['Ladder score'] - b['Ladder score'];
+    });
+
+    // console.log('dataParam', dataParam);
+    // whr_data = dataParam;
+    //     .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
+
+    // Work on scales
+    let countries = whr_data
+        .map(row => row['country']);
+    scales.countries.domain(countries);
+
+    explainors = longData
+        .map(row => row['explainor'])
+        .unique();
+    // console.log('found explainors', explainors);
+    if ('domain' in scales.color)
+        scales.color.domain(explainors);
+
+    // Band scale for the different explainors
+    scales.explainors = d3.scaleBand()
+        .domain(explainors)
+        .rangeRound([0, config.plot.width])
+        .paddingInner(config.plot.paddingBetweenRegions);
+
+    // Linear scales, one for each explainor's values
+    for (let explainor of Object.keys(whr_data[0])) {
+        // Skip non-related things
+        if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
+            continue;
+        }
+
+        // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
+        let maxOfExplainor = Math.max(...whr_data.map(d => d[explainor]));
+        // console.log('max of ', explainor, maxOfExplainor);
+
+        // console.log('explainor', explainor);
+        scales[explainor] = d3.scaleLinear()
+            .domain([0,maxOfExplainor])
+            .rangeRound([0, scales.explainors.bandwidth()])
+            .nice();
+
+        // Also give the weight an initial value
+        weights[explainor] = 50;
+    }
+}
+
 
 
 //////////////////////////
