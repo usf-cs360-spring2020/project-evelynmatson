@@ -589,7 +589,8 @@ async function updateMapVis(sortedData) {
 
     let graticule = d3.geoGraticule10();
     let graticuleG = map_svg.select('g#graticule');
-    // console.log('graticule', graticule);
+    console.log('graticule', graticule);
+    // graticule.coordinates.splice(0, 0, [[179, -80.000001], [179, 9.999999000000003], [179, 80.000001]]);
     graticuleG.append('path')
         .attr('d', pathGenerator(graticule))
         .attr('stroke', '#ccc')
@@ -606,10 +607,10 @@ async function updateMapVis(sortedData) {
 function updateMapScale(sorted) {
 
     let maxWeighted = weightedSmExplainors(sorted[0]);
-    console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
+    // console.log('maxWeighted', maxWeighted, '(from)', sorted[0]);
 
     let minWeighted = weightedSmExplainors(sorted[sorted.length - 1]);
-    console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
+    // console.log('minWeighted', minWeighted, '(from)', sorted[sorted.length - 1]);
 
     scales.mapColorScale.domain([minWeighted, maxWeighted]);
 }
