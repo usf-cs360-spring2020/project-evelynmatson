@@ -54,6 +54,9 @@ let mapPromise;
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
 
+
+// TODO something is making redraw slow...
+
 ///////////////////////////////
 // My Main Drawing Functions //
 ///////////////////////////////
@@ -354,10 +357,7 @@ function makeMapLegend() {
 
     // Make the white background first
     parentLegendG.append('rect')
-        .style('fill', 'white')
-        .style('stroke-width', '1px')
-        .style('stroke', '#222')
-        .style('border-style', 'solid')
+        .attr('id', 'map_legend_background')
         // .style('fill', 'white')
         .attr('x', -10)
         .attr('y', -25)

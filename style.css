@@ -112,18 +112,36 @@ th {
 /***********************/
 /* Final project stuff */
 /***********************/
-#mapLegend .cell text {
-    font-size: 0.75em;
-    font-weight: normal;
-}
 
+/*Style the country shapes in the map visualization*/
 svg#mapVisualization path.country_outline {
     stroke: #999;
     stroke-width: 0.5px;
 }
 
+/*Style the graticule lines in the map visualization*/
 svg#mapVisualization g#graticule path.graticule {
     stroke: #ddd;
     stroke-width: .75px;
     fill: none;
+}
+
+/*Style the background of the map legend*/
+svg#mapVisualization g#mapLegend rect#map_legend_background {
+    fill: white;
+    stroke-width: 0.75px;
+    stroke: #666;
+    border-style: solid;
+}
+
+/*Style the small labels in the map visualization legend*/
+#mapLegend .cell text {
+    font-size: 0.75em;
+    font-weight: normal;
+}
+
+#mapLegend text.legendTitle {
+    font-size: 0.9em;
+    font-style: normal;
+    /*font-weight : bold;*/
 }

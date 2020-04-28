@@ -189,13 +189,26 @@
 <!--          TODO put numbers on the range sliders-->
 
           <div class="slidecontainer">
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices"> Freedom<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Generosity">Generosity<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Healthy life expectancy">Healthy<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Log GDP per capita">GDP<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Perceptions of corruption">Corruption<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Social support">Social Support<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Dystopia + residual">Dystopia + residual<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices" list="steplist"> Freedom<br>
+            <datalist id="steplist">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </datalist>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Generosity" list="steplist">Generosity<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Healthy life expectancy" list="steplist">Healthy<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Log GDP per capita" list="steplist">GDP<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Perceptions of corruption" list="steplist">Corruption<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Social support" list="steplist">Social Support<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Dystopia + residual" list="steplist">Dystopia + residual<br>
           </div>
           <svg id="lineupVisualization" class="visualization"></svg>
           <script src="resources/my-lineup.js"></script>
