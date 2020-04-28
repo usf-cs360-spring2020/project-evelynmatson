@@ -51,9 +51,7 @@ let weights = {};
 
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
-
-
-// TODO something is making redraw slow...
+// TODO highlight on country
 
 ///////////////////////////////
 // My Main Drawing Functions //
@@ -136,7 +134,8 @@ async function letsGetItStarted() {
     //     .rangeRound([0, config.plot.width])
     //     .paddingInner(config.plot.paddingBetweenRegions);
 
-    scales.color = d3.scaleOrdinal(d3.schemeCategory10);
+    // scales.color = d3.scaleOrdinal(d3.schemeCategory10);
+    scales.color = anything => "#666";
 
     // Restrict to the lighter parts of the scale
     scales.mapColorScale = d3.scaleSequential(num => d3.interpolateRdYlBu(num * 0.6 + 0.2));
@@ -188,7 +187,8 @@ function prepVis(dataParam) {
         .map(row => row['explainor'])
         .unique();
     // console.log('found explainors', explainors);
-    scales.color.domain(explainors);
+    if ('domain' in scales.color)
+        scales.color.domain(explainors);
 
     // Band scale for the different explainors
     scales.explainors = d3.scaleBand()
@@ -306,6 +306,8 @@ function prepMap(dataParam) {
         .attr('d', pathGenerator(graticule));
 
     matchCountries();
+    makeMapLegend();
+
 }
 
 
@@ -490,10 +492,6 @@ function updateVis() {
     // Update the lineup y scale to show the new order!
     scales.countries.domain(sorted.map(r => r.country));
 
-    // Use the map visualization too!
-    updateMapVis(sorted);
-    makeMapLegend();
-
     // Draw actual bars
     let rect = d3.select("#bars");
     console.assert(rect.size() === 1); // Make sure we just have one thing
@@ -526,13 +524,15 @@ function updateVis() {
     // Update Axes
     let countriesAxis = d3.axisLeft(scales.countries);
     axes.countries = countriesAxis;
-    // plot.remove('g#countries-axis');
     plot.select('g#countriesaxis').remove();
+
     let countriesAxisGroup = plot.append("g")
         .attr("id", "countriesaxis")
         .attr("class", "axis hidden-ticks");
     countriesAxisGroup.call(countriesAxis);
 
+    // Use the map visualization too!
+    updateMapVis(sorted);
 }
 
 /**
@@ -572,18 +572,23 @@ function updateMapVis(sortedData) {
         }
     };
 
-    country_shapes.join(
-    enter =>
-          enter
-            .append('path')
-            .attr('class', 'country_outline')
-            .style('fill', map_feature_to_color)
-            .attr('d', pathGenerator),
-    update =>
-        update.
-            transition()
-            .style('fill', map_feature_to_color)
-    );
+    console.log('before enter update', country_shapes);
+
+    let drawShapes = async function(country_shapes) {
+        country_shapes.join(
+            enter =>
+                enter
+                    .append('path')
+                    .attr('class', 'country_outline')
+                    .style('fill', map_feature_to_color)
+                    .attr('d', pathGenerator),
+            update => update
+                .transition()
+                // .duration(2000)
+                .style('fill', map_feature_to_color)
+        );
+    };
+    drawShapes(country_shapes);
 
     // let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
     // let data_country_names = sortedData.map(d => d.country).forEach(name => console.log('data', name));
