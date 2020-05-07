@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Happiness and Inequality Datasets</title>
+
+
+    <!-- Load Bulma from CDN (consider saving it to repository instead) -->
+    <!-- https://bulma.io/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+
+    <!-- Load Font Awesome 5 (free) icons -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+    <!-- include d3.js v5 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <!-- include d3.js modules -->
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+    <script src="https://d3js.org/d3-time.v1.min.js"></script>
+    <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+
+<!--    My Css!-->
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <!-- Page header -->
+    <!-- https://bulma.io/documentation/layout/hero/ -->
+    <section class="hero is-primary is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Happiness and Inequality</h1>
+          <h2 class="subtitle">By Evelyn Matson for CS 360 'Data Visualization'</h2>
+        </div>
+      </div>
+    </section>
+    <!-- End page header -->
+
+    <!-- Page navigation -->
+    <!-- https://bulma.io/documentation/components/navbar/ -->
+    <nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
+      <div class="container">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="index.html" title="Home">
+            <span class="icon"><i class="fas fa-home"></i></span>
+            <span>Home</span>
+          </a>
+
+          <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="main-menu">
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div id="main-menu" class="navbar-menu has-text-weight-medium">
+          <!-- Left navbar items -->
+          <div class="navbar-start">
+
+            <a class="navbar-item" href="about.html" title="About">
+              <span class="icon"><i class="far fa-address-card"></i></i></span>
+              <span>About</span>
+            </a>
+
+            <a class="navbar-item is-active" href="dataset.html" title="Dataset">
+              <span class="icon"><i class="fas fa-table"></i></span>
+              <span>Dataset</span>
+            </a>
+
+            <a class="navbar-item" href="finalvisualization.html" title="final visualization">
+              <span class="icon"><i class="far fa-chart-bar"></i></span>
+              <span>Final Visualization</span>
+            </a>
+
+
+            <!--          <div class="navbar-item has-dropdown is-hoverable">-->
+            <!--            <a class="navbar-link"  href="index.html">-->
+            <!--              Info-->
+            <!--            </a>-->
+
+            <!--            <div class="navbar-dropdown">-->
+            <!--              <a class="navbar-item" href="index.html#about" title="About the Assignment">-->
+            <!--                <span class="icon"><i class="far fa-file-alt"></i></span>-->
+            <!--                <span>Assignment</span>-->
+            <!--              </a>-->
+            <!--              <a class="navbar-item" href="index.html#data" title="Dataset Info">-->
+            <!--                <span class="icon"><i class="fas fa-table"></i></span>-->
+            <!--                <span>Dataset</span>-->
+            <!--              </a>-->
+            <!--              <a class="navbar-item" href="index.html#wrangling" title="Dataset Info">-->
+            <!--                <span class="icon"><i class="fas fa-wrench"></i></span>-->
+            <!--                <span>Wrangling</span>-->
+            <!--              </a>-->
+            <!--              <a class="navbar-item" href="index.html#bio" title="About Me">-->
+            <!--                <span class="icon"><i class="fas fa-info-circle"></i></span>-->
+            <!--                <span>About me</span>-->
+            <!--              </a>-->
+            <!--            </div>-->
+          </div>
+          <!--          <a class="navbar-item" href="alphaprototypes.html" title="visualization">-->
+          <!--            <span class="icon"><i class="fas fa-chart-line"></i></span>-->
+          <!--            <span>Visualization</span>-->
+          <!--          </a>-->
+
+        </div>
+
+        <!-- Right navbar items -->
+        <div class="navbar-end">
+          <a class="navbar-item" href="feedback.html" title="Feedback">
+            <span class="icon"><i class="fas fa-users"></i></i></span>
+            <span>Feedback</span>
+          </a>
+
+          <a class="navbar-item" href="alphaprototypes.html" title="Prototypes">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span>Alpha Prototypes</span>
+          </a>
+          <a class="navbar-item" href="betaprototypes.html" title="Prototypes">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span>Beta Prototypes</span>
+          </a>
+          <!--        <a class="navbar-item" href="grade.html" title="About">-->
+          <!--          <span class="icon"><i class="fas fa-tasks"></i></span>-->
+          <!--          <span>Grade</span>-->
+          <!--        </a>-->
+        </div>
+      </div>
+      <!--      <a class="navbar-item" href="index.html#about" title="About">-->
+      <!--        <span class="icon"><i class="fas fa-info-circle"></i></span>-->
+      <!--        <span>About Me</span>-->
+      <!--      </a>-->
+      </div>
+    </nav>
+    <!-- End page navigation -->
+
+  <section class="section">
+    <div class="container">
+      <!-- Begin page content -->
+      <div class="content page-content">
+
+        <h1 class="title">Dataset Info</h1>
+
+<!--        World Happiness Report-->
+        <h2>World Happiness Report 2020</h2>
+        <p>The main dataset I will use will be from the <a href="https://worldhappiness.report">2020 World Happiness Report</a>.
+          This is an annual publication by the United Nations Sustainable Development Solutions Network that tracks people's happiness by country, and analyzes which factors contribute to or take away from people's happiness.</p>
+
+        <div class="tile is-ancestor">
+          <div class="tile is-4 is-vertical is-parent">
+            <div class="tile is-child box">
+              <p class="title">Accessed</p>
+              <p class="subtitle">April 12, 2020</p>
+            </div>
+            <div class="tile is-child box">
+              <p class="subtitle">Total Rows</p>
+              <p class="title">2,195</p>
+            </div>
+          </div>
+          <div class="tile is-parent is-8">
+            <div class="tile is-child box">
+              <p class="title">Files</p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigure2.1.xls"><i class="fas fa-file-excel"></i> WHR20_DataForFigure2.1.xls</a></p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigures2.2_2.3_Appendix2.xlsx"><i class="fas fa-file-excel"></i> WHR20_DataForFigures2.2_2.3_Appendix2.xlsx</a></p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigure2.4.xls"><i class="fas fa-file-excel"></i> WHR20_DataForFigure2.4.xls</a></p>
+              <p><a href="resources/WHR%20Datasets/WHR20_DataForTable2.1.xls"><i class="fas fa-file-excel"></i> WHR20_DataForTable2.1.xls</a></p>
+            </div>
+          </div>
+        </div><br>
+
+<!--        WHR Columns-->
+        <h4>
+          Relevant Columns
+        </h4>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Column Name</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Country name</td>
+            <td>Name of the country.<br>
+              <span class="has-text-grey-light">Example: <em>Iceland</em></span></td>
+          </tr>
+          <tr>
+            <td>Regional indicator</td>
+            <td>More specific type of incident.<br>
+              <span class="has-text-grey-light">Example: <em>construction_private_property</em></span></td>
+          </tr>
+          <tr>
+            <td>Ladder score</td>
+            <td>Happiness score of the country on the <a href="https://worldhappiness.report/faq/#what-is-the-original-source-of-the-data-for-figure-21-how-are-the-rankings-calculated">Cantril Ladder Scale</a>.<br>
+              <span class="has-text-grey-light">Example: <em>7.50450</em></span></td>
+          </tr>
+          <tr>
+            <td>Logged GDP per capita</td>
+            <td>Gross Domestic Product per capita of the country on a logarithmic scale.<br>
+              <span class="has-text-grey-light">Example: <em>10.77256</em></span></td>
+          </tr>
+<!--          <tr>-->
+<!--            <td>Longitude</td>-->
+<!--            <td>Horizontal geographic position.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>-->
+<!--          </tr>-->
+          </tbody>
+        </table>
+
+<!--        World Happiness Report License-->
+        <h4>License</h4>
+        <p>The World Happiness Report doesn't explicitly list the license their data is offered under, but they make their data easily accessible to the public as a CSV file, and give a citation for the report as a whole (reproduced below).
+          I reached out to the Sustainable Development Solutions Network, and got explicit permission to use their data for this project if I list the following citation :</p>
+        <blockquote>Helliwell, John F., Richard Layard, Jeffrey Sachs, and Jan-Emmanuel De Neve, eds. 2020. World Happiness Report 2020. New York: Sustainable Development Solutions Network</blockquote>
+
+        <br><br>
+
+        <!--        Map -->
+        <h2>Country Polygons from Natural Earth</h2>
+        <p>
+          This is a supplemental dataset I will use from <a href="http://www.naturalearthdata.com">Natural Earth</a> to define countries for my map visualization.
+          Each row is a polygon defining the borders of a country.
+        </p>
+        <div class="tile is-ancestor">
+          <div class="tile is-4 is-vertical is-parent">
+            <div class="tile is-child box">
+              <p class="title">Accessed</p>
+              <p class="subtitle">April 25, 2020</p>
+            </div>
+            <div class="tile is-child box">
+              <p class="subtitle">Rows</p>
+              <p class="title">255</p>
+            </div>
+          </div>
+          <div class="tile is-parent is-8">
+            <div class="tile is-child box">
+              <p class="title">
+                Country Polygons
+              <p>Defines country borders as polygon objects to be used in geospatial visualizations. he data comes from Natural Earth, a community effort to make visually pleasing, well-crafted maps with cartography or GIS software at small scale. </p>
+            </div>
+          </div>
+        </div><br>
+
+
+        <!--        OECD License-->
+        <h4>License</h4>
+        <blockquote>
+          <p>All data is licensed under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>.</p>
+          <p>Note that the original data from <a href="http://www.naturalearthdata.com/">Natural Earth</a> is public domain. While no credit is
+            formally required a link back or credit to <a href="http://www.naturalearthdata.com/">Natural Earth</a>, <a href="https://github.com/lexman">Lexman</a> and the <a href="https://okfn.org/">Open Knowledge Foundation</a> is much appreciated.</p>
+        </blockquote>
+
+        <br><br>
+
+
+<!--        &lt;!&ndash;        OECD&ndash;&gt;-->
+<!--        <h2>OECD Income Inequality Dataset</h2>-->
+<!--        <p>This is a supplemental dataset I will use from the Organization for Economic Co-operation and Development about income inequality in different countries: <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">OECD Income Inequality Data</a>.-->
+<!--          This dataset gives a measure of the amount of income inequality by country by year, which I will use to compare with different countries' happiness scores.</p>-->
+
+<!--        <div class="tile is-ancestor">-->
+<!--          <div class="tile is-4 is-vertical is-parent">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">Accessed</p>-->
+<!--              <p class="subtitle">April 13, 2020</p>-->
+<!--            </div>-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="subtitle">Rows</p>-->
+<!--              <p class="title">2,581</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="tile is-parent is-8">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">-->
+<!--                OECD Income Inequality</p>-->
+<!--              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div><br>-->
+
+<!--        &lt;!&ndash;        OECD Columns&ndash;&gt;-->
+<!--        <h4>-->
+<!--          Relevant Columns-->
+<!--        </h4>-->
+<!--        <table class="table">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>Column Name</th>-->
+<!--            <th>Description</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr>-->
+<!--            <td>LOCATION</td>-->
+<!--            <td>Name of the country (as a 3-letter code).<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>MEASURE</td>-->
+<!--            <td>Whether a row gives the GINI coefficient or some other measure.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>GINI</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>TIME</td>-->
+<!--            <td>Year when the row refers to.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>2015</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Value</td>-->
+<!--            <td>The GINI score itself.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>0.257</em></span></td>-->
+<!--          </tr>-->
+<!--          &lt;!&ndash;          <tr>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Longitude</td>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Horizontal geographic position.<br>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </tr>&ndash;&gt;-->
+<!--          </tbody>-->
+<!--        </table>-->
+
+<!--        &lt;!&ndash;        OECD License&ndash;&gt;-->
+<!--        <h4>License</h4>-->
+<!--        <p>OECD's Terms and Conditions says that "<em>You can extract from, download, copy, adapt, print, distribute, share and embed Data for any purpose, even for commercial use. You must give appropriate credit to the OECD by using the citation associated with the relevant Data</em>"</p>-->
+<!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
+
+<!--        <br><br>-->
+
+<!--        &lt;!&ndash;        World Bank&ndash;&gt;-->
+<!--        <h2>World Bank Population Data</h2>-->
+<!--        <p>This is a supplemental dataset I will use from the World Bank that lists the population of different countries: <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank Population Data</a>.-->
+<!--          This dataset gives the populations of different countries, which I will compare with different countries' happiness scores.</p>-->
+
+<!--        <div class="tile is-ancestor">-->
+<!--          <div class="tile is-4 is-vertical is-parent">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">Accessed</p>-->
+<!--              <p class="subtitle">April 13, 2020</p>-->
+<!--            </div>-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="subtitle">Rows</p>-->
+<!--              <p class="title">264</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="tile is-parent is-8">-->
+<!--            <div class="tile is-child box">-->
+<!--              <p class="title">-->
+<!--                World Bank Population, Total</p>-->
+<!--              <p>Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div><br>-->
+
+<!--        &lt;!&ndash;        World Bank Columns&ndash;&gt;-->
+<!--        <h4>-->
+<!--          Relevant Columns-->
+<!--        </h4>-->
+<!--        <table class="table">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>Column Name</th>-->
+<!--            <th>Description</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr>-->
+<!--            <td>Country Name</td>-->
+<!--            <td>Full name of the country.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Country Code</td>-->
+<!--            <td>Name of the country (as a 3-letter code).<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>[Year Number]</td>-->
+<!--            <td>Population at that year.<br>-->
+<!--              <span class="has-text-grey-light">Example: <em>330815</em></span></td>-->
+<!--          </tr>-->
+<!--          &lt;!&ndash;          <tr>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Longitude</td>&ndash;&gt;-->
+<!--          &lt;!&ndash;            <td>Horizontal geographic position.<br>&ndash;&gt;-->
+<!--          &lt;!&ndash;              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </tr>&ndash;&gt;-->
+<!--          </tbody>-->
+<!--        </table>-->
+
+<!--        &lt;!&ndash;        World Bank License&ndash;&gt;-->
+<!--        <h4>License</h4>-->
+<!--        <p>This data is distributed under the <a href="https://datacatalog.worldbank.org/public-licenses#cc-by">CC BY-4.0 license</a>, which allows users to "copy, modify and distribute data in any format for any purpose, including commercial use", as long as attribution is given.</p>-->
+<!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
+
+
+<!--        Wrangling (on all) -->
+<!--        <h2 id="wrangling">Data Wrangling</h2>-->
+<!--        <p>I filtered the dataset when downloading it from data.sfgov.org, and kept only cases of category "Noise Report", and which were opened in February 2020. <a href="resources/311_Cases_filtered_feb_noise.csv">[Data file as downloaded]</a>.-->
+<!--          Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>-->
+
+      </div>
+    </div>
+    <!-- End page content -->
+  </section>
+<!--  </main>-->
+
+  <!-- Page footer -->
+<!--  <div class="false-footer"></div>-->
+  <!-- https://bulma.io/documentation/layout/footer/ -->
+  <footer class="footer smaller-footers-are-better">
+    <div class="content has-text-centered is-size-7">
+      <p>
+
+        <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+          <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+        </a>
+
+        <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+          <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+        </a>
+
+        <a href="https://bulma.io" class="button is-small">
+          <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+        </a>
+      </p>
+    </div>
+  </footer>
+  <!-- End page footer -->
+
+  <!-- Mobile menu responsiveness -->
+  <!-- https://bulma.io/documentation/components/navbar/ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    if ($navbarBurgers.length > 0) {
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+        });
+      });
+    }
+  });
+  </script>
+  <!-- End mobile menu responsiveness -->
+
+
+  </body>
+
+</html>

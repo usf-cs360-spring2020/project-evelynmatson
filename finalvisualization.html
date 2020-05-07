@@ -38,6 +38,8 @@
     <script src="https://d3js.org/d3-transition.v1.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha256-qo76Vs9B6JAALbrTn+PcN1r09hbNLd2M78V19glOMeU=" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
 
     <!-- Lineup Scripts -->
     <link href="https://unpkg.com/lineupjs/build/LineUpJS.css" rel="stylesheet">
@@ -55,7 +57,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">Happiness and Inequality</h1>
-          <h2 class="subtitle">By Eve Matson for CS 360 'Data Visualization'</h2>
+          <h2 class="subtitle">By Evelyn Matson for CS 360 'Data Visualization'</h2>
         </div>
       </div>
     </section>
@@ -85,19 +87,17 @@
               <span>About</span>
             </a>
 
-            <a class="navbar-item" href="datasets.html" title="Datasets">
+            <a class="navbar-item" href="dataset.html" title="Dataset">
               <span class="icon"><i class="fas fa-table"></i></span>
-              <span>Datasets</span>
+              <span>Dataset</span>
             </a>
 
-            <a class="navbar-item" href="alphaprototypes.html" title="Prototypes">
-              <span class="icon"><i class="fas fa-chart-line"></i></span>
-              <span>Alpha Prototypes</span>
+            <a class="navbar-item is-active" href="finalvisualization.html" title="final visualization">
+              <span class="icon"><i class="far fa-chart-bar"></i></span>
+              <span>Final Visualization</span>
             </a>
-            <a class="navbar-item is-active" href="betaprototypes.html" title="Prototypes">
-              <span class="icon"><i class="fas fa-chart-line"></i></span>
-              <span>Beta Prototypes</span>
-            </a>
+
+
             <!--          <div class="navbar-item has-dropdown is-hoverable">-->
             <!--            <a class="navbar-link"  href="index.html">-->
             <!--              Info-->
@@ -131,6 +131,19 @@
 
         <!-- Right navbar items -->
         <div class="navbar-end">
+          <a class="navbar-item" href="feedback.html" title="Feedback">
+            <span class="icon"><i class="fas fa-users"></i></i></span>
+            <span>Feedback</span>
+          </a>
+
+          <a class="navbar-item" href="alphaprototypes.html" title="Prototypes">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span>Alpha Prototypes</span>
+          </a>
+          <a class="navbar-item" href="betaprototypes.html" title="Prototypes">
+            <span class="icon"><i class="fas fa-chart-line"></i></span>
+            <span>Beta Prototypes</span>
+          </a>
           <!--        <a class="navbar-item" href="grade.html" title="About">-->
           <!--          <span class="icon"><i class="fas fa-tasks"></i></span>-->
           <!--          <span>Grade</span>-->
@@ -154,49 +167,114 @@
             Data Visualization Beta Prototypes
           </h1>
 
-          <div id="lineup" style="width: 1200px; height: 1200px;border-width: 2px;border-style: solid;border-color: #222222"></div>
+          <h3>Question</h3>
+          <p><em>'Which country best matches my values?'</em></p>
+          <p>
+            This is the question I designed these visualizations to answer.
+            The World Happiness Report reports an average 'happiness ladder' (<a href="https://worldhappiness.report/faq/#what-is-the-original-source-of-the-data-for-figure-21-how-are-the-rankings-calculated">More info about this metric</a>) score for each country, on a scale from one to ten.
+            It then uses other data about each country and their own model to calculate six 'explained by' values for that country, as well as a residual (the amount of 'extra' happiness unexplained by those factors).
+            These report how much of that country's happiness the researchers can ascribe to each of the following six factors :
+          </p>
+          <ul>
+            <li>GDP per capita</li>
+            <li>Social support</li>
+            <li>Healthy life expectancy</li>
+            <li>Freedom to make life choices</li>
+            <li>Generosity</li>
+            <li>Perceived (absence of) corruption</li>
+          </ul>
+          <p>Together, these seven factors (the 'residual', included) add up to the average happiness score recorded in each country.</p>
 
-          <script>
-            // generate some data
-            const arr = [];
-            const cats = ['c1', 'c2', 'c3'];
-            for (let i = 0; i < 100; ++i) {
-              arr.push({
-                a: Math.random() * 10,
-                d: 'Row ' + i,
-                cat: cats[Math.floor(Math.random() * 3)],
-                cat2: cats[Math.floor(Math.random() * 3)]
-              })
-            }
+          <p>
+            However, people are different! Some may want social support but not care much about GDP, and some the other way around.
+            I designed this visualization so that people can customize how much weight each factor is given, then see how the countries may rank differently.
+          </p>
 
-            // Get some data on d3
-            let actualData = d3.csv('resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv', function (row) {
-              console.log('original row', row);
-              let toReturn = {
-                'country' : row['Country name'],
-                'ladder score' : parseFloat(row['Ladder score']),
-                "Explained by Freedom to make life choices" : parseFloat(row['Explained by: Freedom to make life choices']),
-                "Explained by Generosity" : parseFloat(row['Explained by: Generosity']),
-                "Explained by Healthy life expectancy" : parseFloat(row['Explained by: Healthy life expectancy']),
-                "Explained by Log GDP per capita" : parseFloat(row['Explained by: Log GDP per capita']),
-                "Explained by Perceptions of corruption" : parseFloat(row['Explained by: Perceptions of corruption']),
-                "Explained by Social support" : parseFloat(row['Explained by: Social support']),
-                'dystopia + residual' : parseFloat(row['Dystopia + residual']),
-                'region' : row['Regional indicator']
-              };
-              console.log('returned row', toReturn)
-              return toReturn;
-            }).then(function(data) {
-              // Make the lineup!
-              let lineUpLocation = document.getElementById('lineup');
-              const lineup = LineUpJS.asTaggle(lineUpLocation, data);
-            });
-            console.log('actualData', actualData);
+          <h3>Answer</h3>
+          <p>
+            Everyone's answer to this question will be different, so give it a try (it seems to work best in Google Chrome, FYI)! Tweak the calculation to match what you value most, and find which countries most closely match those values.
+          </p>
+
+          <h3>Interactivity (Implemented)</h3>
+          <p>
+            This visualization's main form of interactivity is the ability to scale each factor's weight using the range sliders, then see the map and lineup update.
+            To use this, drag the control element of a slider to the left or right (left will give this factor less weight, right will give it more).
+            After you let go, the visualization will update, reordering countries in the small multiples the bar chart according to remain sorted given their newly weighted values.
+            The map and its scale will also update, to show which countries have the largest (happiest) and smallest (least happy) weighted happiness values given the new weights that have been inputted.
+          </p>
+
+          <h3>Interactivity (Planned)</h3>
+          <p>
+            I plan to implement a hover tooltip in the map, so that hovering over a country will highlight its outline, and display a tooltip with its name and details about its value for each factor.
+          </p>
+          <p>
+            If I have time, I will also implement brushing in d3.
+            This will enable users to select a range of countries in the ranked bar chart or a group of countries on the map, and see those same countries highlighted in the other visualization.
+          </p>
+          <p>
+            Finally, if I have time I will allow users to narrow down the scope of the visualization to zoom into any one of several geographic regions.
+            This will enable a more detailed view of the map of that region, and let the user focus on only those countries in the ranked bar chart.
+          </p>
 
 
-            console.log('array as sent to lineup', arr);
-          </script>
+          <svg id="mapVisualization" class="visualization">
+            <g id="graticule"></g>
+            <g id="countries"></g>
+          </svg>
 
+<!--          TODO put numbers on the range sliders maybe-->
+
+          <div class="slidecontainer">
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices" list="steplist"> Freedom<br>
+            <datalist id="steplist">
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </datalist>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Generosity" list="steplist">Generosity<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Healthy life expectancy" list="steplist">Healthy<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Log GDP per capita" list="steplist">GDP<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Perceptions of corruption" list="steplist">Corruption<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Social support" list="steplist">Social Support<br>
+            <input type="range" min="0" max="10" value="5" class="slider" id="Dystopia + residual" list="steplist">Dystopia + residual<br>
+          </div>
+          <svg id="lineupVisualization" class="visualization"></svg>
+          <script src="resources/my-lineup.js"></script>
+
+          <h3>Encoding</h3>
+          <p>
+            In the map, data is encoded on as color on a choropleth visualization on an equal area map projection. Each colored shape is a country, and data is encoded as follows :
+          </p>
+          <ul>
+            <li>Location of the country : where in the world the country is located (projected using the Natural Earth projection) (North is up, East is right)</li>
+            <li>Area of country on the map : the area of the country in the world</li>
+            <li>Color of country : weighted happiness value calculation (see legend)</li>
+          </ul>
+
+          <p>
+            In the small multiples bar chart that follows, each country is represented by a row of data bars, and each bar encodes the data value for one of the seven explaining factors.
+            The rows are sorted by the sum of each explaining factor, so that the countries with the greatest average happiness value are the highest.
+            The rows are automatically re-sorted based on the weight factors the user sets on the slider input controls whenever the weights change.
+            More specifically :
+          </p>
+          <ul>
+            <li>Vertical location of row/country : weighted average happiness rank of that country (higher happiness values are higher up)</li>
+            <li>Vertical location of a bar/explaining factor : which country it refers to</li>
+            <li>Horizontal location of a bar/explaining factor : which factor it is (see labels at top)</li>
+            <li>
+              Width of the bar : the country's value for that explaining factor<br>
+              <em>Each factor has a different scale, but the specific values are unimportant and are not displayed.
+                The bars are for the purpose of comparison, not for exact value calculation. </em>
+            </li>
+          </ul>
 
 <!--        <h3>About</h3>-->
 <!--        <p>In order to explore the datasets a bit, I created two prototype visualizations in Tableau.</p>-->
