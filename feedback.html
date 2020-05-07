@@ -28,6 +28,7 @@
   </head>
 
   <body>
+
     <!-- Page header -->
     <!-- https://bulma.io/documentation/layout/hero/ -->
     <section class="hero is-primary is-bold">
@@ -135,317 +136,121 @@
     </nav>
     <!-- End page navigation -->
 
-  <section class="section">
-    <div class="container">
-      <!-- Begin page content -->
-      <div class="content page-content">
+    <!-- Begin page content -->
+    <section class="section">
+      <div class="container">
+        <div class="content page-content">
 
-        <h1 class="title">Datasets Info</h1>
+          <h1 class="title">Feedback</h1>
 
-<!--        World Happiness Report-->
-        <h2>World Happiness Report 2020</h2>
-        <p>The main dataset I will use will be from the <a href="https://worldhappiness.report">2020 World Happiness Report</a>.
-          This is an annual publication by the United Nations Sustainable Development Solutions Network that tracks people's happiness by country, and analyzes which factors contribute to or take away from people's happiness.</p>
+          <h3>Live Feedback from Instructor</h3>
 
-        <div class="tile is-ancestor">
-          <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child box">
-              <p class="title">Accessed</p>
-              <p class="subtitle">April 12, 2020</p>
-            </div>
-            <div class="tile is-child box">
-              <p class="subtitle">Total Rows</p>
-              <p class="title">2,195</p>
-            </div>
-          </div>
-          <div class="tile is-parent is-8">
-            <div class="tile is-child box">
-              <p class="title">Files</p>
-              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigure2.1.xls"><i class="fas fa-file-excel"></i> WHR20_DataForFigure2.1.xls</a></p>
-              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigures2.2_2.3_Appendix2.xlsx"><i class="fas fa-file-excel"></i> WHR20_DataForFigures2.2_2.3_Appendix2.xlsx</a></p>
-              <p><a href="resources/WHR%20Datasets/WHR20_DataForFigure2.4.xls"><i class="fas fa-file-excel"></i> WHR20_DataForFigure2.4.xls</a></p>
-              <p><a href="resources/WHR%20Datasets/WHR20_DataForTable2.1.xls"><i class="fas fa-file-excel"></i> WHR20_DataForTable2.1.xls</a></p>
-            </div>
-          </div>
-        </div><br>
+          <p>
+            I met with my professor Sophie Engle over Zoom to get her feedback on the beta version of my prototype (the second half of our course was taught online due to the SARS-CoV-2 pandemic, so meeting in-person wasn't possible).
+            She helped me decide which kinds of interactivity to implement, and suggested a few other tweaks for me to make.
+            Here are her main ideas, summarized:
+          </p>
 
-<!--        WHR Columns-->
-        <h4>
-          Relevant Columns
-        </h4>
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Column Name</th>
-            <th>Description</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>Country name</td>
-            <td>Name of the country.<br>
-              <span class="has-text-grey-light">Example: <em>Iceland</em></span></td>
-          </tr>
-          <tr>
-            <td>Regional indicator</td>
-            <td>More specific type of incident.<br>
-              <span class="has-text-grey-light">Example: <em>construction_private_property</em></span></td>
-          </tr>
-          <tr>
-            <td>Ladder score</td>
-            <td>Happiness score of the country on the <a href="https://worldhappiness.report/faq/#what-is-the-original-source-of-the-data-for-figure-21-how-are-the-rankings-calculated">Cantril Ladder Scale</a>.<br>
-              <span class="has-text-grey-light">Example: <em>7.50450</em></span></td>
-          </tr>
-          <tr>
-            <td>Logged GDP per capita</td>
-            <td>Gross Domestic Product per capita of the country on a logarithmic scale.<br>
-              <span class="has-text-grey-light">Example: <em>10.77256</em></span></td>
-          </tr>
-<!--          <tr>-->
-<!--            <td>Longitude</td>-->
-<!--            <td>Horizontal geographic position.<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>-->
-<!--          </tr>-->
-          </tbody>
-        </table>
+          <ul>
+            <li>
+              Adding details-on-demand interactivity in the form of a hover tooltip over countries would be helpful.
+              This tooltip could include details about each of the country's 'explainor' factors that contribute to happiness.
+            </li>
+            <li>
+              The color scale used on the countries as displayed on the map, which encodes their calculated happiness values, could be used on the bars in the bar chart too.
+              This would provide some continuity between the two charts, and help emphasize the connection between them.
+            </li>
+            <li>
+              Zooming would also be nice sometimes, but probably the least interesting kind of interactivity to implement.
+            </li>
+          </ul>
 
-<!--        World Happiness Report License-->
-        <h4>License</h4>
-        <p>The World Happiness Report doesn't explicitly list the license their data is offered under, but they make their data easily accessible to the public as a CSV file, and give a citation for the report as a whole (reproduced below).
-          I reached out to the Sustainable Development Solutions Network, and got explicit permission to use their data for this project if I list the following citation :</p>
-        <blockquote>Helliwell, John F., Richard Layard, Jeffrey Sachs, and Jan-Emmanuel De Neve, eds. 2020. World Happiness Report 2020. New York: Sustainable Development Solutions Network</blockquote>
+          <h3>Online Feedback from Peers</h3>
 
-        <br><br>
-
-        <!--        Map -->
-        <h2>Country Polygons from Natural Earth</h2>
-        <p>
-          This is a supplemental dataset I will use from <a href="http://www.naturalearthdata.com">Natural Earth</a> to define countries for my map visualization.
-          Each row is a polygon defining the borders of a country.
-        </p>
-        <div class="tile is-ancestor">
-          <div class="tile is-4 is-vertical is-parent">
-            <div class="tile is-child box">
-              <p class="title">Accessed</p>
-              <p class="subtitle">April 25, 2020</p>
-            </div>
-            <div class="tile is-child box">
-              <p class="subtitle">Rows</p>
-              <p class="title">255</p>
-            </div>
-          </div>
-          <div class="tile is-parent is-8">
-            <div class="tile is-child box">
-              <p class="title">
-                Country Polygons
-              <p>Defines country borders as polygon objects to be used in geospatial visualizations. he data comes from Natural Earth, a community effort to make visually pleasing, well-crafted maps with cartography or GIS software at small scale. </p>
-            </div>
-          </div>
-        </div><br>
+          <p>
+            Additionally, I received written feedback on my beta prototype from three of my peers in my class, in the form of a rubric on Canvas with comments for each topic (like visual encodings, lie factor, gestalt principles, etc.).
+            Many of their comments fit with what Sophie suggested, and helped inform what changes I made for the final version. Here are some of their most helpful comments:
+          </p>
+          <ul>
+            <li>
+              From Alejandro Garcia:
+              <ul>
+                <li>"It was hard to see where the countr[ies] are but the tool feature [you're] going to add will help a lot for that."</li>
+                <li>"One cool idea I thought about if possible was to add also a highlight on the continent that the country is under or even possible add it to your brushing".</li>
+                <li>"The planned interactivity would really help distinguish the countries and help for a better view."</li>
+                <li>"From these visualizations, I can see I should move to Finland and avoid Afghanistan but in reality, it really helped to see some ways people [categorize] a country's happiness and how it compares to other countries ... The visualization did help complete your goal and answer your question; very nice job on making it".</li>
+              </ul>
+            </li>
+            <li>
+              From Betty Ozerova:
+              <ul>
+                <li>"The visualization is very big, totally impossible to put on one screen, but I loose the overall context during scrolling".</li>
+                <li>"I like the colors, they are distinguishable, color scheme for the map fits well. The grey colors of bars are not very attractive and don't fit to map color scheme, I can suggest light beige or light blue instead of grey."</li>
+                <li>"Context is okay, I wasn't able to find caption and title. And I would like to see scales in scrolling bars and bars".</li>
+                <li>"Lie factor is relatively okay, but without scales, I cannot know exact numbers. And I also believe that the legend is upside down."</li>
+              </ul>
+            </li>
+            <li>
+              From Chaitrika Budamagunta:
+              <ul>
+                <li>"The diverging color scheme works very well for this data, and each color is easily distinguishable."</li>
+                <li>"There is a lot of explanatory context given, which makes it easy to interpret the visualizations."</li>
+                <li>"There is always some amount of lie factor for maps, but it feels less significant for this specific data since it is a distinct rating per country and does not give weight based on area. Also, the ability to change the values that are weighted helps to show more perspectives and further reduce any lie factor."</li>
+                <li>"There is a lot of ink but most of it serves a strong purpose for the visualization. Possibly, the grid lines on the map could be removed, and the legend/sliders could be made more compact, but it's pretty good already."</li>
+                <li>"The tooltip will be very helpful in knowing which countries are being looked at more closely, and would help to engage with the visualization further. Having brushing and zooming would also be very useful, to decrease the scope and make it more manageable to see the smaller countries that may get hidden on the global map."</li>
+                <li>"The map looks really good, but the bar chart is a little jarring with all black, maybe some color (even just one base color) would be more pleasant to look at."</li>
+              </ul>
+            </li>
+          </ul>
 
 
-        <!--        OECD License-->
-        <h4>License</h4>
-        <blockquote>
-          <p>All data is licensed under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>.</p>
-          <p>Note that the original data from <a href="http://www.naturalearthdata.com/">Natural Earth</a> is public domain. While no credit is
-            formally required a link back or credit to <a href="http://www.naturalearthdata.com/">Natural Earth</a>, <a href="https://github.com/lexman">Lexman</a> and the <a href="https://okfn.org/">Open Knowledge Foundation</a> is much appreciated.</p>
-        </blockquote>
-
-        <br><br>
-
-
-<!--        &lt;!&ndash;        OECD&ndash;&gt;-->
-<!--        <h2>OECD Income Inequality Dataset</h2>-->
-<!--        <p>This is a supplemental dataset I will use from the Organization for Economic Co-operation and Development about income inequality in different countries: <a href="https://data.oecd.org/inequality/income-inequality.htm#indicator-chart">OECD Income Inequality Data</a>.-->
-<!--          This dataset gives a measure of the amount of income inequality by country by year, which I will use to compare with different countries' happiness scores.</p>-->
-
-<!--        <div class="tile is-ancestor">-->
-<!--          <div class="tile is-4 is-vertical is-parent">-->
-<!--            <div class="tile is-child box">-->
-<!--              <p class="title">Accessed</p>-->
-<!--              <p class="subtitle">April 13, 2020</p>-->
-<!--            </div>-->
-<!--            <div class="tile is-child box">-->
-<!--              <p class="subtitle">Rows</p>-->
-<!--              <p class="title">2,581</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="tile is-parent is-8">-->
-<!--            <div class="tile is-child box">-->
-<!--              <p class="title">-->
-<!--                OECD Income Inequality</p>-->
-<!--              <p>Breaks down income inequality by country in recent years, measured by the GINI coefficient. A value of 0 means total equality of income, and a value of 1 means total inequality.</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div><br>-->
-
-<!--        &lt;!&ndash;        OECD Columns&ndash;&gt;-->
-<!--        <h4>-->
-<!--          Relevant Columns-->
-<!--        </h4>-->
-<!--        <table class="table">-->
-<!--          <thead>-->
-<!--          <tr>-->
-<!--            <th>Column Name</th>-->
-<!--            <th>Description</th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr>-->
-<!--            <td>LOCATION</td>-->
-<!--            <td>Name of the country (as a 3-letter code).<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>MEASURE</td>-->
-<!--            <td>Whether a row gives the GINI coefficient or some other measure.<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>GINI</em></span></td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>TIME</td>-->
-<!--            <td>Year when the row refers to.<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>2015</em></span></td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Value</td>-->
-<!--            <td>The GINI score itself.<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>0.257</em></span></td>-->
-<!--          </tr>-->
-<!--          &lt;!&ndash;          <tr>&ndash;&gt;-->
-<!--          &lt;!&ndash;            <td>Longitude</td>&ndash;&gt;-->
-<!--          &lt;!&ndash;            <td>Horizontal geographic position.<br>&ndash;&gt;-->
-<!--          &lt;!&ndash;              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>&ndash;&gt;-->
-<!--          &lt;!&ndash;          </tr>&ndash;&gt;-->
-<!--          </tbody>-->
-<!--        </table>-->
-
-<!--        &lt;!&ndash;        OECD License&ndash;&gt;-->
-<!--        <h4>License</h4>-->
-<!--        <p>OECD's Terms and Conditions says that "<em>You can extract from, download, copy, adapt, print, distribute, share and embed Data for any purpose, even for commercial use. You must give appropriate credit to the OECD by using the citation associated with the relevant Data</em>"</p>-->
-<!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
-
-<!--        <br><br>-->
-
-<!--        &lt;!&ndash;        World Bank&ndash;&gt;-->
-<!--        <h2>World Bank Population Data</h2>-->
-<!--        <p>This is a supplemental dataset I will use from the World Bank that lists the population of different countries: <a href="https://data.worldbank.org/indicator/sp.pop.totl">World Bank Population Data</a>.-->
-<!--          This dataset gives the populations of different countries, which I will compare with different countries' happiness scores.</p>-->
-
-<!--        <div class="tile is-ancestor">-->
-<!--          <div class="tile is-4 is-vertical is-parent">-->
-<!--            <div class="tile is-child box">-->
-<!--              <p class="title">Accessed</p>-->
-<!--              <p class="subtitle">April 13, 2020</p>-->
-<!--            </div>-->
-<!--            <div class="tile is-child box">-->
-<!--              <p class="subtitle">Rows</p>-->
-<!--              <p class="title">264</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="tile is-parent is-8">-->
-<!--            <div class="tile is-child box">-->
-<!--              <p class="title">-->
-<!--                World Bank Population, Total</p>-->
-<!--              <p>Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div><br>-->
-
-<!--        &lt;!&ndash;        World Bank Columns&ndash;&gt;-->
-<!--        <h4>-->
-<!--          Relevant Columns-->
-<!--        </h4>-->
-<!--        <table class="table">-->
-<!--          <thead>-->
-<!--          <tr>-->
-<!--            <th>Column Name</th>-->
-<!--            <th>Description</th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr>-->
-<!--            <td>Country Name</td>-->
-<!--            <td>Full name of the country.<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Country Code</td>-->
-<!--            <td>Name of the country (as a 3-letter code).<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>ISL</em></span></td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>[Year Number]</td>-->
-<!--            <td>Population at that year.<br>-->
-<!--              <span class="has-text-grey-light">Example: <em>330815</em></span></td>-->
-<!--          </tr>-->
-<!--          &lt;!&ndash;          <tr>&ndash;&gt;-->
-<!--          &lt;!&ndash;            <td>Longitude</td>&ndash;&gt;-->
-<!--          &lt;!&ndash;            <td>Horizontal geographic position.<br>&ndash;&gt;-->
-<!--          &lt;!&ndash;              <span class="has-text-grey-light">Example: <em>-122.4407522</em></span></td>&ndash;&gt;-->
-<!--          &lt;!&ndash;          </tr>&ndash;&gt;-->
-<!--          </tbody>-->
-<!--        </table>-->
-
-<!--        &lt;!&ndash;        World Bank License&ndash;&gt;-->
-<!--        <h4>License</h4>-->
-<!--        <p>This data is distributed under the <a href="https://datacatalog.worldbank.org/public-licenses#cc-by">CC BY-4.0 license</a>, which allows users to "copy, modify and distribute data in any format for any purpose, including commercial use", as long as attribution is given.</p>-->
-<!--        <blockquote>OECD (2020), Income inequality (indicator). doi: 10.1787/459aa7f1-en (Accessed on 13 April 2020)</blockquote>-->
-
-
-<!--        Wrangling (on all) -->
-<!--        <h2 id="wrangling">Data Wrangling</h2>-->
-<!--        <p>I filtered the dataset when downloading it from data.sfgov.org, and kept only cases of category "Noise Report", and which were opened in February 2020. <a href="resources/311_Cases_filtered_feb_noise.csv">[Data file as downloaded]</a>.-->
-<!--          Then I loaded the data into D3, and created the visualization. I created a JavaScript object to map reports to their neighborhood, to make hover data-on-demand more efficient, but that was about it.</p>-->
-
+        </div>
       </div>
-    </div>
+    </section>
     <!-- End page content -->
-  </section>
-<!--  </main>-->
 
-  <!-- Page footer -->
-<!--  <div class="false-footer"></div>-->
-  <!-- https://bulma.io/documentation/layout/footer/ -->
-  <footer class="footer smaller-footers-are-better">
-    <div class="content has-text-centered is-size-7">
-      <p>
+    <!-- Page footer -->
+    <!--  <div class="false-footer"></div>-->
+    <!-- https://bulma.io/documentation/layout/footer/ -->
+    <footer class="footer smaller-footers-are-better">
+      <div class="content has-text-centered is-size-7">
+        <p>
 
-        <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
-        </a>
+          <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+          </a>
 
-        <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
-          <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
-        </a>
+          <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+            <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+          </a>
 
-        <a href="https://bulma.io" class="button is-small">
-          <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
-        </a>
-      </p>
-    </div>
-  </footer>
-  <!-- End page footer -->
+          <a href="https://bulma.io" class="button is-small">
+            <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+          </a>
+        </p>
+      </div>
+    </footer>
+    <!-- End page footer -->
 
-  <!-- Mobile menu responsiveness -->
-  <!-- https://bulma.io/documentation/components/navbar/ -->
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    <!-- Mobile menu responsiveness -->
+    <!-- https://bulma.io/documentation/components/navbar/ -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    if ($navbarBurgers.length > 0) {
-      $navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-          const target = el.dataset.target;
-          const $target = document.getElementById(target);
-          el.classList.toggle('is-active');
-          $target.classList.toggle('is-active');
+      if ($navbarBurgers.length > 0) {
+        $navbarBurgers.forEach( el => {
+          el.addEventListener('click', () => {
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+          });
         });
-      });
-    }
-  });
-  </script>
-  <!-- End mobile menu responsiveness -->
+      }
+    });
+    </script>
+    <!-- End mobile menu responsiveness -->
 
 
   </body>
