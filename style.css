@@ -157,3 +157,24 @@ svg#lineupVisualization rect.bars {
     stroke: #666;
     border-style: solid;
 }
+
+/* Thank you Sophie Engle for the following CSS */
+.tooltip {
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding: 8px;
+    background: rgba(230, 230, 230, 0.8);;
+    pointer-events: none;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+text, .tooltip {
+    font-family: sans-serif;
+    font-size: 10pt;
+}
+
+table, .tooltip {
+    border-spacing: 5px;
+}

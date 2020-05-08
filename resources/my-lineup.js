@@ -75,6 +75,7 @@ async function letsGetItStarted() {
     // Load the data, continue in later methods
     whr_data = await d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow); //.then(prepWithWHRData);
     mapData = await  d3.json('resources/Datasets/countries.geojson'); //.then(prepMap);
+    // mapData = await  d3.json('resources/Datasets/countries_simplified.geojson'); //.then(prepMap);
     // whr_data = await whr_promise;
     // mapData = await map_promise;
 
@@ -102,6 +103,8 @@ function prepVis(dataParam) {
     setupSliders();
 
     updateVis();
+
+    enableHover();
 }
 
 /**
@@ -610,13 +613,12 @@ function updateMapVis(sortedData) {
             return scales.mapColorScale(color_numbers[feature['whrdata']['country']]);
         } else {
             return config.other_countries_color;
-
         }
     };
 
     // console.log('before enter update', country_shapes);
 
-    let drawShapes = async function(country_shapes) {
+    let drawShapes = function(country_shapes) {
         country_shapes.join(
             enter =>
                 enter
@@ -631,6 +633,7 @@ function updateMapVis(sortedData) {
         );
     };
     drawShapes(country_shapes);
+
 
     // let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
     // let data_country_names = sortedData.map(d => d.country).forEach(name => console.log('data', name));
@@ -852,6 +855,52 @@ function matchCountries() {
     // console.log('Matched exact matches');
 }
 
+/**
+ * Enable hover interactivity
+ */
+function enableHover() {
+    let countries = d3.selectAll('path.country_outline');
+
+    countries.on("mouseover.hover", function(d) {
+        let me = d3.select(this);
+        let div = d3.select("body").append("div");
+
+        div.attr("id", "details");
+        div.attr("class", "tooltip");
+
+        let rows = div.append("table")
+            .selectAll("tr")
+            .data(Object.keys(d))
+            .enter()
+            .append("tr");
+
+        rows.append("th")
+            .text(key => key)
+            .style('padding-right', '10px');
+        rows.append("td")
+            .text(function(key) {
+                // log(d);
+                return d[key];
+            });
+        // TODO better text
+    });
+
+    countries.on("mousemove.hover2", function(d) {
+        let div = d3.select("div#details");
+
+        // get height of tooltip
+        let bbox = div.node().getBoundingClientRect();
+
+        div.style("left", d3.event.pageX + "px")
+        div.style("top",  (d3.event.pageY - bbox.height) + "px");
+    });
+
+    countries.on("mouseout.hover2", function(d) {
+        d3.selectAll("div#details").remove();
+    });
+
+    // Thank you Sophie Engle for this code
+}
 
 
 
