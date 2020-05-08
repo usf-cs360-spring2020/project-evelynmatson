@@ -134,6 +134,11 @@ svg#mapVisualization g#mapLegend rect#map_legend_background {
     border-style: solid;
 }
 
+/* Make all text in the map vis legend slightly grey */
+#mapLegend text {
+    fill: #222222;
+}
+
 /*Style the small labels in the map visualization legend*/
 #mapLegend .cell text {
     font-size: 0.75em;

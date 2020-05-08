@@ -218,7 +218,7 @@ function makeMapLegend() {
         .shapeHeight(15)
         .cells(7)
         .title('Country Colors :')
-        .labels(['Most Happy', '.',   '.', '.', '.', '.', 'Least Happy'])
+        .labels(['Least Happy', '.',   '.', '.', '.', '.', 'Most Happy'])
         .orient('vertical')
         .scale(scales.mapColorScale);
 
