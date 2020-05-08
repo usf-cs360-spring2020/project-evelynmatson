@@ -49,6 +49,7 @@ let longData = [];
 let mapData;
 let explainors;
 let weights = {};
+let color_numbers = {};
 
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
@@ -516,15 +517,29 @@ function prepWithWHRData() {
  */
 function updateVis() {
     // Sort the data according to the current weights
-    let sorted = whr_data.sort(function(a, b) {
-        let weightedSumA = weightedSmExplainors(a);
-        let weightedSumB = weightedSmExplainors(b);
+    let sortedData = whr_data;
+
+    // Calculate values for color calculations
+    sortedData.forEach(function (row) {
+        let sum = weightedSmExplainors(row);
+        // Store the sum
+        color_numbers[row['country']] = sum;
+    });
+
+    // Actually sort it
+    sortedData = sortedData.sort(function(a, b) {
+        let weightedSumA = color_numbers[a['country']];
+        let weightedSumB = color_numbers[b['country']];
         return weightedSumB - weightedSumA;
     });
-    // console.log('sorted data: ', sorted);
+    // console.log('calculated color_numbers', color_numbers);
+    console.log('color numbers', color_numbers);
+
+    // Add a new domain to the scale.
+    updateMapScale(sortedData);
 
     // Update the lineup y scale to show the new order!
-    scales.countries.domain(sorted.map(r => r.country));
+    scales.countries.domain(sortedData.map(r => r.country));
 
     // Draw actual bars
     let rect = d3.select("#bars");
@@ -534,6 +549,12 @@ function updateVis() {
         .data(longData, function(d) {return d["country"]+d['explainor']});
 
     // Draw new bars for entering data
+    let colorUpdater = function(d) {
+        let number = color_numbers[d['country']];
+        // console.log('maybe this', number, 'so this', scales.mapColorScale(number));
+        // console.log(d);
+        return scales.mapColorScale(number);
+    };
     things.join(
         enter =>
             enter
@@ -545,6 +566,7 @@ function updateVis() {
                 .attr("y", d => scales.countries(d["country"]))
                 .attr("height", scales.countries.bandwidth())
                 .style("fill", d => scales.color(d['explainor']))
+                .style('fill', colorUpdater)
                 .style('stroke', 'white'),
         update =>
             update
@@ -552,6 +574,7 @@ function updateVis() {
                 .duration(750)
                 .attr("width", d => scales[d['explainor']](d["value"]))
                 // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
+                .style('fill', colorUpdater)
                 .attr("y", d => scales.countries(d["country"]))
     );
 
@@ -566,28 +589,13 @@ function updateVis() {
     countriesAxisGroup.call(countriesAxis);
 
     // Use the map visualization too!
-    updateMapVis(sorted);
+    updateMapVis(sortedData);
 }
 
 /**
  * Update the map visualization.
  */
 function updateMapVis(sortedData) {
-
-    // Add a new domain to the scale.
-    updateMapScale(sortedData);
-
-    // Calculate values for color calculations
-    let color_numbers = {};
-    sortedData.forEach(function (row) {
-
-        let sum = weightedSmExplainors(row);
-
-        // Store the sum
-        color_numbers[row['country']] = sum;
-    });
-    // console.log('calculated color_numbers', color_numbers);
-
     let countriesG = map_svg.select('g#countries');
     // console.log('outlines', outlinesG);
 
@@ -606,7 +614,7 @@ function updateMapVis(sortedData) {
         }
     };
 
-    console.log('before enter update', country_shapes);
+    // console.log('before enter update', country_shapes);
 
     let drawShapes = async function(country_shapes) {
         country_shapes.join(
