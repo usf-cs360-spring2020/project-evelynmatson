@@ -145,3 +145,10 @@ svg#mapVisualization g#mapLegend rect#map_legend_background {
     font-style: normal;
     /*font-weight : bold;*/
 }
+
+/* Make the bars in the bar chart have an outline */
+svg#lineupVisualization rect.bars {
+    stroke-width: 0.5px;
+    stroke: #666;
+    border-style: solid;
+}

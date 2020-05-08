@@ -566,8 +566,8 @@ function updateVis() {
                 .attr("y", d => scales.countries(d["country"]))
                 .attr("height", scales.countries.bandwidth())
                 .style("fill", d => scales.color(d['explainor']))
-                .style('fill', colorUpdater)
-                .style('stroke', 'white'),
+                .style('fill', colorUpdater),
+                // .style('stroke', 'white'),
         update =>
             update
                 .transition()
