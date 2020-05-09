@@ -44,9 +44,12 @@ let lineup_svg;
 let axes = {};
 let plot;
 let grid;
+
 let whr_data;
 let longData = [];
 let mapData;
+let countryShapesSelection;
+
 let explainors;
 let weights = {};
 let color_numbers = {};
@@ -586,7 +589,7 @@ function updateMapVis() {
     let countriesG = map_svg.select('g#countries');
     // console.log('outlines', outlinesG);
 
-    let country_shapes = countriesG.selectAll('path.country_outline')
+    countryShapesSelection = countriesG.selectAll('path.country_outline')
         .data(mapData.features, d => d['properties']['ISO_A3']);
 
     // Color function defined here ahead of time
@@ -600,8 +603,8 @@ function updateMapVis() {
 
     // console.log('before enter update', country_shapes);
 
-    let drawShapes = function(country_shapes) {
-        country_shapes.join(
+    let drawShapes = function(countryShapesSelection) {
+        countryShapesSelection.join(
             enter =>
                 enter
                     .append('path')
@@ -614,7 +617,7 @@ function updateMapVis() {
                 .style('fill', map_feature_to_color)
         );
     };
-    drawShapes(country_shapes);
+    drawShapes(countryShapesSelection);
 
 
     // let map_country_names = mapData.features.map(d => d.properties.ADMIN).forEach(name => console.log('map', name));
