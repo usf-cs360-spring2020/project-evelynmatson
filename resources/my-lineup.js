@@ -49,6 +49,8 @@ let whr_data;
 let longData = [];
 let mapData;
 let countryShapesSelection;
+let countriesG;
+let detailsDiv;
 
 let explainors;
 let weights = {};
@@ -193,6 +195,12 @@ function prepMap() {
         .attr('class', 'graticule')
         .attr('d', pathGenerator(graticule));
 
+
+    // Make some selections ahead of time to make things faster
+    countriesG = map_svg.select('g#countries');
+
+    countryShapesSelection = countriesG.selectAll('path.country_outline')
+        .data(mapData.features, d => d['properties']['ISO_A3']);
 }
 
 
@@ -586,11 +594,6 @@ function updateVis() {
  * Update the map visualization.
  */
 function updateMapVis() {
-    let countriesG = map_svg.select('g#countries');
-    // console.log('outlines', outlinesG);
-
-    countryShapesSelection = countriesG.selectAll('path.country_outline')
-        .data(mapData.features, d => d['properties']['ISO_A3']);
 
     // Color function defined here ahead of time
     let map_feature_to_color = function(feature) {
@@ -604,6 +607,7 @@ function updateMapVis() {
     // console.log('before enter update', country_shapes);
 
     let drawShapes = function(countryShapesSelection) {
+        countryShapesSelection.data(mapData.features, d => d['properties']['ISO_A3']);
         countryShapesSelection.join(
             enter =>
                 enter
@@ -847,45 +851,66 @@ function enableHover() {
     let countries = d3.selectAll('path.country_outline');
 
     countries.on("mouseover.hover", function(d) {
+        // Skip grey countries
+        if (!d.hasOwnProperty('whrdata'))
+            return;
+
         let me = d3.select(this);
-        let div = d3.select("body").append("div");
+        detailsDiv = d3.select("body").append("div");
 
-        div.attr("id", "details");
-        div.attr("class", "tooltip");
+        detailsDiv.attr("id", "details");
+        detailsDiv.attr("class", "tooltip");
 
-        let rows = div.append("table")
+        let rows = detailsDiv.append("table")
             .selectAll("tr")
             .data(d.hasOwnProperty('whrdata') ? Object.keys(d['whrdata']) : [])
             .enter()
             .append("tr");
 
         rows.append("th")
-            .text(key => key)
+            .text(function (key) {
+                let shortened = explainor_name_abbreviator(key);
+                // console.log(shortened, 'shortened')
+                if (shortened === undefined)
+                    return key
+                else
+                    return shortened
+            })
             .style('padding-right', '10px');
         rows.append("td")
             .text(function(key) {
-                // log(d);
-                return d[key];
+                // console.log(d['whrdata'][key]);
+                return d['whrdata'][key];
             });
 
         me.raise();
+        me.style('stroke-width', '1px');
         me.style('stroke', 'red');
     });
 
     countries.on("mousemove.hover2", function(d) {
+        // Skip grey countries
+        if (!d.hasOwnProperty('whrdata'))
+            return;
+
         // let div = d3.select("div#details");
-        //
-        // // get height of tooltip
-        // let bbox = div.node().getBoundingClientRect();
-        //
-        // div.style("left", d3.event.pageX + "px")
-        // div.style("top",  (d3.event.pageY - bbox.height) + "px");
+
+        // get height of tooltip
+        let bbox = detailsDiv.node().getBoundingClientRect();
+
+        detailsDiv.style("left", d3.event.pageX + "px")
+        detailsDiv.style("top",  (d3.event.pageY - bbox.height) + "px");
     });
 
     countries.on("mouseout.hover2", function(d) {
-        let me = d3.select(this);
-        // d3.selectAll("div#details").remove();
+        // Skip grey countries
+        if (!d.hasOwnProperty('whrdata'))
+            return;
 
+        let me = d3.select(this);
+        detailsDiv.remove();
+
+        me.style('stroke-width', '0.5px');
         me.style('stroke', '#999');
     })
     // Thank you Sophie Engle for this code
