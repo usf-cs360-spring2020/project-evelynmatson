@@ -58,7 +58,7 @@ let color_numbers = {};
 /**
  * This function will draw all of the visualization.
  */
-async function letsGetItStarted() {
+async function stepOne() {
 
     initialPrep();
 
@@ -73,35 +73,91 @@ async function letsGetItStarted() {
     //     .attr('text-anchor', 'middle');
 
     // Load the data, continue in later methods
-    whr_data = await d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow); //.then(prepWithWHRData);
-    mapData = await  d3.json('resources/Datasets/countries.geojson'); //.then(prepMap);
-    // mapData = await  d3.json('resources/Datasets/countries_simplified.geojson'); //.then(prepMap);
-    // whr_data = await whr_promise;
-    // mapData = await map_promise;
+    const promises = [
+        d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow),
+        d3.json('resources/Datasets/countries.geojson')
+    ];
 
-    prepWithWHRData();
-    prepVis(whr_data);
-    // prepMap(mapData);
-
+    Promise.all(promises).then(function (values) {
+        whr_data = values[0];
+        mapData = values[1];
+        console.log('mapData', mapData);
+        stepTwo()
+    });
     // TODO clean up the order of 'prep', 'draw', etc... methods and their waiting and such
+}
+
+/**
+ * Do the next round of preparation work that can be done with the WHR dataset.
+ */
+function stepTwo() {
+
+    longData = longData.sort(function(a, b) {
+        return a['Ladder score'] - b['Ladder score'];
+    });
+
+    // console.log('dataParam', dataParam);
+    // whr_data = dataParam;
+    //     .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
+
+    // Work on scales
+    let countries = whr_data
+        .map(row => row['country']);
+    scales.countries.domain(countries);
+
+    explainors = longData
+        .map(row => row['explainor'])
+        .unique();
+    // console.log('found explainors', explainors);
+    if ('domain' in scales.color)
+        scales.color.domain(explainors);
+
+    // Band scale for the different explainors
+    scales.explainors = d3.scaleBand()
+        .domain(explainors)
+        .rangeRound([0, config.plot.width])
+        .paddingInner(config.plot.paddingBetweenRegions);
+
+    // Linear scales, one for each explainor's values
+    for (let explainor of Object.keys(whr_data[0])) {
+        // Skip non-related things
+        if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
+            continue;
+        }
+
+        // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
+        let maxOfExplainor = Math.max(...whr_data.map(d => d[explainor]));
+        // console.log('max of ', explainor, maxOfExplainor);
+
+        // console.log('explainor', explainor);
+        scales[explainor] = d3.scaleLinear()
+            .domain([0,maxOfExplainor])
+            .rangeRound([0, scales.explainors.bandwidth()])
+            .nice();
+
+        // Also give the weight an initial value
+        weights[explainor] = 50;
+    }
+
+    stepThree();
 }
 
 /**
  * Draw the actual visualization number one
  * @param dataParam the data loaded from csv to use in the visualization
  */
-function prepVis(dataParam) {
-    // console.log('data as loaded', dataParam);
-    // console.log('longData', longData);
+function stepThree() {
 
     makeLineupAxes();
 
-    prepMap(mapData);
+    prepMap();
+    matchCountries();
+    makeMapLegend();
+
 
     // makeLineupLegend();
 
     setupSliders();
-
     updateVis();
 
     enableHover();
@@ -111,9 +167,7 @@ function prepVis(dataParam) {
  * Prep the map visualization
  * @param dataParam the data loaded from CSV
  */
-function prepMap(dataParam) {
-    mapData = dataParam;
-    // console.log('mapData', mapData);
+function prepMap() {
 
     // Make the map projection and path generator
     let projection = d3.geoNaturalEarth1()
@@ -135,9 +189,6 @@ function prepMap(dataParam) {
     graticuleG.append('path')
         .attr('class', 'graticule')
         .attr('d', pathGenerator(graticule));
-
-    matchCountries();
-    makeMapLegend();
 
 }
 
@@ -267,14 +318,6 @@ function makeMapLegend() {
  */
 function setupSliders() {
 
-    // Setup slider (old)
-    // let slider = document.getElementById("myRange");
-    // console.log('this is my slider', slider);
-    // slider.oninput = function() {
-    //     console.log('slider is now', this.value);
-    // }
-
-
     let sliders = d3.selectAll('.slider');
     // console.log('sliders', sliders);
 
@@ -286,7 +329,6 @@ function setupSliders() {
 
         weights[explainor] = parseFloat(this.value);
     });
-    // normalizeWeights();
 
     // Setup modification/interactivty
     sliders.on('change', function () {
@@ -295,11 +337,8 @@ function setupSliders() {
         console.log(explainor, 'set to', scale_factor);
 
         weights[explainor] = scale_factor;
-        // normalizeWeights();
 
         updateVis();
-
-        // TODO I have the new value, now do something with it (update the visualization)
     });
 }
 
@@ -312,6 +351,7 @@ function setupSliders() {
  * Draw the axes for the lineup visualization
  */
 function makeLineupAxes() {
+
     // Make the static axes
     let explainorsAxis = d3.axisTop(scales.explainors)
         .tickFormat(explainor_name_abbreviator);
@@ -360,7 +400,6 @@ function makeLineupAxes() {
     //         .call(ygridlines);
     // }
 }
-
 
 
 ///////////////////////
@@ -457,58 +496,6 @@ function prepScales() {
     scales.mapColorScale = d3.scaleSequential(num => d3.interpolateRdYlBu(num * 0.6 + 0.2));
 }
 
-/**
- * Do the next round of preparation work that can be done with the WHR dataset.
- */
-function prepWithWHRData() {
-    longData = longData.sort(function(a, b) {
-        return a['Ladder score'] - b['Ladder score'];
-    });
-
-    // console.log('dataParam', dataParam);
-    // whr_data = dataParam;
-    //     .filter(d => d['geo'] !== 'US'); // Filter out US data because it's too large
-
-    // Work on scales
-    let countries = whr_data
-        .map(row => row['country']);
-    scales.countries.domain(countries);
-
-    explainors = longData
-        .map(row => row['explainor'])
-        .unique();
-    // console.log('found explainors', explainors);
-    if ('domain' in scales.color)
-        scales.color.domain(explainors);
-
-    // Band scale for the different explainors
-    scales.explainors = d3.scaleBand()
-        .domain(explainors)
-        .rangeRound([0, config.plot.width])
-        .paddingInner(config.plot.paddingBetweenRegions);
-
-    // Linear scales, one for each explainor's values
-    for (let explainor of Object.keys(whr_data[0])) {
-        // Skip non-related things
-        if (!explainor.includes('Explained by') && !explainor.includes('residual')) {
-            continue;
-        }
-
-        // console.log('mapped', explainor, data.map(d => d[explainor]).sort().reverse());
-        let maxOfExplainor = Math.max(...whr_data.map(d => d[explainor]));
-        // console.log('max of ', explainor, maxOfExplainor);
-
-        // console.log('explainor', explainor);
-        scales[explainor] = d3.scaleLinear()
-            .domain([0,maxOfExplainor])
-            .rangeRound([0, scales.explainors.bandwidth()])
-            .nice();
-
-        // Also give the weight an initial value
-        weights[explainor] = 50;
-    }
-}
-
 
 
 //////////////////////////
@@ -519,18 +506,19 @@ function prepWithWHRData() {
  * Update the visualization after a modification.
  */
 function updateVis() {
+
     // Sort the data according to the current weights
-    let sortedData = whr_data;
 
     // Calculate values for color calculations
-    sortedData.forEach(function (row) {
+    whr_data.forEach(function (row) {
         let sum = weightedSmExplainors(row);
+
         // Store the sum
         color_numbers[row['country']] = sum;
     });
 
     // Actually sort it
-    sortedData = sortedData.sort(function(a, b) {
+    whr_data = whr_data.sort(function(a, b) {
         let weightedSumA = color_numbers[a['country']];
         let weightedSumB = color_numbers[b['country']];
         return weightedSumB - weightedSumA;
@@ -539,24 +527,21 @@ function updateVis() {
     console.log('color numbers', color_numbers);
 
     // Add a new domain to the scale.
-    updateMapScale(sortedData);
+    updateMapScale(whr_data);
 
     // Update the lineup y scale to show the new order!
-    scales.countries.domain(sortedData.map(r => r.country));
+    scales.countries.domain(whr_data.map(r => r.country));
 
     // Draw actual bars
     let rect = d3.select("#bars");
     console.assert(rect.size() === 1); // Make sure we just have one thing
 
     let things = rect.selectAll(".bars")
-        .data(longData, function(d) {return d["country"]+d['explainor']});
+        .data(longData, function(d) {return d["country"] + d['explainor']});
 
     // Draw new bars for entering data
     let colorUpdater = function(d) {
-        let number = color_numbers[d['country']];
-        // console.log('maybe this', number, 'so this', scales.mapColorScale(number));
-        // console.log(d);
-        return scales.mapColorScale(number);
+        return scales.mapColorScale(color_numbers[d['country']]);
     };
     things.join(
         enter =>
@@ -574,8 +559,8 @@ function updateVis() {
         update =>
             update
                 .transition()
-                .duration(750)
-                .attr("width", d => scales[d['explainor']](d["value"]))
+                // .duration(750)
+                // .attr("width", d => scales[d['explainor']](d["value"]))
                 // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
                 .style('fill', colorUpdater)
                 .attr("y", d => scales.countries(d["country"]))
@@ -585,27 +570,24 @@ function updateVis() {
     let countriesAxis = d3.axisLeft(scales.countries);
     axes.countries = countriesAxis;
     plot.select('g#countriesaxis').remove();
-
     let countriesAxisGroup = plot.append("g")
         .attr("id", "countriesaxis")
         .attr("class", "axis hidden-ticks");
     countriesAxisGroup.call(countriesAxis);
 
     // Use the map visualization too!
-    updateMapVis(sortedData);
+    updateMapVis();
 }
 
 /**
  * Update the map visualization.
  */
-function updateMapVis(sortedData) {
+function updateMapVis() {
     let countriesG = map_svg.select('g#countries');
     // console.log('outlines', outlinesG);
 
-    // matchCountries();
-
     let country_shapes = countriesG.selectAll('path.country_outline')
-        .data(mapData.features);
+        .data(mapData.features, d => d['properties']['ISO_A3']);
 
     // Color function defined here ahead of time
     let map_feature_to_color = function(feature) {
@@ -870,7 +852,7 @@ function enableHover() {
 
         let rows = div.append("table")
             .selectAll("tr")
-            .data(Object.keys(d))
+            .data(d.hasOwnProperty('whrdata') ? Object.keys(d['whrdata']) : [])
             .enter()
             .append("tr");
 
@@ -882,23 +864,27 @@ function enableHover() {
                 // log(d);
                 return d[key];
             });
-        // TODO better text
+
+        me.raise();
+        me.style('stroke', 'red');
     });
 
     countries.on("mousemove.hover2", function(d) {
-        let div = d3.select("div#details");
-
-        // get height of tooltip
-        let bbox = div.node().getBoundingClientRect();
-
-        div.style("left", d3.event.pageX + "px")
-        div.style("top",  (d3.event.pageY - bbox.height) + "px");
+        // let div = d3.select("div#details");
+        //
+        // // get height of tooltip
+        // let bbox = div.node().getBoundingClientRect();
+        //
+        // div.style("left", d3.event.pageX + "px")
+        // div.style("top",  (d3.event.pageY - bbox.height) + "px");
     });
 
     countries.on("mouseout.hover2", function(d) {
-        d3.selectAll("div#details").remove();
-    });
+        let me = d3.select(this);
+        // d3.selectAll("div#details").remove();
 
+        me.style('stroke', '#999');
+    })
     // Thank you Sophie Engle for this code
 }
 
@@ -931,4 +917,4 @@ function translate(x, y) {
 ////////////////////
 // Run this show! //
 ////////////////////
-letsGetItStarted();
+stepOne();
