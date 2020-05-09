@@ -58,7 +58,6 @@ let color_numbers = {};
 
 // TODO allow zooming into specific map regions
 // TODO allow selecting just a specific region
-// TODO tooltip highlight on country
 
 /**
  * This function will draw all of the visualization.
@@ -80,13 +79,14 @@ async function stepOne() {
     // Load the data, continue in later methods
     const promises = [
         d3.csv("resources/Datasets/WHR Datasets/WHR20_DataForFigure2.1_CSV.csv", convertRow),
-        d3.json('resources/Datasets/countries.geojson')
+        d3.json('resources/Datasets/countries.geojson'),
+        // d3.json('resources/Datasets/countries_simplified.geojson')
     ];
 
     Promise.all(promises).then(function (values) {
         whr_data = values[0];
         mapData = values[1];
-        console.log('mapData', mapData);
+        // console.log('mapData', mapData);
         stepTwo()
     });
     // TODO clean up the order of 'prep', 'draw', etc... methods and their waiting and such
@@ -189,7 +189,7 @@ function prepMap() {
     // Make some graticule lines
     let graticule = d3.geoGraticule10();
     let graticuleG = map_svg.select('g#graticule');
-    console.log('graticule', graticule);
+    // console.log('graticule', graticule);
     // graticule.coordinates.splice(0, 0, [[179, -80.000001], [179, 9.999999000000003], [179, 80.000001]]);
     graticuleG.append('path')
         .attr('class', 'graticule')
@@ -199,8 +199,8 @@ function prepMap() {
     // Make some selections ahead of time to make things faster
     countriesG = map_svg.select('g#countries');
 
-    countryShapesSelection = countriesG.selectAll('path.country_outline')
-        .data(mapData.features, d => d['properties']['ISO_A3']);
+    // countryShapesSelection = countriesG.selectAll('path.country_outline')
+        // .data(mapData.features, d => d['properties']['ISO_A3']);
 }
 
 
@@ -535,7 +535,7 @@ function updateVis() {
         return weightedSumB - weightedSumA;
     });
     // console.log('calculated color_numbers', color_numbers);
-    console.log('color numbers', color_numbers);
+    // console.log('color numbers', color_numbers);
 
     // Add a new domain to the scale.
     updateMapScale(whr_data);
@@ -548,7 +548,10 @@ function updateVis() {
     console.assert(rect.size() === 1); // Make sure we just have one thing
 
     let things = rect.selectAll(".bars")
-        .data(longData, function(d) {return d["country"] + d['explainor']});
+        .data(longData, function(d) {
+            // console.log('bars key function d', d);
+            return d["country"] + d['explainor'];
+        });
 
     // Draw new bars for entering data
     let colorUpdater = function(d) {
@@ -558,7 +561,10 @@ function updateVis() {
         enter =>
             enter
                 .append("rect")
-                .attr("class","bars")
+                .attr("class",function () {
+                    console.log('bars enter');
+                    return "bars";
+                })
                 .attr("width", d => scales[d['explainor']](d["value"]))
                 // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
                 .attr("x", d => scales.explainors(d["explainor"]))
@@ -570,11 +576,14 @@ function updateVis() {
         update =>
             update
                 .transition()
-                // .duration(750)
+                .duration(750)
                 // .attr("width", d => scales[d['explainor']](d["value"]))
                 // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
                 .style('fill', colorUpdater)
-                .attr("y", d => scales.countries(d["country"]))
+                .attr("y", function(d) {
+                    console.log('bars update');
+                    return scales.countries(d["country"]);
+                })
     );
 
     // Update Axes
@@ -607,20 +616,43 @@ function updateMapVis() {
     // console.log('before enter update', country_shapes);
 
     let drawShapes = function(countryShapesSelection) {
-        countryShapesSelection.data(mapData.features, d => d['properties']['ISO_A3']);
         countryShapesSelection.join(
             enter =>
                 enter
                     .append('path')
-                    .attr('class', 'country_outline')
-                    .style('fill', map_feature_to_color)
-                    .attr('d', pathGenerator),
+                    .attr('class', function () {
+                        console.log('map enter')
+                        return 'country_outline';
+                    })
+                    .attr('d', pathGenerator)
+                    .attr('id', d => d['properties']['ISO_A3'])
+                    .style('fill', map_feature_to_color),
+
             update => update
                 .transition()
-                // .duration(2000)
-                .style('fill', map_feature_to_color)
+                .duration(750)
+                .style('fill', function (d) {
+                    console.log('map update');
+                    return map_feature_to_color(d);
+                })
         );
     };
+
+    countryShapesSelection = countriesG.selectAll('path.country_outline')
+        // data(mapData.features, d => d['properties']['ISO_A3']);
+    // countryShapesSelection.data(mapData.features, function(d) { return d ? d['properties']['ISO_A3'] : this.id; });
+        .data(mapData.features, function(d) {
+
+            let to_return = d['properties']['ISO_A3'];
+            // console.log('map key function returning', to_return,' from d', d);
+            return to_return;
+        });
+
+    // example:
+    // let things = rect.selectAll(".bars")
+    //     .data(longData, function(d) {return d["country"] + d['explainor']});
+
+    console.log(countryShapesSelection);
     drawShapes(countryShapesSelection);
 
 

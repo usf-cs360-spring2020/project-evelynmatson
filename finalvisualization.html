@@ -216,16 +216,8 @@
             This will enable a more detailed view of the map of that region, and let the user focus on only those countries in the ranked bar chart.
           </p>
 
-
-          <svg id="mapVisualization" class="visualization">
-            <g id="graticule"></g>
-            <g id="countries"></g>
-          </svg>
-
-<!--          TODO put numbers on the range sliders maybe-->
-
+          <!-- Sliders -->
           <div class="slidecontainer">
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices" list="steplist"> Freedom<br>
             <datalist id="steplist">
               <option>0</option>
               <option>1</option>
@@ -239,13 +231,50 @@
               <option>9</option>
               <option>10</option>
             </datalist>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Generosity" list="steplist">Generosity<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Healthy life expectancy" list="steplist">Healthy<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Log GDP per capita" list="steplist">GDP<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Perceptions of corruption" list="steplist">Corruption<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Social support" list="steplist">Social Support<br>
-            <input type="range" min="0" max="10" value="5" class="slider" id="Dystopia + residual" list="steplist">Dystopia + residual<br>
+
+            <h4>Explained by:</h4>
+            <table>
+              <tbody>
+              <tr>
+                <td>Freedom to make life choices</td>
+                <td>Generosity</td>
+                <td>Healthy life expectancy</td>
+              </tr>
+              <tr>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices" list="steplist"></td>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Generosity" list="steplist"></td>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Healthy life expectancy" list="steplist"></td>
+              </tr>
+              <tr>
+                <td>Log GDP per capita</td>
+                <td>Perceptions of corruption</td>
+                <td>Social support</td>
+              </tr>
+              <tr>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Log GDP per capita" list="steplist"></td>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Perceptions of corruption" list="steplist"></td>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Social support" list="steplist"></td>
+              </tr>
+              <tr>
+                <td>Residual</td>
+              </tr>
+              <tr>
+                <td><input type="range" min="0" max="10" value="5" class="slider" id="Dystopia + residual" list="steplist"></td>
+              </tr>
+              </tbody>
+            </table>
+
           </div>
+
+          <!-- Map Visualization -->
+          <svg id="mapVisualization" class="visualization">
+            <g id="graticule"></g>
+            <g id="countries"></g>
+          </svg>
+
+<!--          TODO put numbers on the range sliders maybe-->
+
+
           <svg id="lineupVisualization" class="visualization"></svg>
           <script src="resources/my-lineup.js"></script>
 
