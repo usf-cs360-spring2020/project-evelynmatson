@@ -913,28 +913,52 @@ function enableHover() {
     let bars = d3.selectAll('rect.bars');
 
     bars.on('mouseover.hover', function (d) {
+
+        console.log('d in mouseover bar', d);
+        let country = d['country']
         // if (!d.hasOwnProperty('whr_data_link'))
         //     return;
 
         let meMap = d['whr_data_link']['map_link']
         // let me = d3.select(this);
 
-        let siblingBars = d3.select(this.parentNode).selectAll('rect');
+        // let siblingBars = d3.select(this.parentNode).selectAll('rect');
 
         // Highlight bars too
-        // let desire = '#bars rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
-        // console.log('looking for', desire);
-        // // console.log('barsSelection', barsSelection);
-        // let relevantBars = d3.selectAll(desire);
-        // console.log('relevant bars', relevantBars);
-        // relevantBars.style('stroke-width', '1px')
-        //     .style('stroke', 'red');
+        let desire = 'rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
+        console.log('looking for', desire);
+        // console.log('barsSelection', barsSelection);
+        let siblingBars = d3.select(this.parentNode).selectAll(desire);
+        console.log('siblingBars', siblingBars);
+        siblingBars.style('stroke-width', '1px')
+            .style('stroke', 'red');
         //
         // // highlight country
         // me.raise();
         // me.style('stroke-width', '1px');
         // me.style('stroke', 'red');
     });
+
+    bars.on('mouseout.hover', function (d) {
+        // let me = d3.select(this);
+        // detailsDiv.remove();
+
+        // TODO fix unhighlight bars
+
+        // unHighlight bars too
+        let desire = 'rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
+        let siblingBars = d3.select(this.parentNode).selectAll(desire);
+        // let relevantBars = d3.selectAll(desire);
+        console.log('un sibling bars', siblingBars);
+        siblingBars.style('stroke-width', '0.5px')
+            .style('stroke', '#666666');
+
+        // unhighlight country
+        // me.style('stroke-width', '0.5px');
+        // me.style('stroke', '#999999');
+
+
+    })
 
     countries.on("mouseover.hover", function(d) {
         // Skip grey countries
