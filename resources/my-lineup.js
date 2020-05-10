@@ -53,6 +53,8 @@ let countriesG;
 let detailsDiv;
 let barsSelection;
 
+let friendlyLink = {};
+
 let explainors;
 let weights = {};
 let color_numbers = {};
@@ -292,7 +294,7 @@ function makeMapLegend() {
     legendG.select('.legendCells')
         .insert('g')
         .attr('class', 'cell')
-        .attr('transform', 'translate(0, 160)')
+        .attr('transform', 'translate(0, 150)')
         .html('<rect class="swatch" height="15" width="20" style="fill: rgb(238, 238, 238);"></rect>' +
             '        <text class="label" transform="translate( 30, 12.5)">\n' +
             '            No Data\n' +
@@ -630,8 +632,19 @@ function updateMapVis() {
             enter =>
                 enter
                     .append('path')
-                    .attr('class', function () {
+                    .attr('class', function (d) {
                         console.log('map enter')
+                        // link to whr_data
+                        console.log('this in map enter', this);
+                        console.log('d in map enter', d);
+                        console.log('d[\'whrdata\'] in map enter', d['whrdata']);
+                        if (d['whrdata'] != undefined) {
+                            console.log('map linking!')
+                            d['whrdata']['map_link'] = this;
+                            friendlyLink[d['whrdata']['map_data_link_maybe']] = this;
+                        }
+
+
                         return 'country_outline';
                     })
                     .attr('d', pathGenerator)
@@ -729,7 +742,8 @@ function convertRow(row) {
             "Regional indicator" : row["Regional indicator"],
             "Ladder score" : parseFloat(row["Ladder score"]),
             'value' : parseFloat(row[explainor]),
-            'explainor': explainor
+            'explainor': explainor,
+            'whr_data_link' : out
         };
 
         longData.push(newThing);
@@ -808,12 +822,14 @@ function matchCountries() {
 
             // Store the match in the real mapData
             mapData.features[map_data_index]['whrdata'] = whr_data[whr_index];
+            console.log('linked whr data in mapData.features');
 
             // Remove this from the map country names
             delete remaining_map_country_names[map_data_index];
 
             // Remove this from the whr country names
             delete remaining_whr_country_names[whr_index];
+            whr_data[whr_index]['map_data_link_maybe'] = mapData.features[map_data_index];
         }
     }
     // console.log('First pass made, exact matches made.');
@@ -872,6 +888,9 @@ function matchCountries() {
 
         // Store the match in the real mapData
         mapData.features[map_data_index]['whrdata'] = whr_data[whr_data_index];
+        console.log('linked whr data in mapData.features');
+
+        whr_data[whr_data_index]['map_data_link_maybe'] = mapData.features[map_data_index];
 
         // Delete from the remaining name lists
         delete remaining_map_country_names[map_data_index];
@@ -891,6 +910,31 @@ function matchCountries() {
  */
 function enableHover() {
     let countries = d3.selectAll('path.country_outline');
+    let bars = d3.selectAll('rect.bars');
+
+    bars.on('mouseover.hover', function (d) {
+        // if (!d.hasOwnProperty('whr_data_link'))
+        //     return;
+
+        let meMap = d['whr_data_link']['map_link']
+        // let me = d3.select(this);
+
+        let siblingBars = d3.select(this.parentNode).selectAll('rect');
+
+        // Highlight bars too
+        // let desire = '#bars rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
+        // console.log('looking for', desire);
+        // // console.log('barsSelection', barsSelection);
+        // let relevantBars = d3.selectAll(desire);
+        // console.log('relevant bars', relevantBars);
+        // relevantBars.style('stroke-width', '1px')
+        //     .style('stroke', 'red');
+        //
+        // // highlight country
+        // me.raise();
+        // me.style('stroke-width', '1px');
+        // me.style('stroke', 'red');
+    });
 
     countries.on("mouseover.hover", function(d) {
         // Skip grey countries
