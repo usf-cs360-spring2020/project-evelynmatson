@@ -919,7 +919,7 @@ function enableHover() {
         // if (!d.hasOwnProperty('whr_data_link'))
         //     return;
 
-        let meMap = d['whr_data_link']['map_link']
+        let meMap = d3.select(d['whr_data_link']['map_link']);
         // let me = d3.select(this);
 
         // let siblingBars = d3.select(this.parentNode).selectAll('rect');
@@ -934,16 +934,14 @@ function enableHover() {
             .style('stroke', 'red');
         //
         // // highlight country
-        // me.raise();
-        // me.style('stroke-width', '1px');
-        // me.style('stroke', 'red');
+        meMap.raise();
+        meMap.style('stroke-width', '1px');
+        meMap.style('stroke', 'red');
     });
 
     bars.on('mouseout.hover', function (d) {
         // let me = d3.select(this);
         // detailsDiv.remove();
-
-        // TODO fix unhighlight bars
 
         // unHighlight bars too
         let desire = 'rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
@@ -953,9 +951,11 @@ function enableHover() {
         siblingBars.style('stroke-width', '0.5px')
             .style('stroke', '#666666');
 
+        let meMap = d3.select(d['whr_data_link']['map_link']);
+
         // unhighlight country
-        // me.style('stroke-width', '0.5px');
-        // me.style('stroke', '#999999');
+        meMap.style('stroke-width', '0.5px');
+        meMap.style('stroke', '#999999');
 
 
     })
