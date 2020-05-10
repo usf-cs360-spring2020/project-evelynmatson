@@ -51,6 +51,7 @@ let mapData;
 let countryShapesSelection;
 let countriesG;
 let detailsDiv;
+let barsSelection;
 
 let explainors;
 let weights = {};
@@ -288,6 +289,14 @@ function makeMapLegend() {
         .scale(scales.mapColorScale);
 
     legendG.call(legend);
+    legendG.select('.legendCells')
+        .insert('g')
+        .attr('class', 'cell')
+        .attr('transform', 'translate(0, 160)')
+        .html('<rect class="swatch" height="15" width="20" style="fill: rgb(238, 238, 238);"></rect>' +
+            '        <text class="label" transform="translate( 30, 12.5)">\n' +
+            '            No Data\n' +
+            '        </text>');
 
     // console.log('scales.mapColorScale.domain()', scales.mapColorScale.domain());
 
@@ -552,6 +561,7 @@ function updateVis() {
             // console.log('bars key function d', d);
             return d["country"] + d['explainor'];
         });
+    barsSelection = things;
 
     // Draw new bars for entering data
     let colorUpdater = function(d) {
@@ -561,9 +571,9 @@ function updateVis() {
         enter =>
             enter
                 .append("rect")
-                .attr("class",function () {
+                .attr("class",function (d) {
                     console.log('bars enter');
-                    return "bars";
+                    return "bars " + d['country'];
                 })
                 .attr("width", d => scales[d['explainor']](d["value"]))
                 // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
@@ -915,6 +925,16 @@ function enableHover() {
                 return d['whrdata'][key];
             });
 
+        // Highlight bars too
+        let desire = '#bars rect.' + d['whrdata']['country'].replace(new RegExp(' ', 'g'), '.');
+        console.log('looking for', desire);
+        // console.log('barsSelection', barsSelection);
+        let relevantBars = d3.selectAll(desire);
+        console.log('relevant bars', relevantBars);
+        relevantBars.style('stroke-width', '1px')
+            .style('stroke', 'red');
+
+        // highlight country
         me.raise();
         me.style('stroke-width', '1px');
         me.style('stroke', 'red');
@@ -942,8 +962,16 @@ function enableHover() {
         let me = d3.select(this);
         detailsDiv.remove();
 
+        // unHighlight bars too
+        let desire = 'rect.' + d['whrdata']['country'].replace(new RegExp(' ', 'g'), '.');
+        let relevantBars = d3.selectAll(desire);
+        console.log('un relevant bars', relevantBars);
+        relevantBars.style('stroke-width', '0.5px')
+            .style('stroke', '#666666');
+
+        // unhighlight country
         me.style('stroke-width', '0.5px');
-        me.style('stroke', '#999');
+        me.style('stroke', '#999999');
     })
     // Thank you Sophie Engle for this code
 }
