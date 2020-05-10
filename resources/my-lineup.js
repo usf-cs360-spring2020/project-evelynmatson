@@ -563,7 +563,6 @@ function updateVis() {
             // console.log('bars key function d', d);
             return d["country"] + d['explainor'];
         });
-    barsSelection = things;
 
     // Draw new bars for entering data
     let colorUpdater = function(d) {
@@ -574,7 +573,7 @@ function updateVis() {
             enter
                 .append("rect")
                 .attr("class",function (d) {
-                    console.log('bars enter');
+                    // console.log('bars enter');
                     return "bars " + d['country'];
                 })
                 .attr("width", d => scales[d['explainor']](d["value"]))
@@ -593,10 +592,13 @@ function updateVis() {
                 // .attr("width", d => scales[d['explainor']](d["value"]) * weights[d['explainor']]/50)
                 .style('fill', colorUpdater)
                 .attr("y", function(d) {
-                    console.log('bars update');
+                    // console.log('bars update');
                     return scales.countries(d["country"]);
                 })
     );
+
+    // Save bars selection for later
+    barsSelection = d3.selectAll('rect.bars');
 
     // Update Axes
     let countriesAxis = d3.axisLeft(scales.countries);
@@ -633,13 +635,13 @@ function updateMapVis() {
                 enter
                     .append('path')
                     .attr('class', function (d) {
-                        console.log('map enter')
+                        // console.log('map enter')
                         // link to whr_data
-                        console.log('this in map enter', this);
-                        console.log('d in map enter', d);
-                        console.log('d[\'whrdata\'] in map enter', d['whrdata']);
+                        // console.log('this in map enter', this);
+                        // console.log('d in map enter', d);
+                        // console.log('d[\'whrdata\'] in map enter', d['whrdata']);
                         if (d['whrdata'] != undefined) {
-                            console.log('map linking!')
+                            // console.log('map linking!')
                             d['whrdata']['map_link'] = this;
                             friendlyLink[d['whrdata']['map_data_link_maybe']] = this;
                         }
@@ -655,7 +657,7 @@ function updateMapVis() {
                 .transition()
                 .duration(750)
                 .style('fill', function (d) {
-                    console.log('map update');
+                    // console.log('map update');
                     return map_feature_to_color(d);
                 })
         );
@@ -675,7 +677,7 @@ function updateMapVis() {
     // let things = rect.selectAll(".bars")
     //     .data(longData, function(d) {return d["country"] + d['explainor']});
 
-    console.log(countryShapesSelection);
+    // console.log(countryShapesSelection);
     drawShapes(countryShapesSelection);
 
 
@@ -822,7 +824,7 @@ function matchCountries() {
 
             // Store the match in the real mapData
             mapData.features[map_data_index]['whrdata'] = whr_data[whr_index];
-            console.log('linked whr data in mapData.features');
+            // console.log('linked whr data in mapData.features');
 
             // Remove this from the map country names
             delete remaining_map_country_names[map_data_index];
@@ -888,7 +890,7 @@ function matchCountries() {
 
         // Store the match in the real mapData
         mapData.features[map_data_index]['whrdata'] = whr_data[whr_data_index];
-        console.log('linked whr data in mapData.features');
+        // console.log('linked whr data in mapData.features');
 
         whr_data[whr_data_index]['map_data_link_maybe'] = mapData.features[map_data_index];
 
@@ -914,7 +916,7 @@ function enableHover() {
 
     bars.on('mouseover.hover', function (d) {
 
-        console.log('d in mouseover bar', d);
+        // console.log('d in mouseover bar', d);
         let country = d['country']
         // if (!d.hasOwnProperty('whr_data_link'))
         //     return;
@@ -926,10 +928,10 @@ function enableHover() {
 
         // Highlight bars too
         let desire = 'rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
-        console.log('looking for', desire);
+        // console.log('looking for', desire);
         // console.log('barsSelection', barsSelection);
         let siblingBars = d3.select(this.parentNode).selectAll(desire);
-        console.log('siblingBars', siblingBars);
+        // console.log('siblingBars', siblingBars);
         siblingBars.style('stroke-width', '1px')
             .style('stroke', 'red');
         //
@@ -947,7 +949,7 @@ function enableHover() {
         let desire = 'rect.' + d['country'].replace(new RegExp(' ', 'g'), '.');
         let siblingBars = d3.select(this.parentNode).selectAll(desire);
         // let relevantBars = d3.selectAll(desire);
-        console.log('un sibling bars', siblingBars);
+        // console.log('un sibling bars', siblingBars);
         siblingBars.style('stroke-width', '0.5px')
             .style('stroke', '#666666');
 
@@ -995,10 +997,10 @@ function enableHover() {
 
         // Highlight bars too
         let desire = '#bars rect.' + d['whrdata']['country'].replace(new RegExp(' ', 'g'), '.');
-        console.log('looking for', desire);
+        // console.log('looking for', desire);
         // console.log('barsSelection', barsSelection);
         let relevantBars = d3.selectAll(desire);
-        console.log('relevant bars', relevantBars);
+        // console.log('relevant bars', relevantBars);
         relevantBars.style('stroke-width', '1px')
             .style('stroke', 'red');
 
@@ -1033,7 +1035,7 @@ function enableHover() {
         // unHighlight bars too
         let desire = 'rect.' + d['whrdata']['country'].replace(new RegExp(' ', 'g'), '.');
         let relevantBars = d3.selectAll(desire);
-        console.log('un relevant bars', relevantBars);
+        // console.log('un relevant bars', relevantBars);
         relevantBars.style('stroke-width', '0.5px')
             .style('stroke', '#666666');
 
