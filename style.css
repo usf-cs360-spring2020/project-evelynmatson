@@ -178,3 +178,11 @@ text, .tooltip {
 table, .tooltip {
     border-spacing: 5px;
 }
+
+/* Make the bar chart scrollable */
+.scrollable {
+    height: 200px; /* or any value */
+    overflow-y: auto;
+    border: #666666;
+    border-style: solid;
+}

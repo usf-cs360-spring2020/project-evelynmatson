@@ -164,7 +164,7 @@
 
         <div class="content page-content">
           <h1 class="title">
-            Final Visualization
+            Final DIY World Happiness Rank Visualization
           </h1>
 
           <h3>Question</h3>
@@ -192,28 +192,18 @@
 
           <h3>Answer</h3>
           <p>
-            Everyone's answer to this question will be different, so give it a try (it seems to work best in Google Chrome, FYI)! Tweak the calculation to match what you value most, and find which countries most closely match those values.
+            Everyone's answer to this question will be different, so give it a try (it seems to work best in Google Chrome)! Tweak the calculation to match what you value most, and find which countries most closely match those values.
           </p>
 
-          <h3>Interactivity (Implemented)</h3>
+          <h3>Interactivity</h3>
           <p>
             This visualization's main form of interactivity is the ability to scale each factor's weight using the range sliders, then see the map and lineup update.
             To use this, drag the control element of a slider to the left or right (left will give this factor less weight, right will give it more).
             After you let go, the visualization will update, reordering countries in the small multiples the bar chart according to remain sorted given their newly weighted values.
             The map and its scale will also update, to show which countries have the largest (happiest) and smallest (least happy) weighted happiness values given the new weights that have been inputted.
           </p>
-
-          <h3>Interactivity (Planned)</h3>
           <p>
-            I plan to implement a hover tooltip in the map, so that hovering over a country will highlight its outline, and display a tooltip with its name and details about its value for each factor.
-          </p>
-          <p>
-            If I have time, I will also implement brushing in d3.
-            This will enable users to select a range of countries in the ranked bar chart or a group of countries on the map, and see those same countries highlighted in the other visualization.
-          </p>
-          <p>
-            Finally, if I have time I will allow users to narrow down the scope of the visualization to zoom into any one of several geographic regions.
-            This will enable a more detailed view of the map of that region, and let the user focus on only those countries in the ranked bar chart.
+            I have also implemented a hover tooltip in the map, so that hovering over a country will highlight its outline, and display a tooltip with its name and details about its value for each factor.
           </p>
 
           <!-- Sliders -->
@@ -239,27 +229,30 @@
                 <td>Freedom to make life choices</td>
                 <td>Generosity</td>
                 <td>Healthy life expectancy</td>
+                <td></td>
               </tr>
               <tr>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Freedom to make life choices" list="steplist"></td>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Generosity" list="steplist"></td>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Healthy life expectancy" list="steplist"></td>
+                <td></td>
               </tr>
               <tr>
                 <td>Log GDP per capita</td>
                 <td>Perceptions of corruption</td>
                 <td>Social support</td>
+                <td>Residual</td>
               </tr>
               <tr>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Log GDP per capita" list="steplist"></td>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Perceptions of corruption" list="steplist"></td>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Explained by: Social support" list="steplist"></td>
-              </tr>
-              <tr>
-                <td>Residual</td>
-              </tr>
-              <tr>
                 <td><input type="range" min="0" max="10" value="5" class="slider" id="Dystopia + residual" list="steplist"></td>
+
+              </tr>
+              <tr>
+              </tr>
+              <tr>
               </tr>
               </tbody>
             </table>
@@ -275,8 +268,11 @@
 <!--          TODO put numbers on the range sliders maybe-->
 
 
-          <svg id="lineupVisualization" class="visualization"></svg>
-          <script src="resources/my-lineup.js"></script>
+          <div class="scrollable">
+            <svg id="lineupVisualization" class="visualization"></svg>
+            <script src="resources/my-lineup.js"></script>
+          </div>
+
 
           <h3>Encoding</h3>
           <p>
