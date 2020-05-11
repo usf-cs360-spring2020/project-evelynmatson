@@ -1,16 +1,3 @@
-// https://bl.ocks.org/d3noob/10632804
-// https://www.w3schools.com/howto/howto_js_rangeslider.asp
-// https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
-// https://devdocs.io/html/element/input/range
-// https://datahub.io/core/geo-countries#readme
-// https://bl.ocks.org/sjengle/2f6d4832397e3cdd78d735774cb5a4f2
-// http://techslides.com/demos/d3/d3-continents-projections.html
-// https://bl.ocks.org/syntagmatic/ba569633d51ebec6ec6e
-// https://observablehq.com/@d3/world-map-svg
-// https://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
-// https://www.w3schools.com/howto/howto_js_rangeslider.asp
-// https://d3-legend.susielu.com
-
 // Global variables because why not
 let config = {
     'lineup_svg' : {
@@ -57,9 +44,6 @@ let friendlyLink = {};
 let explainors;
 let weights = {};
 let color_numbers = {};
-
-// TODO allow zooming into specific map regions
-// TODO allow selecting just a specific region
 
 /**
  * This function will draw all of the visualization.
