@@ -42,7 +42,7 @@
 .hero.is-primary.is-bold {
     /*background: linear-gradient(90deg, rgba(122,55,196,1) 0%, rgba(95,55,196,1) 44%, rgba(41,191,222,1) 100%) !important;*/
     background: linear-gradient(90deg, rgb(249, 214, 77) 0%, rgb(55, 196, 123) 65%, rgb(41, 191, 222) 100%) !important;
-    /*TODO Make this better*/
+    /* CANCELLED Make this better*/
 }
 
 .content {

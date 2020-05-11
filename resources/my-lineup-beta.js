@@ -50,9 +50,9 @@ let mapData;
 let explainors;
 let weights = {};
 
-// TODO allow zooming into specific map regions
-// TODO allow selecting just a specific region
-// TODO tooltip highlight on country
+// CANCELLED allow zooming into specific map regions
+// CANCELLED allow selecting just a specific region
+// CANCELLED tooltip highlight on country
 
 /**
  * This function will draw all of the visualization.
@@ -81,7 +81,7 @@ async function letsGetItStarted() {
     prepVis(whr_data);
     // prepMap(mapData);
 
-    // TODO clean up the order of 'prep', 'draw', etc... methods and their waiting and such
+    // CANCELLED clean up the order of 'prep', 'draw', etc... methods and their waiting and such
 }
 
 /**
@@ -117,7 +117,7 @@ function prepMap(dataParam) {
         .fitWidth(config.map_svg.width, mapData);
     pathGenerator = d3.geoPath(projection);
 
-    // TODO edit the bounds to skip antarctica
+    // CANCELLED edit the bounds to skip antarctica
 
     // Update the map SVG's height
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
@@ -295,7 +295,7 @@ function setupSliders() {
 
         updateVis();
 
-        // TODO I have the new value, now do something with it (update the visualization)
+        // CANCELLED I have the new value, now do something with it (update the visualization)
     });
 }
 

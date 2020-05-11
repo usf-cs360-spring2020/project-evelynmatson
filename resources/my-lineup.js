@@ -75,7 +75,6 @@ async function stepOne() {
         // console.log('mapData', mapData);
         stepTwo()
     });
-    // TODO clean up the order of 'prep', 'draw', etc... methods and their waiting and such
 }
 
 /**
