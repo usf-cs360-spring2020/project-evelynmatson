@@ -22,9 +22,9 @@ let config = {
     },
     'margin' : {
         top : 80,
-        right : 20,
-        bottom : 110,
-        left : 150
+        right : 35,
+        bottom : 10,
+        left : 170
     },
     'plot' : {},
     'legend' : {
@@ -183,11 +183,18 @@ function prepMap() {
         .fitWidth(config.map_svg.width, mapData);
     pathGenerator = d3.geoPath(projection);
 
-    // TODO edit the bounds to skip antarctica
 
     // Update the map SVG's height
     // console.log('pathGenerator.bounds', pathGenerator.bounds(mapData)[1][1]);
+    map_svg.attr('width', pathGenerator.bounds(mapData)[1][0]);
     map_svg.attr('height', pathGenerator.bounds(mapData)[1][1]);
+    console.log('bounds',  pathGenerator.bounds(mapData))
+
+    // Fix sizes of other things too
+    // d3.select('div.scrollable')
+    //     .attr('width', config.lineup_svg.width);
+    // d3.select('div.slidecontainer')
+    //     .attr('width', config.lineup_svg.width);
 
     // Make some graticule lines
     let graticule = d3.geoGraticule10();
@@ -382,6 +389,10 @@ function makeLineupAxes() {
         .attr("id", "explainors-axis")
         .attr("class", "axis hidden-ticks");
     explainorsAxisGroup.call(explainorsAxis);
+
+    // Rotate the text
+    explainorsAxisGroup.selectAll('text')
+        .attr('transform', "rotate(-30 -40 -40)");
 
     // let passengerAxesGroup = plot.append("g")
     //     .attr("id", "passenger-axes");
@@ -718,8 +729,36 @@ function updateMapScale(sorted) {
 function convertRow(row) {
     // console.log('row', row);
 
+    // Shorten overly long country names
+    let country_name;
+    switch (row['Country name']) {
+        case 'Taiwan Province of China':
+            country_name = 'Taiwan';
+            break;
+
+        case 'Hong Kong S.A.R. of China':
+            country_name = 'Hong Kong S.A.R.';
+            break;
+
+        case 'Palestinian Territories':
+            country_name = 'Palestine';
+            break;
+
+        case 'Congo (Kinshasa)':
+            country_name = 'Congo-Kinshasa';
+            break;
+
+        case 'Congo (Brazzaville)':
+            country_name = 'Congo-Brazzaville';
+            break;
+
+        default:
+            country_name = row['Country name']
+            break;
+    }
+
     let out = {
-        'country': row['Country name'],
+        'country': country_name,
         "Explained by: Freedom to make life choices" : parseFloat(row["Explained by: Freedom to make life choices"]),
         "Explained by: Generosity" : parseFloat(row["Explained by: Generosity"]),
         "Explained by: Healthy life expectancy" : parseFloat(row["Explained by: Healthy life expectancy"]),
@@ -740,7 +779,7 @@ function convertRow(row) {
         }
 
         let newThing = {
-            'country': row['Country name'],
+            'country': country_name,
             "Regional indicator" : row["Regional indicator"],
             "Ladder score" : parseFloat(row["Ladder score"]),
             'value' : parseFloat(row[explainor]),
@@ -791,7 +830,7 @@ function explainor_name_abbreviator(long_name) {
             return 'GDP per capita';
 
         case 'Explained by: Perceptions of corruption' :
-            return 'Corruption';
+            return 'Corruption (lack of)';
 
         case 'Explained by: Social support' :
             return 'Social support';
@@ -870,7 +909,7 @@ function matchCountries() {
                 map_name = 'Hong Kong S.A.R.';
                 break;
 
-            case 'Congo (Brazzaville)':
+            case 'Congo-Brazzaville':
                 map_name = 'Republic of Congo';
                 break;
 
@@ -878,7 +917,7 @@ function matchCountries() {
                 map_name = 'Palestine';
                 break;
 
-            case 'Congo (Kinshasa)':
+            case 'Congo-Kinshasa':
                 map_name = 'Democratic Republic of the Congo';
                 break;
 
@@ -975,7 +1014,7 @@ function enableHover() {
 
         let rows = detailsDiv.append("table")
             .selectAll("tr")
-            .data(d.hasOwnProperty('whrdata') ? Object.keys(d['whrdata']) : [])
+            .data(d.hasOwnProperty('whrdata') ? Object.keys(d['whrdata']).filter(d=>d[0] != 'm') : [])
             .enter()
             .append("tr");
 

@@ -113,6 +113,14 @@ th {
 /* Final project stuff */
 /***********************/
 
+svg#mapVisualization {
+    /*border: #999999 solid;*/
+}
+
+div.slidecontainer {
+    /*border: #999999 solid;*/
+}
+
 /*Style the country shapes in the map visualization*/
 svg#mapVisualization path.country_outline {
     stroke: #999;
@@ -121,7 +129,7 @@ svg#mapVisualization path.country_outline {
 
 /*Style the graticule lines in the map visualization*/
 svg#mapVisualization g#graticule path.graticule {
-    stroke: #ddd;
+    stroke: #dddddd;
     stroke-width: .75px;
     fill: none;
 }
@@ -181,8 +189,7 @@ table, .tooltip {
 
 /* Make the bar chart scrollable */
 .scrollable {
-    height: 200px; /* or any value */
+    height: 400px; /* or any value */
     overflow-y: auto;
-    border: #666666;
-    border-style: solid;
+    border: solid #CCCCCC;
 }
