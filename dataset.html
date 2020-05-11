@@ -24,7 +24,7 @@
     <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 
 <!--    My Css!-->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="resources/style.css">
   </head>
 
   <body>
@@ -245,7 +245,7 @@
           </div><br>
 
 
-          <!--        OECD License-->
+          <!--        Map License-->
           <h4>License</h4>
           <blockquote>
             <p>All data is licensed under the <a href="http://opendatacommons.org/licenses/pddl/1.0/">Open Data Commons Public Domain Dedication and License</a>.</p>
@@ -253,6 +253,21 @@
               formally required a link back or credit to <a href="http://www.naturalearthdata.com/">Natural Earth</a>, <a href="https://github.com/lexman">Lexman</a> and the <a href="https://okfn.org/">Open Knowledge Foundation</a> is much appreciated.</p>
           </blockquote>
 
+          <br><br>
+
+
+
+          <h2> Data Wrangling</h2>
+          <p>
+            Getting these two datasets was easy to start, but had a few tricky countries that were named differently in each dataset that required some javascript wrangling. See the matchCountries() method in my JavaScript file.
+          </p>
+          <p>
+            The rows in the WHR dataset connected in a 1:1 way to the countries displayed on the map.
+            However, I needed to turn each WHR dataset row into 6 different rows (one for each 'explainer' factor) for the bar chart. See the convertRow() method of my javascript file.
+          </p>
+          <p>
+
+          </p>
           <br><br>
 
 
