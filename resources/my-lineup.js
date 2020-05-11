@@ -7,7 +7,6 @@
 // http://techslides.com/demos/d3/d3-continents-projections.html
 // https://bl.ocks.org/syntagmatic/ba569633d51ebec6ec6e
 // https://observablehq.com/@d3/world-map-svg
-// https://lineup.js.org
 // https://stackoverflow.com/questions/14492284/center-a-map-in-d3-given-a-geojson-object
 // https://www.w3schools.com/howto/howto_js_rangeslider.asp
 // https://d3-legend.susielu.com
